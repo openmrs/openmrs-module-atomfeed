@@ -44,10 +44,6 @@ public class AtomfeedmoduleController {
 	public String onPost(HttpSession httpSession, @ModelAttribute("anyRequestObject") Object anyRequestObject,
 	        BindingResult errors) {
 		
-		if (errors.hasErrors()) {
-			// return error view
-		}
-		
 		return VIEW;
 	}
 	
