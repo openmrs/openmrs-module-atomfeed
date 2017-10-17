@@ -7,7 +7,7 @@
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
 	<package>org.openmrs.module.atomfeed</package>
-	<author>user</author>
+	<author>Soldevelo developers</author>
 	<description>
 			${project.parent.description}
 	</description>
