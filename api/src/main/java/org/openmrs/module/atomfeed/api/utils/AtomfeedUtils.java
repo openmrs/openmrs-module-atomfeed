@@ -13,9 +13,9 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
-
-;
+import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
 public final class AtomfeedUtils {
 	
@@ -29,4 +29,14 @@ public final class AtomfeedUtils {
             throw new AtomfeedIoException(e);
         }
     }
+	
+	public static FeedConfiguration parseJsonConfigurationResource(String resourcePath) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.readValue(readResourceFile(resourcePath), FeedConfiguration.class);
+		}
+		catch (IOException e) {
+			throw new AtomfeedIoException(e);
+		}
+	}
 }
