@@ -11,7 +11,9 @@ package org.openmrs.module.atomfeed.api.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.atomfeed.api.AtomfeedmoduleService;
+import org.springframework.stereotype.Component;
 
+@Component("atomfeed.AtomfeedmoduleService")
 public class AtomfeedmoduleServiceImpl extends BaseOpenmrsService implements AtomfeedmoduleService {
 	
 }
