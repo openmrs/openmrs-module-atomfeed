@@ -66,6 +66,17 @@
 
 	<build>
 		<plugins>
+			<!-- Set Java version -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>${javaVersion}</source>
+					<target>${javaVersion}</target>
+				</configuration>
+			</plugin>
+			<!-- Checkstyle, PMD, Findbugs -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -159,6 +170,7 @@
 	</reporting>
 
     <properties>
+		<javaVersion>1.8</javaVersion>
         <openmrsPlatformVersion>2.0.5</openmrsPlatformVersion>
         <legacyVersion>1.3.1</legacyVersion>
         <javaCompilerVersion>1.8</javaCompilerVersion>
