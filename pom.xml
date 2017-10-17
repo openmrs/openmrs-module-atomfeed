@@ -121,6 +121,25 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${findbugsPluginVersion}</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<xmlOutput>true</xmlOutput>
+					<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -145,5 +164,6 @@
         <javaCompilerVersion>1.8</javaCompilerVersion>
         <pmdPluginVersion>3.8</pmdPluginVersion>
         <checkstylePluginVersion>2.17</checkstylePluginVersion>
+		<findbugsPluginVersion>3.0.2</findbugsPluginVersion>
     </properties>
 </project>

@@ -17,20 +17,20 @@ import org.slf4j.LoggerFactory;
  */
 public class AtomfeedmoduleActivator extends BaseModuleActivator {
 	
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(AtomfeedmoduleActivator.class);
 	
 	/**
 	 * @see #started()
 	 */
 	public void started() {
-		log.info("Started Atomfeed module");
+		LOGGER.info("Started Atomfeed module");
 	}
 	
 	/**
 	 * @see #shutdown()
 	 */
 	public void shutdown() {
-		log.info("Shutdown Atomfeed module");
+		LOGGER.info("Shutdown Atomfeed module");
 	}
 	
 }
