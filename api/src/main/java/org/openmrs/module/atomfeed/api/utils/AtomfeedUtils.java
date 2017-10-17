@@ -34,8 +34,7 @@ public final class AtomfeedUtils {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(readResourceFile(resourcePath), FeedConfiguration.class);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new AtomfeedIoException(e);
 		}
 	}
