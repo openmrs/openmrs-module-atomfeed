@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Beans to add to the current Application context definition -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -24,26 +22,6 @@
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="org.openmrs.module.atomfeed" />
-
-    <!-- Wraps AtomfeedmoduleService methods in DB transactions and OpenMRS interceptors,
-    which set audit info like dateCreated, changedBy, etc.-->
-    <bean id="atomfeed.AtomfeedmoduleService"
-            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager" />
-        </property>
-        <property name="target">
-            <bean class="org.openmrs.module.atomfeed.api.impl.AtomfeedmoduleServiceImpl">
-                <property name="dao" ref="atomfeed.AtomfeedmoduleDao" />
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors" />
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource" />
-        </property>
-    </bean>
 
     <!-- Adds AtomfeedmoduleService to OpenMRS context so it can be accessed
     calling Context.getService(AtomfeedmoduleService.class) -->
