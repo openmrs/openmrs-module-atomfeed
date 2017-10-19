@@ -6,13 +6,19 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.impl;
+package org.openmrs.module.atomfeed.api.exceptions;
 
-import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.api.AtomfeedmoduleService;
-import org.springframework.stereotype.Component;
-
-@Component("atomfeed.AtomfeedmoduleService")
-public class AtomfeedmoduleServiceImpl extends BaseOpenmrsService implements AtomfeedmoduleService {
+public class AtomfeedIoException extends RuntimeException {
 	
+	public AtomfeedIoException(String message) {
+		super(message);
+	}
+	
+	public AtomfeedIoException(Throwable cause) {
+		super(cause);
+	}
+	
+	public AtomfeedIoException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
