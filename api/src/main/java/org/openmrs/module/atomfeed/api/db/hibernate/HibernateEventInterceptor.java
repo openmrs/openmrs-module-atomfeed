@@ -1,3 +1,11 @@
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
 package org.openmrs.module.atomfeed.api.db.hibernate;
 
 import java.io.Serializable;
@@ -16,9 +24,9 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.Voidable;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.api.db.EventAction;
+import org.openmrs.module.atomfeed.api.db.EventManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -34,9 +42,7 @@ import org.springframework.util.ReflectionUtils;
 public class HibernateEventInterceptor extends EmptyInterceptor {
 	
 	private static final long serialVersionUID = 1L;
-	
-	protected static final Logger LOGGER = LoggerFactory.getLogger(HibernateEventInterceptor.class);
-	
+
 	private Stack<HashSet<OpenmrsObject>> inserts = new Stack<>();
 	
 	private Stack<HashSet<OpenmrsObject>> updates = new Stack<>();
@@ -190,34 +196,32 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	 * @see EmptyInterceptor#afterTransactionCompletion(Transaction)
 	 */
 	@Override
-	@SuppressWarnings("PMD.EmptyTryBlock")
 	public void afterTransactionCompletion(Transaction tx) {
+		EventManager eventManager = Context.getService(EventManager.class);
 		try {
-			/*
 			if (tx.wasCommitted()) {
 				for (OpenmrsObject delete : deletes.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(delete, EventAction.DELETED);
 				}
 				for (OpenmrsObject insert : inserts.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(insert, EventAction.CREATED);
 				}
 				for (OpenmrsObject update : updates.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(update, EventAction.UPDATED);
 				}
 				for (OpenmrsObject retired : retiredObjects.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(retired, EventAction.RETIRED);
 				}
 				for (OpenmrsObject unretired : unretiredObjects.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(unretired, EventAction.UNRETIRED);
 				}
 				for (OpenmrsObject voided : voidedObjects.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(voided, EventAction.VOIDED);
 				}
 				for (OpenmrsObject unvoided : unvoidedObjects.peek()) {
-					// TODO: add action
+					eventManager.serveEvent(unvoided, EventAction.UNVOIDED);
 				}
 			}
-			*/
 		} finally {
 			//cleanup
 			inserts.pop();
