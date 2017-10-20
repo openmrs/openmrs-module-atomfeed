@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class AtomfeedmoduleActivator extends BaseModuleActivator {
+public class AtomfeedActivator extends BaseModuleActivator {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(AtomfeedmoduleActivator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AtomfeedActivator.class);
 	
 	/**
 	 * @see #started()

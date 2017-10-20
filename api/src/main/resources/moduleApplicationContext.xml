@@ -23,13 +23,13 @@
 
     <context:component-scan base-package="org.openmrs.module.atomfeed" />
 
-    <!-- Adds AtomfeedmoduleService to OpenMRS context so it can be accessed
-    calling Context.getService(AtomfeedmoduleService.class) -->
+    <!-- Adds AtomfeedService to OpenMRS context so it can be accessed
+    calling Context.getService(AtomfeedService.class) -->
     <bean parent="serviceContext">
         <property name="moduleService">
             <list>
-                <value>org.openmrs.module.atomfeed.api.AtomfeedmoduleService</value>
-                <ref bean="atomfeed.AtomfeedmoduleService" />
+                <value>org.openmrs.module.atomfeed.api.AtomfeedService</value>
+                <ref bean="atomfeed.AtomfeedService" />
             </list>
         </property>
     </bean>

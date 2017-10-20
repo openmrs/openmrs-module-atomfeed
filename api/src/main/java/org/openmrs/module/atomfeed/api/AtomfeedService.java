@@ -6,15 +6,10 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed;
+package org.openmrs.module.atomfeed.api;
 
-import org.springframework.stereotype.Component;
+import org.openmrs.api.OpenmrsService;
 
-/**
- * Contains module's config.
- */
-@Component("atomfeed.AtomfeedmoduleConfig")
-public class AtomfeedmoduleConfig {
+public interface AtomfeedService extends OpenmrsService {
 	
-	public static final String MODULE_PRIVILEGE = "Atomfeed module Privilege";
 }
