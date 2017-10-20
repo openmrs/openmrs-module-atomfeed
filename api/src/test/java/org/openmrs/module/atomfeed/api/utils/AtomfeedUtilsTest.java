@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -47,12 +46,12 @@ public class AtomfeedUtilsTest {
 		expectedLinkTemplates.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
 		expectedLinkTemplates.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
 
-		FeedConfiguration result = AtomfeedUtils.parseJsonConfigurationResource(sampleResoucePath);
+		FeedConfiguration[] result = AtomfeedUtils.parseFileToJsonConfigurationResource(sampleResoucePath);
 
-		Assert.assertEquals(result.getOpenMrsClass(), expectedOpenMrsClass);
-		Assert.assertEquals(result.isEnabled(), expectedEnabled);
-		Assert.assertEquals(result.getTitle(), expectedTitle);
-		Assert.assertEquals(result.getFeedWriter(), expectedFeedWriter);
-		Assert.assertEquals(result.getLinkTemplates(), expectedLinkTemplates);
+		Assert.assertEquals(result[0].getOpenMrsClass(), expectedOpenMrsClass);
+		Assert.assertEquals(result[0].isEnabled(), expectedEnabled);
+		Assert.assertEquals(result[0].getTitle(), expectedTitle);
+		Assert.assertEquals(result[0].getFeedWriter(), expectedFeedWriter);
+		Assert.assertEquals(result[0].getLinkTemplates(), expectedLinkTemplates);
 	}
 }
