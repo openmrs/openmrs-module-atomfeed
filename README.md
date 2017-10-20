@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/openmrs/openmrs-module-atomfeed.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-module-atomfeed)
+
 # openmrs-module-atomfeed
 More generic atom feed implementation
 
