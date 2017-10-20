@@ -6,13 +6,9 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Stack;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.hibernate.CallbackException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.HibernateException;
-import org.hibernate.Interceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 
@@ -21,6 +17,9 @@ import org.openmrs.Retireable;
 import org.openmrs.Voidable;
 import org.openmrs.api.context.Context;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
@@ -31,25 +30,26 @@ import org.springframework.util.ReflectionUtils;
  * a Stack here to handle any nested transactions that may occur within a single thread
  */
 @Component
+@Scope("prototype")
 public class HibernateEventInterceptor extends EmptyInterceptor {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected final Log log = LogFactory.getLog(HibernateEventInterceptor.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(HibernateEventInterceptor.class);
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> inserts = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> inserts = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> updates = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> updates = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> deletes = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> deletes = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> retiredObjects = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> retiredObjects = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> unretiredObjects = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> unretiredObjects = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> voidedObjects = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> voidedObjects = new Stack<>();
 	
-	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> unvoidedObjects = new ThreadLocal<Stack<HashSet<OpenmrsObject>>>();
+	private Stack<HashSet<OpenmrsObject>> unvoidedObjects = new Stack<>();
 	
 	/**
 	 * @see EmptyInterceptor#afterTransactionBegin(Transaction)
@@ -59,13 +59,13 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 		
 		initializeStackIfNecessary();
 		
-		inserts.get().push(new HashSet<OpenmrsObject>());
-		updates.get().push(new HashSet<OpenmrsObject>());
-		deletes.get().push(new HashSet<OpenmrsObject>());
-		retiredObjects.get().push(new HashSet<OpenmrsObject>());
-		unretiredObjects.get().push(new HashSet<OpenmrsObject>());
-		voidedObjects.get().push(new HashSet<OpenmrsObject>());
-		unvoidedObjects.get().push(new HashSet<OpenmrsObject>());
+		inserts.push(new HashSet<>());
+		updates.push(new HashSet<>());
+		deletes.push(new HashSet<>());
+		retiredObjects.push(new HashSet<>());
+		unretiredObjects.push(new HashSet<>());
+		voidedObjects.push(new HashSet<>());
+		unvoidedObjects.push(new HashSet<>());
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	@Override
 	public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 		if (entity instanceof OpenmrsObject) {
-			inserts.get().peek().add((OpenmrsObject) entity);
+			inserts.peek().add((OpenmrsObject) entity);
 		}
 		
 		//tells hibernate that there are no changes made here that
@@ -87,12 +87,13 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	 *      Type[])
 	 */
 	@Override
+	@SuppressWarnings("parameternumber")
 	public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState,
-								String[] propertyNames, Type[] types) {
+	        String[] propertyNames, Type[] types) {
 		
 		if (entity instanceof OpenmrsObject) {
 			OpenmrsObject object = (OpenmrsObject) entity;
-			updates.get().peek().add(object);
+			updates.peek().add(object);
 			//Fire events for retired/unretired and voided/unvoided objects
 			if (entity instanceof Retireable || entity instanceof Voidable) {
 				for (int i = 0; i < propertyNames.length; i++) {
@@ -108,22 +109,7 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 							currentValue = Boolean.valueOf(currentState[i].toString());
 						}
 						
-						if (previousValue != currentValue) {
-							if ("retired".equals(auditableProperty)) {
-								if (previousValue) {
-									unretiredObjects.get().peek().add(object);
-								} else {
-									retiredObjects.get().peek().add(object);
-								}
-							} else {
-								if (previousValue) {
-									unvoidedObjects.get().peek().add(object);
-								} else {
-									voidedObjects.get().peek().add(object);
-								}
-							}
-						}
-						
+						addToRetriedOrVoided(object, auditableProperty, previousValue, currentValue);
 						break;
 					}
 				}
@@ -133,13 +119,32 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 		return false;
 	}
 	
+	private void addToRetriedOrVoided(OpenmrsObject object, String auditableProperty, boolean previousValue,
+	        boolean currentValue) {
+		if (previousValue != currentValue) {
+			if ("retired".equals(auditableProperty)) {
+				if (previousValue) {
+					unretiredObjects.peek().add(object);
+				} else {
+					retiredObjects.peek().add(object);
+				}
+			} else {
+				if (previousValue) {
+					unvoidedObjects.peek().add(object);
+				} else {
+					voidedObjects.peek().add(object);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @see EmptyInterceptor#onDelete(Object, Serializable, Object[], String[], Type[])
 	 */
 	@Override
 	public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 		if (entity instanceof OpenmrsObject) {
-			deletes.get().peek().add((OpenmrsObject) entity);
+			deletes.peek().add((OpenmrsObject) entity);
 		}
 	}
 	
@@ -152,31 +157,31 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 			//If a collection element has been added/removed, fire an update event for the parent entity
 			Object owningObject = getOwner(collection);
 			if (owningObject instanceof OpenmrsObject) {
-				updates.get().peek().add((OpenmrsObject) owningObject);
+				updates.peek().add((OpenmrsObject) owningObject);
 			}
 		}
 	}
 	
 	/**
 	 * Gets the owning object of a persistent collection
-	 *
+	 * 
 	 * @param collection the persistent collection
 	 * @return the owning object
 	 */
 	private Object getOwner(Object collection) {
-		Class<?> pCollClass;
+		Class<?> collectionClass;
 		try {
-			pCollClass = Context.loadClass("org.hibernate.collection.PersistentCollection");
+			collectionClass = Context.loadClass("org.hibernate.collection.PersistentCollection");
 		} catch (ClassNotFoundException oe) {
 			//We are running against openmrs core 2.0 or later where it's a later hibernate version
 			try {
-				pCollClass = Context.loadClass("org.hibernate.collection.spi.PersistentCollection");
+				collectionClass = Context.loadClass("org.hibernate.collection.spi.PersistentCollection");
 			} catch (ClassNotFoundException ie) {
 				throw new HibernateException(ie);
 			}
 		}
 		
-		Method method = ReflectionUtils.findMethod(pCollClass, "getOwner");
+		Method method = ReflectionUtils.findMethod(collectionClass, "getOwner");
 		
 		return ReflectionUtils.invokeMethod(method, collection);
 	}
@@ -185,91 +190,93 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	 * @see EmptyInterceptor#afterTransactionCompletion(Transaction)
 	 */
 	@Override
+	@SuppressWarnings("PMD.EmptyTryBlock")
 	public void afterTransactionCompletion(Transaction tx) {
-		
 		try {
+			/*
 			if (tx.wasCommitted()) {
-				for (OpenmrsObject delete : deletes.get().peek()) {
+				for (OpenmrsObject delete : deletes.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject insert : inserts.get().peek()) {
+				for (OpenmrsObject insert : inserts.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject update : updates.get().peek()) {
+				for (OpenmrsObject update : updates.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject retired : retiredObjects.get().peek()) {
+				for (OpenmrsObject retired : retiredObjects.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject unretired : unretiredObjects.get().peek()) {
+				for (OpenmrsObject unretired : unretiredObjects.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject voided : voidedObjects.get().peek()) {
+				for (OpenmrsObject voided : voidedObjects.peek()) {
 					// TODO: add action
 				}
-				for (OpenmrsObject unvoided : unvoidedObjects.get().peek()) {
+				for (OpenmrsObject unvoided : unvoidedObjects.peek()) {
 					// TODO: add action
 				}
 			}
+			*/
 		} finally {
 			//cleanup
-			inserts.get().pop();
-			updates.get().pop();
-			deletes.get().pop();
-			retiredObjects.get().pop();
-			unretiredObjects.get().pop();
-			voidedObjects.get().pop();
-			unvoidedObjects.get().pop();
+			inserts.pop();
+			updates.pop();
+			deletes.pop();
+			retiredObjects.pop();
+			unretiredObjects.pop();
+			voidedObjects.pop();
+			unvoidedObjects.pop();
 			
 			removeStackIfEmpty();
 		}
 	}
 	
 	private void initializeStackIfNecessary() {
-		if (inserts.get() == null) {
-			inserts.set(new Stack<HashSet<OpenmrsObject>>());
+		if (inserts == null) {
+			inserts = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (updates.get() == null) {
-			updates.set(new Stack<HashSet<OpenmrsObject>>());
+		if (updates == null) {
+			updates = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (deletes.get() == null) {
-			deletes.set(new Stack<HashSet<OpenmrsObject>>());
+		if (deletes == null) {
+			deletes = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (retiredObjects.get() == null) {
-			retiredObjects.set(new Stack<HashSet<OpenmrsObject>>());
+		if (retiredObjects == null) {
+			retiredObjects = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (unretiredObjects.get() == null) {
-			unretiredObjects.set(new Stack<HashSet<OpenmrsObject>>());
+		if (unretiredObjects == null) {
+			unretiredObjects = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (voidedObjects.get() == null) {
-			voidedObjects.set(new Stack<HashSet<OpenmrsObject>>());
+		if (voidedObjects == null) {
+			voidedObjects = new Stack<HashSet<OpenmrsObject>>();
 		}
-		if (unvoidedObjects.get() == null) {
-			unvoidedObjects.set(new Stack<HashSet<OpenmrsObject>>());
+		if (unvoidedObjects == null) {
+			unvoidedObjects = new Stack<HashSet<OpenmrsObject>>();
 		}
 	}
 	
 	private void removeStackIfEmpty() {
-		if (inserts.get().empty()) {
-			inserts.remove();
+		if (inserts.empty()) {
+			inserts = null;
 		}
-		if (updates.get().empty()) {
-			updates.remove();
+		if (updates.empty()) {
+			updates = null;
 		}
-		if (deletes.get().empty()) {
-			deletes.remove();
+		if (deletes.empty()) {
+			deletes = null;
 		}
-		if (retiredObjects.get().empty()) {
-			retiredObjects.remove();
+		if (retiredObjects.empty()) {
+			retiredObjects = null;
 		}
-		if (unretiredObjects.get().empty()) {
-			unretiredObjects.remove();
+		if (unretiredObjects.empty()) {
+			unretiredObjects = null;
 		}
-		if (voidedObjects.get().empty()) {
-			voidedObjects.remove();
+		if (voidedObjects.empty()) {
+			voidedObjects = null;
 		}
-		if (unvoidedObjects.get().empty()) {
-			unvoidedObjects.remove();
+		if (unvoidedObjects.empty()) {
+			unvoidedObjects = null;
 		}
 	}
 }
