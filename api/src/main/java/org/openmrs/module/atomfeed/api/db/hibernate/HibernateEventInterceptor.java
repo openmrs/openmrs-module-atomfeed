@@ -285,4 +285,32 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 			unvoidedObjects.remove();
 		}
 	}
+
+	public static void setInserts(ThreadLocal<Stack<HashSet<OpenmrsObject>>> inserts) {
+		HibernateEventInterceptor.inserts = inserts;
+	}
+
+	public static void setUpdates(ThreadLocal<Stack<HashSet<OpenmrsObject>>> updates) {
+		HibernateEventInterceptor.updates = updates;
+	}
+
+	public static void setDeletes(ThreadLocal<Stack<HashSet<OpenmrsObject>>> deletes) {
+		HibernateEventInterceptor.deletes = deletes;
+	}
+
+	public static void setRetiredObjects(ThreadLocal<Stack<HashSet<OpenmrsObject>>> retiredObjects) {
+		HibernateEventInterceptor.retiredObjects = retiredObjects;
+	}
+
+	public static void setUnretiredObjects(ThreadLocal<Stack<HashSet<OpenmrsObject>>> unretiredObjects) {
+		HibernateEventInterceptor.unretiredObjects = unretiredObjects;
+	}
+
+	public static void setVoidedObjects(ThreadLocal<Stack<HashSet<OpenmrsObject>>> voidedObjects) {
+		HibernateEventInterceptor.voidedObjects = voidedObjects;
+	}
+
+	public static void setUnvoidedObjects(ThreadLocal<Stack<HashSet<OpenmrsObject>>> unvoidedObjects) {
+		HibernateEventInterceptor.unvoidedObjects = unvoidedObjects;
+	}
 }
