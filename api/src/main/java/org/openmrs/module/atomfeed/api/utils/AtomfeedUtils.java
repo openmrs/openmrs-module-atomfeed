@@ -18,43 +18,43 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.util.DefaultPrettyPrinter;
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
 public final class AtomfeedUtils {
 	
-	public static String readResourceFile(String file) throws AtomfeedIoException {
+	public static String readResourceFile(String file) throws AtomfeedException {
         try (InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(file)) {
             if (in == null) {
-                throw new AtomfeedIoException("Resource '" + file + "' doesn't exist");
+                throw new AtomfeedException("Resource '" + file + "' doesn't exist");
             }
             return IOUtils.toString(in);
         } catch (IOException e) {
-            throw new AtomfeedIoException(e);
+            throw new AtomfeedException(e);
         }
     }
 	
-	public static FeedConfiguration[] parseFileToJsonConfigurationResource(String resourcePath) {
+	public static FeedConfiguration[] parseJsonFileToFeedConfiguration(String resourcePath) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(readResourceFile(resourcePath), FeedConfiguration[].class);
 		}
 		catch (IOException e) {
-			throw new AtomfeedIoException(e);
+			throw new AtomfeedException(e);
 		}
 	}
 	
-	public static FeedConfiguration[] parseStringToJsonConfigurationResource(String value) {
+	public static FeedConfiguration[] parseJsonStringToFeedConfiguration(String value) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(value, FeedConfiguration[].class);
 		}
 		catch (IOException e) {
-			throw new AtomfeedIoException(e);
+			throw new AtomfeedException(e);
 		}
 	}
 	
-	public static boolean isValidateJson(String json) throws AtomfeedIoException {
+	public static boolean isValidateJson(String json) throws AtomfeedException {
 		try {
 			final JsonParser parser = new ObjectMapper().getJsonFactory().createJsonParser(json);
 			while (parser.nextToken() != null) {}
@@ -63,13 +63,13 @@ public final class AtomfeedUtils {
 			return false;
 		}
 		catch (IOException e) {
-			throw new AtomfeedIoException(e);
+			throw new AtomfeedException(e);
 		}
 		return true;
 	}
 	
-	public static void parseJsonConfigurationResourceToFile(FeedConfiguration[] feedConfigurations, String file)
-	        throws AtomfeedIoException {
+	public static void writeFeedConfigurationToJsonFile(FeedConfiguration[] feedConfigurations, String file)
+	        throws AtomfeedException {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
 		try {
@@ -77,7 +77,12 @@ public final class AtomfeedUtils {
 			writer.writeValue(resultFile, feedConfigurations);
 		}
 		catch (IOException e) {
-			throw new AtomfeedIoException(e);
+			throw new AtomfeedException(e);
 		}
+	}
+
+	public static boolean resourceFileExists(String path) {
+		InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(path);
+		return in != null;
 	}
 }

@@ -1,0 +1,12 @@
+[
+  {
+    "openMrsClass": "org.openmrs.Patient",
+    "enabled": "false",
+    "title": "Title",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
+    },
+    "feedWriter": "custom.PatientWriter",
+  }
+]
