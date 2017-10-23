@@ -59,7 +59,7 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	}
 	
 	@Test
-	public void onSave_shouldSaveOpenmrsObject() {
+	public void onSave_shouldAddOpenmrsObjectToInsertSet() {
 		final OpenmrsObject expected = mock(OpenmrsObject.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
@@ -68,7 +68,7 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	}
 	
 	@Test
-	public void onSave_shouldNotSaveNotOpenmrsObject() {
+	public void onSave_shouldNotAddNotOpenmrsObjectToInsertSet() {
 		final Object notOpenmrsObject = mock(Object.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
@@ -81,9 +81,23 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	}
 	
 	@Test
-	public void onDelete() {
+	public void onDelete_shouldAddOpenmrsObjectToDeleteSet() {
+		final OpenmrsObject expected = mock(OpenmrsObject.class);
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+
+		hibernateEventInterceptor.onDelete(expected, null, null, null, null);
+		Assert.assertTrue(deletes.get().peek().contains(expected));
 	}
-	
+
+	@Test
+	public void onDelete_shouldNotAddNotOpenmrsObjectToDeleteSet() {
+		final Object notOpenmrsObject = mock(Object.class);
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+
+		hibernateEventInterceptor.onSave(notOpenmrsObject, null, null, null, null);
+		Assert.assertFalse(deletes.get().peek().contains(notOpenmrsObject));
+	}
+
 	@Test
 	public void onCollectionUpdate() {
 	}
