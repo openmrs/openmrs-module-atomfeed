@@ -11,54 +11,54 @@ package org.openmrs.module.atomfeed.api.model;
 import java.util.HashMap;
 
 public class FeedConfiguration {
-
-    private String openMrsClass;
-
-    private boolean enabled;
-
-    private String title;
-
-    private HashMap<String, String> linkTemplates;
-
-    private String feedWriter;
-
-    public String getOpenMrsClass() {
-        return openMrsClass;
-    }
-
-    public void setOpenMrsClass(String openMrsClass) {
-        this.openMrsClass = openMrsClass;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public HashMap<String, String> getLinkTemplates() {
-        return linkTemplates;
-    }
-
-    public void setLinkTemplates(HashMap<String, String> linkTemplates) {
-        this.linkTemplates = linkTemplates;
-    }
-
-    public String getFeedWriter() {
-        return feedWriter;
-    }
-
-    public void setFeedWriter(String feedWriter) {
-        this.feedWriter = feedWriter;
-    }
+	
+	private String openMrsClass;
+	
+	private boolean enabled;
+	
+	private String title;
+	
+	private HashMap<String, String> linkTemplates;
+	
+	private String feedWriter;
+	
+	public String getOpenMrsClass() {
+		return openMrsClass;
+	}
+	
+	public void setOpenMrsClass(String openMrsClass) {
+		this.openMrsClass = openMrsClass;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public HashMap<String, String> getLinkTemplates() {
+		return linkTemplates;
+	}
+	
+	public void setLinkTemplates(HashMap<String, String> linkTemplates) {
+		this.linkTemplates = linkTemplates;
+	}
+	
+	public String getFeedWriter() {
+		return feedWriter;
+	}
+	
+	public void setFeedWriter(String feedWriter) {
+		this.feedWriter = feedWriter;
+	}
 }

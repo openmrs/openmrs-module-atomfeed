@@ -10,6 +10,6 @@ package org.openmrs.module.atomfeed.api;
 
 import org.openmrs.api.OpenmrsService;
 
-public interface AtomfeedmoduleService extends OpenmrsService {
+public interface AtomfeedService extends OpenmrsService {
 	
 }

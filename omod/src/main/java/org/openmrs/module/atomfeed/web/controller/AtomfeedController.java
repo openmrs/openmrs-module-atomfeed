@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class AtomfeedmoduleController {
+public class AtomfeedController {
 	
 	/** Success form view name */
 	private static final String VIEW = "/module/atomfeed/atomfeed";

@@ -29,9 +29,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:git@github.com:pkornowski/openmrs-module-atomfeed.git</connection>
-		<developerConnection>scm:git:git@github.com:pkornowski/openmrs-module-atomfeed.git</developerConnection>
-		<url>https://github.com/pkornowski/openmrs-module-atomfeed/</url>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-atomfeed.git</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-atomfeed.git</developerConnection>
+		<url>https://github.com/openmrs/openmrs-module-atomfeed/</url>
 	</scm>
 
 	<modules>

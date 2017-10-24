@@ -42,6 +42,7 @@
 		audits that should be suppressed.
 		http://checkstyle.sourceforge.net/config.html
 	-->
+	<module name="SuppressWarningsFilter"/>
 	<module name="SuppressionFilter">
 		<property name="file" value="checkstyle-suppressions.xml"/>
 	</module>
@@ -84,6 +85,7 @@
 	</module>
 
 	<module name="TreeWalker">
+		<module name="SuppressWarningsHolder"/>
 		<!-- Defines expected tab width for checks that require a tab width -->
 		<property name="tabWidth" value="4"/>
 
