@@ -27,6 +27,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.db.EventManager;
 
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -104,48 +105,51 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 		if (entity instanceof OpenmrsObject) {
 			OpenmrsObject object = (OpenmrsObject) entity;
 			updates.get().peek().add(object);
-			//Fire events for retired/unretired and voided/unvoided objects
-			if (entity instanceof Retireable || entity instanceof Voidable) {
-				for (int i = 0; i < propertyNames.length; i++) {
-					String auditableProperty = (entity instanceof Retireable) ? "retired" : "voided";
-					if (auditableProperty.equals(propertyNames[i])) {
-						boolean previousValue = false;
-						if (previousState != null && previousState[i] != null) {
-							previousValue = Boolean.valueOf(previousState[i].toString());
-						}
-						
-						boolean currentValue = false;
-						if (currentState != null && currentState[i] != null) {
-							currentValue = Boolean.valueOf(currentState[i].toString());
-						}
-						
-						addToRetriedOrVoided(object, auditableProperty, previousValue, currentValue);
-						break;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	private void addToRetriedOrVoided(OpenmrsObject object, String auditableProperty, boolean previousValue,
-	        boolean currentValue) {
-		if (previousValue != currentValue) {
-			if ("retired".equals(auditableProperty)) {
-				if (previousValue) {
+			
+			if (entity instanceof Retireable) {
+				State state = hasPropertyChanged("retired", currentState, previousState, propertyNames);
+				if (state == State.UNDO) {
 					unretiredObjects.get().peek().add(object);
-				} else {
+				} else if (state == State.CHANGED) {
 					retiredObjects.get().peek().add(object);
 				}
-			} else {
-				if (previousValue) {
+			}
+			if (entity instanceof Voidable) {
+				State state = hasPropertyChanged("voided", currentState, previousState, propertyNames);
+				if (state == State.UNDO) {
 					unvoidedObjects.get().peek().add(object);
-				} else {
+				} else if (state == State.CHANGED) {
 					voidedObjects.get().peek().add(object);
 				}
 			}
 		}
+		return false; // tells hibernate that there are no changes made here that
+	}
+	
+	private State hasPropertyChanged(String propertyNameToCheck, Object[] currentState, Object[] previousState,
+	                           String[] propertyNames) {
+		for (int i = 0; i < propertyNames.length; ++i) {
+			if (propertyNameToCheck.equals(propertyNames[i])) {
+				boolean previousValue = false;
+				if (previousState != null && previousState[i] != null) {
+					previousValue = Boolean.valueOf(previousState[i].toString());
+				}
+				
+				boolean currentValue = false;
+				if (currentState != null && currentState[i] != null) {
+					currentValue = Boolean.valueOf(currentState[i].toString());
+				}
+				
+				if (previousValue == currentValue) {
+					return State.NOT_CHANGED;
+				} else if (previousValue) {
+					return State.UNDO;
+				} else {
+					return State.CHANGED;
+				}
+			}
+		}
+		throw new AtomfeedIoException("Property '" + propertyNameToCheck + "' has not been found");
 	}
 	
 	/**
@@ -312,5 +316,9 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 
 	public static void setUnvoidedObjects(ThreadLocal<Stack<HashSet<OpenmrsObject>>> unvoidedObjects) {
 		HibernateEventInterceptor.unvoidedObjects = unvoidedObjects;
+	}
+	
+	private enum State {
+		NOT_CHANGED, CHANGED, UNDO
 	}
 }
