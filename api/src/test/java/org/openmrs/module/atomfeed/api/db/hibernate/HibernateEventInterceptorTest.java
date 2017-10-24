@@ -1,20 +1,25 @@
 package org.openmrs.module.atomfeed.api.db.hibernate;
 
+import org.hibernate.collection.spi.PersistentCollection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.openmrs.OpenmrsObject;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import java.util.HashSet;
 import java.util.Stack;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTest {
-	
-	// @Mock
-	// private EventManager eventManager;
+public class HibernateEventInterceptorTest {
+
+	@Mock
+	private final OpenmrsObject openmrsObject = mock(OpenmrsObject.class);
+
+	@Mock
+	private final Object notOpenmrsObject = mock(Object.class);
 	
 	private ThreadLocal<Stack<HashSet<OpenmrsObject>>> inserts;
 	
@@ -82,16 +87,14 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	
 	@Test
 	public void onDelete_shouldAddOpenmrsObjectToDeleteSet() {
-		final OpenmrsObject expected = mock(OpenmrsObject.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 
-		hibernateEventInterceptor.onDelete(expected, null, null, null, null);
-		Assert.assertTrue(deletes.get().peek().contains(expected));
+		hibernateEventInterceptor.onDelete(openmrsObject, null, null, null, null);
+		Assert.assertTrue(deletes.get().peek().contains(openmrsObject));
 	}
 
 	@Test
 	public void onDelete_shouldNotAddNotOpenmrsObjectToDeleteSet() {
-		final Object notOpenmrsObject = mock(Object.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 
 		hibernateEventInterceptor.onSave(notOpenmrsObject, null, null, null, null);
@@ -99,7 +102,29 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	}
 
 	@Test
-	public void onCollectionUpdate() {
+	public void onCollectionUpdate_shouldAddOwnerOfUpdatedCollectionToUpdateSet() {
+		final OpenmrsObject expectedCollectionOwner = openmrsObject;
+
+		final PersistentCollection updatedCollection = mock(PersistentCollection.class);
+		when(updatedCollection.getOwner()).thenReturn(expectedCollectionOwner);
+
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+
+		hibernateEventInterceptor.onCollectionUpdate(updatedCollection, null);
+		Assert.assertTrue(updates.get().peek().contains(expectedCollectionOwner));
+	}
+
+	@Test
+	public void onCollectionUpdate_shouldNotAddOwnerOfUpdatedCollectionWhenTheyAreNotOpenmrsObject() {
+		final Object collectionOwner = notOpenmrsObject;
+
+		final PersistentCollection updatedCollection = mock(PersistentCollection.class);
+		when(updatedCollection.getOwner()).thenReturn(collectionOwner);
+
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+
+		hibernateEventInterceptor.onCollectionUpdate(updatedCollection, null);
+		Assert.assertFalse(updates.get().peek().contains(collectionOwner));
 	}
 	
 	@Test
@@ -107,13 +132,13 @@ public class HibernateEventInterceptorTest extends BaseModuleContextSensitiveTes
 	}
 	
 	private void initVariables() {
-        inserts = new ThreadLocal<>();
-        updates = new ThreadLocal<>();
-        deletes = new ThreadLocal<>();
-        retiredObjects = new ThreadLocal<>();
-        unretiredObjects = new ThreadLocal<>();
-        voidedObjects = new ThreadLocal<>();
-        unvoidedObjects = new ThreadLocal<>();
+		inserts = new ThreadLocal<>();
+		updates = new ThreadLocal<>();
+		deletes = new ThreadLocal<>();
+		retiredObjects = new ThreadLocal<>();
+		unretiredObjects = new ThreadLocal<>();
+		voidedObjects = new ThreadLocal<>();
+		unvoidedObjects = new ThreadLocal<>();
 
 		HibernateEventInterceptor.setInserts(inserts);
 		HibernateEventInterceptor.setUpdates(updates);
