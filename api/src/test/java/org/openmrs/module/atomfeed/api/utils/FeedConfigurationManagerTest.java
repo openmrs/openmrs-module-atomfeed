@@ -1,6 +1,7 @@
 package org.openmrs.module.atomfeed.api.utils;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
@@ -11,12 +12,17 @@ public class FeedConfigurationManagerTest {
 
     private static final String sampleFeedConfigurationPath = "sampleFeedConfiguration.json";
     private static final String sampleFeedConfigurationPath2 = "sampleFeedConfiguration2.json";
+    private static final HashMap<String, String> links = new HashMap<>();;
+
+    @Before
+    public void setUp() {
+        links.clear();
+        links.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
+        links.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
+    }
 
     @Test
     public void loadLocalFeedConfiguration_shouldLoadFeedConfigurationFromArrayCorrectly() throws AtomfeedException {
-        final HashMap<String, String> links = new HashMap<>();
-        links.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
-        links.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
         final FeedConfiguration expectedFeedConfiguration = new FeedConfiguration(
                 "org.openmrs.Patient",
                 false,
@@ -33,9 +39,6 @@ public class FeedConfigurationManagerTest {
 
     @Test
     public void loadLocalFeedConfiguration_shouldLoadFeedConfigurationFromStringCorrectly() throws AtomfeedException {
-        final HashMap<String, String> links = new HashMap<>();
-        links.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
-        links.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
         final FeedConfiguration expectedFeedConfiguration = new FeedConfiguration(
                 "org.openmrs.TEST2",
                 true,
