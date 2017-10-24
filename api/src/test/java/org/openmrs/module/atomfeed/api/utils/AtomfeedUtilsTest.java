@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,8 +54,8 @@ public class AtomfeedUtilsTest {
 	
 	@Test
 	public void parseJsonFileToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
-		FeedConfiguration[] result = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
-		Assert.assertEquals(expectedFeedConfiguration, result[0]);
+		List<FeedConfiguration> result = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
+		Assert.assertEquals(expectedFeedConfiguration, result.get(0));
 	}
 
 	@Test(expected = AtomfeedException.class)
@@ -65,8 +66,8 @@ public class AtomfeedUtilsTest {
 	@Test
 	public void parseJsonStringToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
 		String json = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath);
-		FeedConfiguration[] result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
-		Assert.assertEquals(expectedFeedConfiguration, result[0]);
+		List<FeedConfiguration> result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
+		Assert.assertEquals(expectedFeedConfiguration, result.get(0));
 	}
 
 	@Test(expected = AtomfeedException.class)

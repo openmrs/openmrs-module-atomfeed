@@ -3,10 +3,12 @@ package org.openmrs.module.atomfeed.api.utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.atomfeed.api.FeedConfigurationManager;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class FeedConfigurationManagerTest {
 
@@ -31,7 +33,7 @@ public class FeedConfigurationManagerTest {
                 "custom.PatientWriter"
         );
 
-        FeedConfiguration[] array = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
+        List<FeedConfiguration> array = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
         FeedConfigurationManager manager = new FeedConfigurationManager();
         manager.loadLocalFeedConfiguration(array);
         Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByTitle("Title"));
