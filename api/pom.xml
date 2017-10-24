@@ -11,4 +11,11 @@
 	<packaging>jar</packaging>
 	<name>Atomfeed module API</name>
 	<description>API project for Atomfeed module</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.ict4h</groupId>
+			<artifactId>atomfeed-server</artifactId>
+		</dependency>
+	</dependencies>
 </project>

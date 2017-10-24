@@ -39,6 +39,7 @@
 		<module>omod</module>
 		<module>build-tools</module>
 	</modules>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -54,8 +55,14 @@
 				<version>${uicommonsVersion}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.ict4h</groupId>
+				<artifactId>atomfeed-server</artifactId>
+				<version>${atomfeedServerVersion}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<repositories>
 		<repository>
 			<id>openmrs-repo</id>
@@ -204,5 +211,6 @@
 		<findbugsPluginVersion>3.0.2</findbugsPluginVersion>
 		<uicommonsVersion>2.3.0</uicommonsVersion>
 		<uiframeworkVersion>3.11.0</uiframeworkVersion>
+    	<atomfeedServerVersion>1.9.4</atomfeedServerVersion>
 	</properties>
 </project>
