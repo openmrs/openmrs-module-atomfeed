@@ -8,20 +8,89 @@
  */
 package org.openmrs.module.atomfeed.api.db;
 
+import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.readResourceFile;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.UUID;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.ict4h.atomfeed.server.service.Event;
+
+import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
 
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventManager {
 	
-	protected static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
+	
+	private static final String UUID_PATTERN = "{uuid}";
 	
 	public void serveEvent(OpenmrsObject openmrsObject, EventAction eventAction) {
-		Class<?> openmrsObjectClass = openmrsObject.getClass();
-		LOGGER.info("Called serveEvent method. Parameters: openmrsObject=" + openmrsObjectClass.getName() + ", eventAction="
-		        + eventAction.name());
+		LOGGER.info("Called serveEvent method. Parameters: openmrsObject=" + openmrsObject.getClass().getName() +
+				", eventAction=" + eventAction.name());
+		
+		FeedConfiguration feedConfiguration = getFeedConfiguration(openmrsObject.getClass().getName());
+		
+		final Event event = new Event(
+				getUniqueId(),
+				feedConfiguration.getTitle(),
+				DateTime.now(),
+				(URI) null,
+				getEventObject(openmrsObject, feedConfiguration),
+				feedConfiguration.getOpenMrsClass()
+		);
+	}
+	
+	private String getUniqueId() {
+		return UUID.randomUUID().toString();
+	}
+	
+	private String getEventObject(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
+		final String urlTemplate = getPrefferedTemplate(feedConfiguration);
+		String uuid = openmrsObject.getUuid();
+		return urlTemplate.replace(UUID_PATTERN, uuid);
+	}
+	
+	private String getPrefferedTemplate(FeedConfiguration feedConfiguration) {
+		String endpoint;
+		final String fhir = "fhir";
+		final String rest = "rest";
+		if (feedConfiguration.getLinkTemplates().containsKey(fhir)) {
+			endpoint = feedConfiguration.getLinkTemplates().get(fhir);
+		} else if (feedConfiguration.getLinkTemplates().containsKey(rest)) {
+			endpoint = feedConfiguration.getLinkTemplates().get(rest);
+		} else {
+			throw new AtomfeedIoException("Not exists appropriate object endpoint template");
+		}
+		return endpoint;
+	}
+	
+	
+	private FeedConfiguration getFeedConfiguration(String openmrsClass) {
+		// TODO: to replaced by FeedConfiguration's manager methods
+		ObjectMapper mapper = new ObjectMapper();
+		FeedConfiguration[] array = null;
+		try {
+			mapper.readValue(readResourceFile("defaultFeedConfiguration.json"), FeedConfiguration[].class);
+		} catch (IOException e) {
+			throw new AtomfeedIoException(e);
+		}
+		
+		for (FeedConfiguration feedConfiguration : Arrays.asList(array)) {
+			if (feedConfiguration.getOpenMrsClass().equals(openmrsClass)) {
+				return feedConfiguration;
+			}
+		}
+		throw new AtomfeedIoException("Atomfeed configuration for '" + openmrsClass + "' has not been found");
 	}
 }
