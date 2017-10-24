@@ -8,19 +8,28 @@
  */
 package org.openmrs.module.atomfeed.api.writers;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsQueue;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
+
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
 
 public abstract class FeedWriterBase implements FeedWriter {
+	
+	protected static final Logger LOGGER = LoggerFactory.getLogger(FeedWriterBase.class);
 	
 	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 	
@@ -53,5 +62,19 @@ public abstract class FeedWriterBase implements FeedWriter {
 		List<PlatformTransactionManager> platformTransactionManagers =
 				Context.getRegisteredComponents(PlatformTransactionManager.class);
 		return platformTransactionManagers.get(0);
+	}
+	
+	protected void debugEvent(Event event) {
+		final ObjectMapper objectMapper = new ObjectMapper();
+		if (LOGGER.isDebugEnabled()) {
+			try {
+				String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(event);
+				LOGGER.debug("{} AtomFeed event created, event body:\n {}", event.getUuid(), json);
+			} catch (IOException e) {
+				throw new AtomfeedIoException(e);
+			}
+		} else {
+			LOGGER.info("Created AtomFeed event with {} UUID", event.getUuid());
+		}
 	}
 }

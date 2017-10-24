@@ -8,16 +8,53 @@
  */
 package org.openmrs.module.atomfeed.api.writers;
 
+import java.net.URI;
+import java.util.UUID;
+
+import org.ict4h.atomfeed.server.service.Event;
+import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.module.atomfeed.api.db.EventAction;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.springframework.stereotype.Component;
 
 @Component("atomfeed.DefaultFeedWriter")
-public class DefaultFeedWriter implements FeedWriter {
-
+public class DefaultFeedWriter extends FeedWriterBase {
+	
+	private static final String UUID_PATTERN = "{uuid}";
+	
 	@Override
 	public void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration) {
+		final Event event = new Event(
+				UUID.randomUUID().toString(),
+				feedConfiguration.getTitle(),
+				DateTime.now(),
+				(URI) null,
+				getEventContent(openmrsObject, feedConfiguration),
+				eventAction.name()
+		);
+		debugEvent(event);
+		saveEvent(event);
+	}
 	
+	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
+		final String urlTemplate = getPreferredTemplate(feedConfiguration);
+		String uuid = openmrsObject.getUuid();
+		return urlTemplate.replace(UUID_PATTERN, uuid);
+	}
+	
+	private String getPreferredTemplate(FeedConfiguration feedConfiguration) {
+		String endpoint;
+		final String fhir = "fhir";
+		final String rest = "rest";
+		if (feedConfiguration.getLinkTemplates().containsKey(fhir)) {
+			endpoint = feedConfiguration.getLinkTemplates().get(fhir);
+		} else if (feedConfiguration.getLinkTemplates().containsKey(rest)) {
+			endpoint = feedConfiguration.getLinkTemplates().get(rest);
+		} else {
+			throw new AtomfeedIoException("Not exists appropriate object endpoint template");
+		}
+		return endpoint;
 	}
 }
