@@ -9,6 +9,7 @@
 package org.openmrs.module.atomfeed.api.model;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class FeedConfiguration {
 
@@ -21,6 +22,16 @@ public class FeedConfiguration {
     private HashMap<String, String> linkTemplates;
 
     private String feedWriter;
+
+    public FeedConfiguration() { }
+
+    public FeedConfiguration(String openMrsClass, boolean enabled, String title, HashMap<String, String> linkTemplates, String feedWriter) {
+        this.openMrsClass = openMrsClass;
+        this.enabled = enabled;
+        this.title = title;
+        this.linkTemplates = linkTemplates;
+        this.feedWriter = feedWriter;
+    }
 
     public String getOpenMrsClass() {
         return openMrsClass;
@@ -60,5 +71,27 @@ public class FeedConfiguration {
 
     public void setFeedWriter(String feedWriter) {
         this.feedWriter = feedWriter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        FeedConfiguration feedConfiguration = (FeedConfiguration) o;
+        return Objects.equals(openMrsClass, feedConfiguration.openMrsClass) &&
+            Objects.equals(enabled, feedConfiguration.enabled) &&
+            Objects.equals(title, feedConfiguration.title) &&
+            Objects.equals(linkTemplates, feedConfiguration.linkTemplates) &&
+            Objects.equals(feedWriter, feedConfiguration.feedWriter);
+    }
+
+            @Override
+    public int hashCode() {
+        return Objects.hash(openMrsClass, enabled, title, linkTemplates, feedWriter);
     }
 }
