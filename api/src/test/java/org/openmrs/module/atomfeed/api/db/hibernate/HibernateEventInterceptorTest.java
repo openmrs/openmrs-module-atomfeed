@@ -1,5 +1,16 @@
 package org.openmrs.module.atomfeed.api.db.hibernate;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.HashSet;
+import java.util.Stack;
+
 import org.hibernate.Transaction;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.junit.Assert;
@@ -8,20 +19,12 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Retireable;
+import org.openmrs.Voidable;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.db.EventManager;
-
-import java.util.HashSet;
-import java.util.Stack;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class HibernateEventInterceptorTest {
 	
@@ -80,16 +83,14 @@ public class HibernateEventInterceptorTest {
 	
 	@Test
 	public void onSave_shouldAddOpenmrsObjectToInsertSet() {
-		final OpenmrsObject expected = mock(OpenmrsObject.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
-		hibernateEventInterceptor.onSave(expected, null, null, null, null);
-		Assert.assertTrue(inserts.get().peek().contains(expected));
+		hibernateEventInterceptor.onSave(openmrsObject, null, null, null, null);
+		Assert.assertTrue(inserts.get().peek().contains(openmrsObject));
 	}
 	
 	@Test
 	public void onSave_shouldNotAddNotOpenmrsObjectToInsertSet() {
-		final Object notOpenmrsObject = mock(Object.class);
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
 		hibernateEventInterceptor.onSave(notOpenmrsObject, null, null, null, null);
@@ -97,7 +98,139 @@ public class HibernateEventInterceptorTest {
 	}
 	
 	@Test
-	public void onFlushDirty() {
+	public void onFlushDirty_shouldAddOpenmrsObjectToUpdateSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		hibernateEventInterceptor.onFlushDirty(openmrsObject, null, null, null, null, null);
+		Assert.assertTrue(updates.get().peek().contains(openmrsObject));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldNotAddNotOpenmrsObjectToUpdateSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		hibernateEventInterceptor.onFlushDirty(notOpenmrsObject, null, null, null, null, null);
+		Assert.assertFalse(updates.get().peek().contains(notOpenmrsObject));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldAddRetriedObjectToRetriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Retireable retireable = mock(Retireable.class);
+		String[] propertyNames = { "retired" };
+		Object[] previousState = { Boolean.FALSE };
+		Object[] currentState = { Boolean.TRUE };
+		
+		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(retireable));
+		Assert.assertTrue(retiredObjects.get().peek().contains(retireable));
+		Assert.assertFalse(unretiredObjects.get().peek().contains(retireable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldNotAddNotRetriedObjectToRetriedSets() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Retireable retireable = mock(Retireable.class);
+		String[] propertyNames = { "retired" };
+		Object[] previousState = { Boolean.TRUE };
+		Object[] currentState = { Boolean.TRUE };
+		
+		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(retireable));
+		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
+		Assert.assertFalse(unretiredObjects.get().peek().contains(retireable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldAddUnretriedObjectToUnretriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Retireable retireable = mock(Retireable.class);
+		String[] propertyNames = { "retired" };
+		Object[] previousState = { Boolean.TRUE };
+		Object[] currentState = { Boolean.FALSE };
+		
+		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(retireable));
+		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
+		Assert.assertTrue(unretiredObjects.get().peek().contains(retireable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldNotAddNotUnretriedObjectToUnretriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Retireable retireable = mock(Retireable.class);
+		String[] propertyNames = { "retired" };
+		Object[] previousState = { Boolean.FALSE };
+		Object[] currentState = { Boolean.FALSE };
+		
+		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(retireable));
+		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
+		Assert.assertFalse(unretiredObjects.get().peek().contains(retireable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldAddVoidedObjectToRetriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Voidable voidable = mock(Voidable.class);
+		String[] propertyNames = { "voided" };
+		Object[] previousState = { Boolean.FALSE };
+		Object[] currentState = { Boolean.TRUE };
+		
+		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(voidable));
+		Assert.assertTrue(voidedObjects.get().peek().contains(voidable));
+		Assert.assertFalse(unvoidedObjects.get().peek().contains(voidable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldNotAddNotVoidedObjectToRetriedSets() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Voidable voidable = mock(Voidable.class);
+		String[] propertyNames = { "voided" };
+		Object[] previousState = { Boolean.TRUE };
+		Object[] currentState = { Boolean.TRUE };
+		
+		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(voidable));
+		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
+		Assert.assertFalse(unvoidedObjects.get().peek().contains(voidable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldAddUnvoidedObjectToUnretriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Voidable voidable = mock(Voidable.class);
+		String[] propertyNames = { "voided" };
+		Object[] previousState = { Boolean.TRUE };
+		Object[] currentState = { Boolean.FALSE };
+		
+		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(voidable));
+		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
+		Assert.assertTrue(unvoidedObjects.get().peek().contains(voidable));
+	}
+	
+	@Test
+	public void onFlushDirty_shouldNotAddNotUnvoidedObjectToUnretriedSet() {
+		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
+		
+		Voidable voidable = mock(Voidable.class);
+		String[] propertyNames = { "voided" };
+		Object[] previousState = { Boolean.FALSE };
+		Object[] currentState = { Boolean.FALSE };
+		
+		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
+		Assert.assertTrue(updates.get().peek().contains(voidable));
+		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
+		Assert.assertFalse(unvoidedObjects.get().peek().contains(voidable));
 	}
 	
 	@Test
