@@ -11,6 +11,9 @@ package org.openmrs.module.atomfeed.api.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 
 import org.codehaus.jackson.JsonParseException;
@@ -34,20 +37,22 @@ public final class AtomfeedUtils {
         }
     }
 	
-	public static FeedConfiguration[] parseJsonFileToFeedConfiguration(String resourcePath) {
+	public static List<FeedConfiguration> parseJsonFileToFeedConfiguration(String resourcePath) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(readResourceFile(resourcePath), FeedConfiguration[].class);
+			FeedConfiguration[] array =  mapper.readValue(readResourceFile(resourcePath), FeedConfiguration[].class);
+			return Arrays.asList(array);
 		}
 		catch (IOException e) {
 			throw new AtomfeedException(e);
 		}
 	}
 	
-	public static FeedConfiguration[] parseJsonStringToFeedConfiguration(String value) {
+	public static List<FeedConfiguration> parseJsonStringToFeedConfiguration(String value) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(value, FeedConfiguration[].class);
+			FeedConfiguration[] array =  mapper.readValue(value, FeedConfiguration[].class);
+			return Arrays.asList(array);
 		}
 		catch (IOException e) {
 			throw new AtomfeedException(e);
@@ -68,7 +73,7 @@ public final class AtomfeedUtils {
 		return true;
 	}
 	
-	public static void writeFeedConfigurationToJsonFile(FeedConfiguration[] feedConfigurations, String file)
+	public static void writeFeedConfigurationToJsonFile(List<FeedConfiguration> feedConfigurations, String file)
 	        throws AtomfeedException {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
