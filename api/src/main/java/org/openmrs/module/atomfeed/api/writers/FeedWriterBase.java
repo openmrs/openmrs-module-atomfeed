@@ -20,7 +20,7 @@ import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public abstract class FeedWriterBase implements FeedWriter {
 				String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(event);
 				LOGGER.debug("{} AtomFeed event created, event body:\n {}", event.getUuid(), json);
 			} catch (IOException e) {
-				throw new AtomfeedIoException(e);
+				throw new AtomfeedException(e);
 			}
 		} else {
 			LOGGER.info("Created AtomFeed event with {} UUID", event.getUuid());

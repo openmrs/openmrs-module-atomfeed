@@ -17,12 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import org.openmrs.OpenmrsObject;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-
-import org.openmrs.module.atomfeed.api.writers.DefaultFeedWriter;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +34,7 @@ public class EventManager implements ApplicationContextAware {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
 	
-	private static final Class<? extends FeedWriter> defaultFeedWriter = DefaultFeedWriter.class;
+	private static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
 	
 	private ApplicationContext applicationContext;
 	
@@ -45,27 +43,31 @@ public class EventManager implements ApplicationContextAware {
 			+ " eventAction={}", openmrsObject.getClass().getName(), eventAction.name());
 		
 		FeedConfiguration feedConfiguration = getFeedConfiguration(openmrsObject.getClass().getName());
-		getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
+		if (feedConfiguration != null) {
+			getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
+		} else {
+			LOGGER.info("Skipped serve hibernate operation on '{}' object", openmrsObject.getClass().getName());
+		}
 	}
 	
 	private FeedWriter getFeedWriter(FeedConfiguration feedConfiguration) {
-		FeedWriter result;
+		String feedWriterBeanId;
 		if (StringUtils.isBlank(feedConfiguration.getFeedWriter())) {
-			result = Context.getService(defaultFeedWriter);
+			feedWriterBeanId = DEFAULT_FEED_WRITER;
 		} else {
-			result = (FeedWriter) applicationContext.getBean(feedConfiguration.getFeedWriter());
+			feedWriterBeanId = feedConfiguration.getFeedWriter();
 		}
-		return result;
+		return (FeedWriter) applicationContext.getBean(feedWriterBeanId);
 	}
 	
 	private FeedConfiguration getFeedConfiguration(String openmrsClass) {
-		// TODO: to replaced by FeedConfiguration's manager methods
+		// TODO: to replaced by FeedConfiguration's service methods
 		ObjectMapper mapper = new ObjectMapper();
 		FeedConfiguration[] array;
 		try {
 			array = mapper.readValue(readResourceFile("defaultFeedConfiguration.json"), FeedConfiguration[].class);
 		} catch (IOException e) {
-			throw new AtomfeedIoException(e);
+			throw new AtomfeedException(e);
 		}
 		
 		for (FeedConfiguration feedConfiguration : Arrays.asList(array)) {
@@ -73,7 +75,8 @@ public class EventManager implements ApplicationContextAware {
 				return feedConfiguration;
 			}
 		}
-		throw new AtomfeedIoException("Atomfeed configuration for '" + openmrsClass + "' has not been found");
+		LOGGER.debug("Atomfeed configuration for '{}' has not been found", openmrsClass);
+		return null;
 	}
 	
 	@Override

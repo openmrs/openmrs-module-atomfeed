@@ -15,7 +15,7 @@ import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.module.atomfeed.api.db.EventAction;
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +32,7 @@ public class DefaultFeedWriter extends FeedWriterBase {
 				DateTime.now(),
 				(URI) null,
 				getEventContent(openmrsObject, feedConfiguration),
+				feedConfiguration.getCategory(),
 				eventAction.name()
 		);
 		debugEvent(event);
@@ -54,7 +55,7 @@ public class DefaultFeedWriter extends FeedWriterBase {
 		} else if (feedConfiguration.getLinkTemplates().containsKey(rest)) {
 			endpoint = feedConfiguration.getLinkTemplates().get(rest);
 		} else {
-			throw new AtomfeedIoException("Not exists appropriate object endpoint template");
+			throw new AtomfeedException("Not exists appropriate object endpoint template");
 		}
 		return endpoint;
 	}
