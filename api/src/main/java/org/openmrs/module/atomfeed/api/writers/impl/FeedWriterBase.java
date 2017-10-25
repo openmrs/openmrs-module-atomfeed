@@ -6,7 +6,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.writers;
+package org.openmrs.module.atomfeed.api.writers.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
+import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 
 import org.slf4j.Logger;

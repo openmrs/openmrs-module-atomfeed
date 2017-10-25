@@ -6,7 +6,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.writers;
+package org.openmrs.module.atomfeed.api.writers.impl;
 
 import java.net.URI;
 import java.util.UUID;
