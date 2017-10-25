@@ -13,27 +13,49 @@ import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.readResourceFi
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
+import org.openmrs.module.atomfeed.api.writers.DefaultFeedWriter;
+import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventManager {
+public class EventManager implements ApplicationContextAware {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
+	
+	private static final Class<? extends FeedWriter> defaultFeedWriter = DefaultFeedWriter.class;
+	
+	private ApplicationContext applicationContext;
 	
 	public void serveEvent(OpenmrsObject openmrsObject, EventAction eventAction) {
 		LOGGER.info("Called serveEvent method. Parameters: openmrsObject={},"
 			+ " eventAction={}", openmrsObject.getClass().getName(), eventAction.name());
 		
 		FeedConfiguration feedConfiguration = getFeedConfiguration(openmrsObject.getClass().getName());
+		getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
+	}
+	
+	private FeedWriter getFeedWriter(FeedConfiguration feedConfiguration) {
+		FeedWriter result;
+		if (StringUtils.isBlank(feedConfiguration.getFeedWriter())) {
+			result = Context.getService(defaultFeedWriter);
+		} else {
+			result = (FeedWriter) applicationContext.getBean(feedConfiguration.getFeedWriter());
+		}
+		return result;
 	}
 	
 	private FeedConfiguration getFeedConfiguration(String openmrsClass) {
@@ -52,5 +74,10 @@ public class EventManager {
 			}
 		}
 		throw new AtomfeedIoException("Atomfeed configuration for '" + openmrsClass + "' has not been found");
+	}
+	
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 }

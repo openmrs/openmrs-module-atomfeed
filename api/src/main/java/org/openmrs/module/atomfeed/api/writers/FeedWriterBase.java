@@ -29,7 +29,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public abstract class FeedWriterBase implements FeedWriter {
 	
-	protected static final Logger LOGGER = LoggerFactory.getLogger(FeedWriterBase.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FeedWriterBase.class);
 	
 	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 	

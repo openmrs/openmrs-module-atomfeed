@@ -45,6 +45,7 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	}
 	
 	private String getPreferredTemplate(FeedConfiguration feedConfiguration) {
+		// TODO: to change to more generic version
 		String endpoint;
 		final String fhir = "fhir";
 		final String rest = "rest";
