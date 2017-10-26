@@ -217,6 +217,6 @@
 		<uicommonsVersion>2.3.0</uicommonsVersion>
 		<uiframeworkVersion>3.11.0</uiframeworkVersion>
 		<atomfeedVersion>1.9.4</atomfeedVersion>
-		<openmrsAtomfeedVersion>2.5.4</openmrsAtomfeedVersion>
+		<openmrsAtomfeedVersion>2.5.5-SNAPSHOT</openmrsAtomfeedVersion>
 	</properties>
 </project>
