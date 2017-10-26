@@ -1,14 +1,14 @@
 package org.openmrs.module.atomfeed.api.impl;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.AtomfeedmoduleConstants;
+import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Component("atomfeed.feedConfigurationService")
 public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements FeedConfigurationService {
@@ -16,20 +16,20 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
     private HashMap<String, FeedConfiguration> feedConfiguration;
 
     public FeedConfigurationServiceImpl() {
-        if (AtomfeedUtils.resourceFileExists(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)) {
+        if (AtomfeedUtils.resourceFileExists(AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)) {
             loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)
+                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)
             );
         } else {
             loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_DAFAULT_CONFIGURATION)
+                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_DEFAULT_CONFIGURATION)
             );
         }
     }
 
     public void saveConfig(List<FeedConfiguration> value) {
         AtomfeedUtils.writeFeedConfigurationToJsonFile(value,
-            AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+            AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
         loadFeedConfigurations(value);
     }
 
@@ -37,7 +37,7 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
         if (AtomfeedUtils.isValidateJson(value)) {
             List<FeedConfiguration> localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
             AtomfeedUtils.writeFeedConfigurationToJsonFile(localConfiguration,
-                AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+                AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
             loadFeedConfigurations(localConfiguration);
         }
     }

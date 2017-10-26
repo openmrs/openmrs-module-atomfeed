@@ -1,20 +1,20 @@
 package org.openmrs.module.atomfeed.api.utils;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.atomfeed.api.impl.FeedConfigurationServiceImpl;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
+import org.openmrs.module.atomfeed.api.impl.FeedConfigurationServiceImpl;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class FeedConfigurationServiceImplTest {
 
     private static final String sampleFeedConfigurationPath = "sampleFeedConfiguration.json";
     private static final String sampleFeedConfigurationPath2 = "sampleFeedConfiguration2.json";
-    private static final HashMap<String, String> links = new HashMap<>();;
+    private static final HashMap<String, String> links = new HashMap<>();
 
     @Before
     public void setUp() {
