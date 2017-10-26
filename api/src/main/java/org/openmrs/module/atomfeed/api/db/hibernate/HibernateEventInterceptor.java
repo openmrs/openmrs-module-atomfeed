@@ -27,7 +27,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.db.EventManager;
 
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedIoException;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -149,7 +149,7 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 				}
 			}
 		}
-		throw new AtomfeedIoException("Property '" + propertyNameToCheck + "' has not been found");
+		throw new AtomfeedException("Property '" + propertyNameToCheck + "' has not been found");
 	}
 	
 	/**

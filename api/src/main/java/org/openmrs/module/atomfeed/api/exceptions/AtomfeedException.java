@@ -8,17 +8,17 @@
  */
 package org.openmrs.module.atomfeed.api.exceptions;
 
-public class AtomfeedIoException extends RuntimeException {
+public class AtomfeedException extends RuntimeException {
 	
-	public AtomfeedIoException(String message) {
+	public AtomfeedException(String message) {
 		super(message);
 	}
 	
-	public AtomfeedIoException(Throwable cause) {
+	public AtomfeedException(Throwable cause) {
 		super(cause);
 	}
 	
-	public AtomfeedIoException(String message, Throwable cause) {
+	public AtomfeedException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }
