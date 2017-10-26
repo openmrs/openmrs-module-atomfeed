@@ -1,6 +1,7 @@
-package org.openmrs.module.atomfeed.api;
+package org.openmrs.module.atomfeed.api.impl;
 
 import org.openmrs.module.atomfeed.AtomfeedmoduleConstants;
+import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.springframework.stereotype.Component;
@@ -9,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class FeedConfigurationManager {
+public class FeedConfigurationServiceImpl implements FeedConfigurationService {
 
     private HashMap<String, FeedConfiguration> feedConfiguration;
 
-    public FeedConfigurationManager() {
+    public FeedConfigurationServiceImpl() {
         if (AtomfeedUtils.resourceFileExists(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)) {
             loadFeedConfigurations(
                     AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)

@@ -3,14 +3,14 @@ package org.openmrs.module.atomfeed.api.utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.atomfeed.api.FeedConfigurationManager;
+import org.openmrs.module.atomfeed.api.impl.FeedConfigurationServiceImpl;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class FeedConfigurationManagerTest {
+public class FeedConfigurationServiceImplTest {
 
     private static final String sampleFeedConfigurationPath = "sampleFeedConfiguration.json";
     private static final String sampleFeedConfigurationPath2 = "sampleFeedConfiguration2.json";
@@ -27,14 +27,14 @@ public class FeedConfigurationManagerTest {
     public void loadLocalFeedConfiguration_shouldLoadFeedConfigurationFromArrayCorrectly() throws AtomfeedException {
         final FeedConfiguration expectedFeedConfiguration = new FeedConfiguration(
                 "org.openmrs.Patient",
-                false,
                 "Title",
+                "patient",
                 links,
                 "custom.PatientWriter"
         );
 
         List<FeedConfiguration> array = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
-        FeedConfigurationManager manager = new FeedConfigurationManager();
+        FeedConfigurationServiceImpl manager = new FeedConfigurationServiceImpl();
         manager.loadLocalFeedConfiguration(array);
         Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByTitle("Title"));
     }
@@ -43,14 +43,14 @@ public class FeedConfigurationManagerTest {
     public void loadLocalFeedConfiguration_shouldLoadFeedConfigurationFromStringCorrectly() throws AtomfeedException {
         final FeedConfiguration expectedFeedConfiguration = new FeedConfiguration(
                 "org.openmrs.TEST2",
-                true,
                 "Title2",
+                "patient",
                 links,
                 "custom"
         );
 
         String json = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath2);
-        FeedConfigurationManager manager = new FeedConfigurationManager();
+        FeedConfigurationServiceImpl manager = new FeedConfigurationServiceImpl();
         manager.loadLocalFeedConfiguration(json);
         Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByTitle("Title2"));
     }

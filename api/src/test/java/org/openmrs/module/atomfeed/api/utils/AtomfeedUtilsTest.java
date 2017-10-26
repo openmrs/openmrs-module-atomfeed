@@ -31,6 +31,7 @@ public class AtomfeedUtilsTest {
 		expectedFeedConfiguration.setOpenMrsClass("org.openmrs.Patient");
 		expectedFeedConfiguration.setEnabled(false);
 		expectedFeedConfiguration.setTitle("Title");
+		expectedFeedConfiguration.setCategory("patient");
 		expectedFeedConfiguration.setFeedWriter("custom.PatientWriter");
 		final HashMap<String, String> expectedLinkTemplates = new HashMap<>();
 		expectedLinkTemplates.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");

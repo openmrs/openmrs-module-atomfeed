@@ -19,16 +19,19 @@ public class FeedConfiguration {
 
     private String title;
 
+    private String category;
+
     private HashMap<String, String> linkTemplates;
 
     private String feedWriter;
 
     public FeedConfiguration() { }
 
-    public FeedConfiguration(String openMrsClass, boolean enabled, String title, HashMap<String, String> linkTemplates, String feedWriter) {
+    public FeedConfiguration(String openMrsClass, String title, String category, HashMap<String, String> linkTemplates, String feedWriter) {
         this.openMrsClass = openMrsClass;
-        this.enabled = enabled;
+        this.enabled = false;
         this.title = title;
+        this.category = category;
         this.linkTemplates = linkTemplates;
         this.feedWriter = feedWriter;
     }
@@ -55,6 +58,14 @@ public class FeedConfiguration {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public HashMap<String, String> getLinkTemplates() {
@@ -86,12 +97,13 @@ public class FeedConfiguration {
         return Objects.equals(openMrsClass, feedConfiguration.openMrsClass) &&
             Objects.equals(enabled, feedConfiguration.enabled) &&
             Objects.equals(title, feedConfiguration.title) &&
+            Objects.equals(category, feedConfiguration.category) &&
             Objects.equals(linkTemplates, feedConfiguration.linkTemplates) &&
             Objects.equals(feedWriter, feedConfiguration.feedWriter);
     }
 
             @Override
     public int hashCode() {
-        return Objects.hash(openMrsClass, enabled, title, linkTemplates, feedWriter);
+        return Objects.hash(openMrsClass, enabled, title, category, linkTemplates, feedWriter);
     }
 }
