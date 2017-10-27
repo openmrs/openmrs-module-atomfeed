@@ -1,0 +1,18 @@
+[
+  {
+    "id": "atomfeed.manageAtomfeedDashboard",
+    "description": "atomfeed.description",
+    "extensions": [
+      {
+        "id": "atomfeed.homepage",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "order": 5,
+        "label": "atomfeed.label",
+        "url": "atomfeed/atomfeed.page",
+        "icon": "icon-envelope",
+        "requiredPrivilege": "Load Atomfeed config"
+      }
+    ]
+  }
+]

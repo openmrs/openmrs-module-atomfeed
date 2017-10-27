@@ -6,7 +6,7 @@
     "category": "location",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/location/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/patient/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/v1/location/{uuid}?v=full"
     }
   },
   {
