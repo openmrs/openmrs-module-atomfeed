@@ -45,17 +45,17 @@ public abstract class FeedWriterBase implements FeedWriter {
 	
 	protected void saveEvent(Event event) {
 		atomFeedSpringTransactionManager.executeWithTransaction(
-				new AFTransactionWorkWithoutResult() {
-					@Override
-					protected void doInTransaction() {
-						eventService.notify(event);
-					}
-					
-					@Override
-					public PropagationDefinition getTxPropagationDefinition() {
-						return PropagationDefinition.PROPAGATION_REQUIRED;
-					}
+			new AFTransactionWorkWithoutResult() {
+				@Override
+				protected void doInTransaction() {
+					eventService.notify(event);
 				}
+				
+				@Override
+				public PropagationDefinition getTxPropagationDefinition() {
+					return PropagationDefinition.PROPAGATION_REQUIRED;
+				}
+			}
 		);
 	}
 	
