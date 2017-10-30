@@ -9,7 +9,6 @@
 package org.openmrs.module.atomfeed.api.writers.impl;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsQueue;
@@ -19,27 +18,32 @@ import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 
-import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.transaction.PlatformTransactionManager;
 
-public abstract class FeedWriterBase implements FeedWriter {
+public abstract class FeedWriterBase implements FeedWriter, ApplicationListener<ContextRefreshedEvent> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FeedWriterBase.class);
+	
+	@Autowired
+	private PlatformTransactionManager springPlatformTransactionManager;
 	
 	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 	
 	private EventService eventService;
 	
-	public FeedWriterBase() {
-		atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(springPlatformTransactionManager);
 		AllEventRecordsQueue allEventRecordsQueue = new AllEventRecordsQueueJdbcImpl(atomFeedSpringTransactionManager);
-		
 		this.eventService = new EventServiceImpl(allEventRecordsQueue);
 	}
 	
@@ -57,12 +61,6 @@ public abstract class FeedWriterBase implements FeedWriter {
 				}
 			}
 		);
-	}
-	
-	private PlatformTransactionManager getSpringPlatformTransactionManager() {
-		List<PlatformTransactionManager> platformTransactionManagers =
-				Context.getRegisteredComponents(PlatformTransactionManager.class);
-		return platformTransactionManagers.get(0);
 	}
 	
 	protected void debugEvent(Event event) {
