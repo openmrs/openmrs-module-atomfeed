@@ -42,7 +42,6 @@
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>uicommons-omod</artifactId>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

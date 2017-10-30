@@ -14,6 +14,7 @@
 package org.openmrs.module.atomfeed.page.controller;
 
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
@@ -35,12 +36,12 @@ public class LoadFeedConfPageController {
 
 	private static final String SAVE_CONFIG_ERROR = "atomfeed.configuration.json.save.fail";
 	private static final String SAVE_CONFIG_SUCCESS = "atomfeed.configuration.json.save.success";
-
+	private static final String VIEW_PROVIDER = "loadFeedConf";
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(LoadFeedConfPageController.class);
 
 	public String get(PageModel model) {
-		return "loadFeedConf";
+		return VIEW_PROVIDER;
 	}
 	
 	public String post(PageModel model, @SpringBean("atomfeed.feedConfigurationService") FeedConfigurationService feedConfigurationService,
@@ -62,14 +63,13 @@ public class LoadFeedConfPageController {
 	
 	@ResponseBody
 	@RequestMapping("/atomfeed/verifyJson")
-	public SimpleObject verifyJson(@RequestParam("json") String json) {
+	public SimpleObject verifyJson(@RequestParam("json") String json) throws AtomfeedException {
 		SimpleObject result = new SimpleObject();
-		try {
-			AtomfeedUtils.isValidateJson(json);
+
+		if (AtomfeedUtils.isValidateJson(json)) {
 			result.put("isValid", true);
-		}
-		catch (Exception e) {
-			LOGGER.warn("Invalid json:", e);
+		} else {
+			LOGGER.warn("Invalid json.");
 			result.put("isValid", false);
 		}
 		

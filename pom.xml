@@ -44,7 +44,7 @@
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>uiframework-api</artifactId>
-				<version>3.2.2</version>
+				<version>${uiframeworkVersion}</version>
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
@@ -202,6 +202,7 @@
         <pmdPluginVersion>3.8</pmdPluginVersion>
         <checkstylePluginVersion>2.17</checkstylePluginVersion>
 		<findbugsPluginVersion>3.0.2</findbugsPluginVersion>
-		<uicommonsVersion>2.1</uicommonsVersion>
+		<uicommonsVersion>2.3.0</uicommonsVersion>
+		<uiframeworkVersion>3.11.0</uiframeworkVersion>
 	</properties>
 </project>
