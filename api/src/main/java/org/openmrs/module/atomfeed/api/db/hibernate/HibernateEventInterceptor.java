@@ -27,7 +27,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.db.EventManager;
 
-import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -57,7 +56,6 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	private static ThreadLocal<Stack<HashSet<OpenmrsObject>>> voidedObjects = new ThreadLocal<>();
 
 	private static ThreadLocal<Stack<HashSet<OpenmrsObject>>> unvoidedObjects = new ThreadLocal<>();
-
 
 	@Autowired
 	private transient EventManager eventManager;
@@ -149,7 +147,7 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 				}
 			}
 		}
-		throw new AtomfeedException("Property '" + propertyNameToCheck + "' has not been found");
+		return State.PROPERTY_NOT_FOUND;
 	}
 	
 	/**
@@ -319,6 +317,6 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	}
 	
 	private enum State {
-		NOT_CHANGED, CHANGED, UNDO
+		NOT_CHANGED, CHANGED, UNDO, PROPERTY_NOT_FOUND
 	}
 }
