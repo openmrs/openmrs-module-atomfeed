@@ -1,13 +1,12 @@
 var jq = jQuery;
 var timeout;
-var action;
 
-jq(function(){
+jq(function() {
     jq('.required').keyup(function() {
         if(timeout){
             clearTimeout(timeout);
         }
-        timeout = setTimeout(function(){
+        timeout = setTimeout(function() {
             validate();
         }, 300);
     });
@@ -19,36 +18,36 @@ jq(document).ajaxError(function() {
     jq('#server-error-msg').show();
 });
 
-function requireValues(){
-    if(jq.trim(jq('#json-field').val()) != ''){
+function requireValues() {
+    if(jq.trim(jq('#json-field').val()) != '') {
         return true;
     }
     return false;
 }
 
-function toggleFields(isJsonValid){
-    if(isJsonValid && requireValues()){
+function toggleFields(isJsonValid) {
+    if(isJsonValid && requireValues()) {
         jq('#save-button').removeAttr('disabled');
         jq('#errorMsg').hide();
-    }else if(isJsonValid) {
+    } else if (isJsonValid) {
         jq('#save-button').attr('disabled','disabled');
         jq('#errorMsg').hide();
-    }else if(!isJsonValid) {
+    } else if (!isJsonValid) {
         jq('#save-button').attr('disabled','disabled');
         jq('#errorMsg').show();
     }
 }
 
-function validate(){
+function validate() {
     var json = jq('#json-field').val();
-    if(jq.trim(json) == ''){
+    if (jq.trim(json) == '') {
         toggleFields(true);
         return;
     }
 
     jq.post("verifyJson.htm",
-        {"json": json},
-        function(data){
+        { "json": json },
+        function(data) {
             jq('#server-error-msg').hide();
             toggleFields(data.isValid);
         },

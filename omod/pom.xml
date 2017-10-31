@@ -60,14 +60,6 @@
 				</excludes>
 				<targetPath>web/module</targetPath>
 			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>resources</include>
-				</includes>
-				<targetPath>web/module</targetPath>
-			</resource>
 		</resources>
 
 		<testResources>
