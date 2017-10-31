@@ -1,0 +1,18 @@
+[
+  {
+    "id": "atomfeed.manageAtomfeedDashboard.configuration",
+    "description": "atomfeed.configuration.description",
+    "order": 2,
+    "extensions": [
+      {
+        "id": "atomfeed.configuration",
+        "extensionPointId": "atomfeed/atomfeed.apps",
+        "type": "link",
+        "order": 5,
+        "label": "atomfeed.configuration.label",
+        "url": "atomfeed/loadFeedConf.page",
+        "icon": "icon-dashboard"
+      }
+    ]
+  }
+]
