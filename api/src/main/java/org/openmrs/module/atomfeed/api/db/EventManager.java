@@ -46,7 +46,7 @@ public class EventManager implements ApplicationContextAware {
 		if (feedConfiguration != null) {
 			getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
 		} else {
-			LOGGER.info("Skipped serve hibernate operation on '{}' object", openmrsObject.getClass().getName());
+			LOGGER.debug("Skipped serve hibernate operation on '{}' object", openmrsObject.getClass().getName());
 		}
 	}
 	
