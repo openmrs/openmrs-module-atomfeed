@@ -42,14 +42,14 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
         }
     }
 
-    public FeedConfiguration getFeedConfigurationByTitle(String title) {
-        return feedConfiguration.get(title);
+    public FeedConfiguration getFeedConfigurationByCategory(String category) {
+        return feedConfiguration.get(category);
     }
 
     private void loadFeedConfigurations(List<FeedConfiguration> feedConfigurations) {
         HashMap<String, FeedConfiguration> tmp = new HashMap<>();
         for (FeedConfiguration configuration : feedConfigurations) {
-            tmp.put(configuration.getTitle(), configuration);
+            tmp.put(configuration.getCategory(), configuration);
         }
         feedConfiguration = tmp;
     }

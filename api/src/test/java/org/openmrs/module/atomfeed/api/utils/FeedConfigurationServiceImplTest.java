@@ -36,7 +36,7 @@ public class FeedConfigurationServiceImplTest {
         List<FeedConfiguration> array = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
         FeedConfigurationServiceImpl manager = new FeedConfigurationServiceImpl();
         manager.saveConfig(array);
-        Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByTitle("Title"));
+        Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByCategory("patient"));
     }
 
     @Test
@@ -52,6 +52,6 @@ public class FeedConfigurationServiceImplTest {
         String json = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath2);
         FeedConfigurationServiceImpl manager = new FeedConfigurationServiceImpl();
         manager.saveConfig(json);
-        Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByTitle("Title2"));
+        Assert.assertEquals(expectedFeedConfiguration, manager.getFeedConfigurationByCategory("patient"));
     }
 }
