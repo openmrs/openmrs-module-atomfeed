@@ -15,28 +15,21 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventManager implements ApplicationContextAware {
+public class EventManager {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
 	
 	private static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
-	
-	private ApplicationContext applicationContext;
 	
 	public void serveEvent(OpenmrsObject openmrsObject, EventAction eventAction) {
 		LOGGER.info("Called serveEvent method. Parameters: openmrsObject={},"
@@ -46,7 +39,7 @@ public class EventManager implements ApplicationContextAware {
 		if (feedConfiguration != null) {
 			getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
 		} else {
-			LOGGER.debug("Skipped serve hibernate operation on '{}' object", openmrsObject.getClass().getName());
+			LOGGER.debug("Skipped serving hibernate operation on '{}' object", openmrsObject.getClass().getName());
 		}
 	}
 	
@@ -57,7 +50,7 @@ public class EventManager implements ApplicationContextAware {
 		} else {
 			feedWriterBeanId = feedConfiguration.getFeedWriter();
 		}
-		return (FeedWriter) applicationContext.getBean(feedWriterBeanId);
+		return Context.getRegisteredComponent(feedWriterBeanId, FeedWriter.class);
 	}
 	
 	private FeedConfiguration getFeedConfiguration(String openmrsClass) {
@@ -77,10 +70,5 @@ public class EventManager implements ApplicationContextAware {
 		}
 		LOGGER.debug("Atomfeed configuration for '{}' has not been found", openmrsClass);
 		return null;
-	}
-	
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 }
