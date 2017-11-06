@@ -5,7 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-10-27-14:42">
+    <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-11-06-19:22">
         <createTable tableName="event_records">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" />
@@ -29,7 +29,6 @@
             <column name="uri" type="varchar(255)" />
             <column name="object" type="varchar(1000)" />
             <column name="category" type="varchar(255)" />
-            <column name="date_created" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP" />
             <column name="tags" type="varchar(255)" />
         </createTable>
         <createTable tableName="chunking_history">
@@ -41,9 +40,29 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createTable tableName="event_records_offset_marker">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="event_id" type="int"/>
+            <column name="event_count" type="int"/>
+            <column name="category" type="varchar(255)"/>
+        </createTable>
+        <insert tableName="scheduler_task_config">
+            <column name="name" value="OpenMRS event publisher task"/>
+            <column name="schedulable_class" value="org.openmrs.module.atomfeed.scheduler.tasks.EventPublisherTask"/>
+            <column name="start_time" valueDate=" now() "/>
+            <column name="start_time_pattern" value="MM/dd/yyyy HH:mm:ss"/>
+            <column name="repeat_interval" value="2"/>
+            <column name="start_on_startup" value="1"/>
+            <column name="started" value="1"/>
+            <column name="created_by" value="1"/>
+            <column name="date_created" valueDate="now()"/>
+            <column name="uuid" valueComputed="uuid()"/>
+        </insert>
     </changeSet>
 
-    <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-10-27-14:45">
+    <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-11-06-19:42">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from chunking_history;</sqlCheck>
         </preConditions>
