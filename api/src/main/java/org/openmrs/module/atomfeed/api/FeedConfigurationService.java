@@ -12,4 +12,6 @@ public interface FeedConfigurationService extends OpenmrsService {
     void saveConfig(String value);
     
     FeedConfiguration getFeedConfigurationByCategory(String category);
+    
+    FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass);
 }
