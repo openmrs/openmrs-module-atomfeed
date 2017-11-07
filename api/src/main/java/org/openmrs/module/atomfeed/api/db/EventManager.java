@@ -8,10 +8,13 @@
  */
 package org.openmrs.module.atomfeed.api.db;
 
+import static org.openmrs.module.atomfeed.AtomfeedConstants.DEFAULT_FEED_WRITER;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.slf4j.Logger;
@@ -23,8 +26,6 @@ import org.springframework.stereotype.Component;
 public class EventManager {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
-	
-	private static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
 	
 	@Autowired
 	FeedConfigurationService feedConfigurationService;
@@ -40,8 +41,8 @@ public class EventManager {
 		if (feedConfiguration != null) {
 			getFeedWriter(feedConfiguration).writeFeed(openmrsObject, eventAction, feedConfiguration);
 		} else {
-			LOGGER.debug("Skipped serving hibernate operation on '{}' because " +
-					"object AtomFeed configuration has not been found", openmrsObject.getClass().getName());
+			LOGGER.debug("Skipped serving hibernate operation on '{}' because "
+					+ "object AtomFeed configuration has not been found", openmrsObject.getClass().getName());
 		}
 	}
 	
@@ -52,6 +53,11 @@ public class EventManager {
 		} else {
 			feedWriterBeanId = feedConfiguration.getFeedWriter();
 		}
-		return Context.getRegisteredComponent(feedWriterBeanId, FeedWriter.class);
+		
+		try {
+			return Context.getRegisteredComponent(feedWriterBeanId, FeedWriter.class);
+		} catch (Exception e) {
+			throw new AtomfeedException("`" + feedWriterBeanId + "` bean for FeedWriter has not been found", e);
+		}
 	}
 }

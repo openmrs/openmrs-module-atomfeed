@@ -17,15 +17,26 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("atomfeed.DefaultFeedWriter")
 public class DefaultFeedWriter extends FeedWriterBase {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
+	
 	private static final String UUID_PATTERN = "{uuid}";
 	
 	@Override
 	public void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration) {
+		if (!feedConfiguration.isEnabled()) {
+			LOGGER.debug("Skipped writing '{}' to AtomFeed because "
+					+ "the synchronization for this object is disabled in the configuration",
+				openmrsObject.getClass().getName());
+			return;
+		}
+		
 		final Event event = new Event(
 				UUID.randomUUID().toString(),
 				feedConfiguration.getTitle(),
@@ -37,6 +48,7 @@ public class DefaultFeedWriter extends FeedWriterBase {
 		);
 		debugEvent(event);
 		saveEvent(event);
+		LOGGER.info("A feed for {} has been saved in AtomFeed", openmrsObject.getClass().getName());
 	}
 	
 	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
