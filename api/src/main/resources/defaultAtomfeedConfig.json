@@ -1,13 +1,169 @@
 [
   {
+    "openMrsClass": "org.openmrs.Location",
+    "enabled": "false",
+    "title": "Location",
+    "category": "location",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/location/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/location/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Obs",
+    "enabled": "false",
+    "title": "Observation",
+    "category": "observation",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/obs/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/obs/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Encounter",
+    "enabled": "false",
+    "title": "Encounter",
+    "category": "encounter",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/encounter/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/encounter/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Visit",
+    "enabled": "false",
+    "title": "Visit",
+    "category": "visit",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/visit/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/visit/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Provider",
+    "enabled": "false",
+    "title": "Provider",
+    "category": "provider",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/provider/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/provider/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Drug",
+    "enabled": "false",
+    "title": "Drug",
+    "category": "drug",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/drug/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/drug/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Form",
+    "enabled": "false",
+    "title": "Form",
+    "category": "form",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/form/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/form/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Order",
+    "enabled": "false",
+    "title": "Order",
+    "category": "order",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/order/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/order/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.PatientProgram",
+    "enabled": "false",
+    "title": "Program Enrollment",
+    "category": "programenrollment",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/programenrollment/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/programenrollment/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Person",
+    "enabled": "false",
+    "title": "Person",
+    "category": "person",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/person/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/person/{uuid}?v=full"
+    }
+  },
+  {
     "openMrsClass": "org.openmrs.Patient",
     "enabled": "false",
     "title": "Patient",
     "category": "patient",
     "linkTemplates": {
-      "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
-    },
-    "feedWriter": "custom.PatientWriter"
+      "rest": "openmrs/ws/rest/v1/patient/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/patient/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Relationship",
+    "enabled": "false",
+    "title": "Relationship",
+    "category": "relationship",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/relationship/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/relationship/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Cohort",
+    "enabled": "false",
+    "title": "Cohort",
+    "category": "cohort",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/cohort/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/cohort/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.VisitType",
+    "enabled": "false",
+    "title": "Visit Type",
+    "category": "visittype",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/visittype/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Concept",
+    "enabled": "false",
+    "title": "Concept",
+    "category": "concept",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/concept/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.User",
+    "enabled": "false",
+    "title": "User",
+    "category": "user",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/user/{uuid}?v=full"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Program",
+    "enabled": "false",
+    "title": "Program",
+    "category": "program",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/program/{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/program/{uuid}?v=full"
+    }
   }
 ]

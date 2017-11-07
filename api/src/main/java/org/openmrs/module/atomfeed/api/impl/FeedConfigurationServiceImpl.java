@@ -18,9 +18,9 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
     private HashMap<String, FeedConfiguration> feedConfigurationByOpenMrsClass;
     
     public FeedConfigurationServiceImpl() {
-        if (AtomfeedUtils.resourceFileExists(AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)) {
+        if (AtomfeedUtils.resourceFileExists(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)) {
             loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)
+                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)
             );
         } else {
             loadFeedConfigurations(
@@ -32,7 +32,7 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
     @Override
     public void saveConfig(List<FeedConfiguration> value) {
         AtomfeedUtils.writeFeedConfigurationToJsonFile(value,
-            AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+            AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
         loadFeedConfigurations(value);
     }
     
@@ -41,7 +41,7 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
         if (AtomfeedUtils.isValidateJson(value)) {
             List<FeedConfiguration> localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
             AtomfeedUtils.writeFeedConfigurationToJsonFile(localConfiguration,
-                AtomfeedConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+                AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
             loadFeedConfigurations(localConfiguration);
         }
     }
