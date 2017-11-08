@@ -8,9 +8,13 @@
  */
 package org.openmrs.module.atomfeed.api.writers.impl;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
@@ -52,23 +56,19 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	}
 	
 	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
-		final String urlTemplate = getPreferredTemplate(feedConfiguration);
-		String uuid = openmrsObject.getUuid();
-		return urlTemplate.replace(UUID_PATTERN, uuid);
-	}
-	
-	private String getPreferredTemplate(FeedConfiguration feedConfiguration) {
-		// TODO: to change to more generic version
-		String endpoint;
-		final String fhir = "fhir";
-		final String rest = "rest";
-		if (feedConfiguration.getLinkTemplates().containsKey(fhir)) {
-			endpoint = feedConfiguration.getLinkTemplates().get(fhir);
-		} else if (feedConfiguration.getLinkTemplates().containsKey(rest)) {
-			endpoint = feedConfiguration.getLinkTemplates().get(rest);
-		} else {
-			throw new AtomfeedException("Not exists appropriate object endpoint template");
+		Map<String, String> links = getLinks(openmrsObject, feedConfiguration);
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return objectMapper.writeValueAsString(links);
+		} catch (IOException e) {
+			throw new AtomfeedException("There is a problem with serialize resource links to AtomFeed content");
 		}
-		return endpoint;
+	}
+
+	private Map<String, String> getLinks(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
+		String uuid = openmrsObject.getUuid();
+		Map<String, String> urls = new HashMap<>();
+		feedConfiguration.getLinkTemplates().forEach((key, value) -> urls.put(key, value.replace(UUID_PATTERN, uuid)));
+		return urls;
 	}
 }
