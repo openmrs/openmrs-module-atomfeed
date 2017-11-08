@@ -6,7 +6,7 @@
     "category": "location",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/location/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/location/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Location/{uuid}"
     }
   },
   {
@@ -16,7 +16,7 @@
     "category": "observation",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/obs/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/obs/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Obs/{uuid}"
     }
   },
   {
@@ -26,7 +26,7 @@
     "category": "encounter",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/encounter/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/encounter/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Encounter/{uuid}"
     }
   },
   {
@@ -36,7 +36,7 @@
     "category": "visit",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/visit/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/visit/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Visit/{uuid}"
     }
   },
   {
@@ -46,7 +46,7 @@
     "category": "provider",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/provider/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/provider/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Provider/{uuid}"
     }
   },
   {
@@ -56,7 +56,7 @@
     "category": "drug",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/drug/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/drug/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Drug/{uuid}"
     }
   },
   {
@@ -66,7 +66,7 @@
     "category": "form",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/form/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/form/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Form/{uuid}"
     }
   },
   {
@@ -76,7 +76,7 @@
     "category": "order",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/order/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/order/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Order/{uuid}"
     }
   },
   {
@@ -86,7 +86,7 @@
     "category": "programenrollment",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/programenrollment/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/programenrollment/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Programenrollment/{uuid}"
     }
   },
   {
@@ -96,7 +96,7 @@
     "category": "person",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/person/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/person/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Person/{uuid}"
     }
   },
   {
@@ -106,7 +106,7 @@
     "category": "patient",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/patient/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/patient/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Patient/{uuid}"
     }
   },
   {
@@ -116,7 +116,7 @@
     "category": "relationship",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/relationship/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/relationship/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Relationship/{uuid}"
     }
   },
   {
@@ -126,7 +126,7 @@
     "category": "cohort",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/cohort/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/cohort/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Cohort/{uuid}"
     }
   },
   {
@@ -163,7 +163,7 @@
     "category": "program",
     "linkTemplates": {
       "rest": "openmrs/ws/rest/v1/program/{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/program/{uuid}?v=full"
+      "fhir": "openmrs/ws/fhir/Program/{uuid}"
     }
   }
 ]
