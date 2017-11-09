@@ -6,13 +6,13 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.impl;
+package org.openmrs.module.atomfeed.api.writers;
 
-import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.api.AtomfeedService;
-import org.springframework.stereotype.Component;
+import org.openmrs.OpenmrsObject;
+import org.openmrs.module.atomfeed.api.db.EventAction;
+import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 
-@Component("atomfeed.AtomfeedService")
-public class AtomfeedServiceImpl extends BaseOpenmrsService implements AtomfeedService {
+public interface FeedWriter {
 	
+	void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration);
 }

@@ -8,16 +8,17 @@
  */
 package org.openmrs.module.atomfeed.api.utils;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashMap;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-import java.util.HashMap;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class AtomfeedUtilsTest {
 
@@ -87,5 +88,28 @@ public class AtomfeedUtilsTest {
 	public void isValidateJson_incorrect() throws AtomfeedException {
 		String json = AtomfeedUtils.readResourceFile(incorrectFeedConfigurationPath);
 		Assert.assertFalse(AtomfeedUtils.isValidateJson(json));
+	}
+	
+	@Test
+	public void writeFeedConfigurationToJsonFile() throws AtomfeedException {
+		List<FeedConfiguration> list = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
+		
+		final String path = "newFile.txt";
+		AtomfeedUtils.writeFeedConfigurationToJsonFile(list, path);
+		
+		String expected = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath);
+		String result = AtomfeedUtils.readResourceFile(path);
+		
+		Assert.assertEquals(expected, result);
+	}
+	
+	@Test
+	public void resourceFileExists_exist() throws AtomfeedException {
+		Assert.assertTrue(AtomfeedUtils.resourceFileExists(sampleFeedConfigurationPath));
+	}
+	
+	@Test
+	public void resourceFileExists_notExist() throws AtomfeedException {
+		Assert.assertFalse(AtomfeedUtils.resourceFileExists(notExistingFilePath));
 	}
 }

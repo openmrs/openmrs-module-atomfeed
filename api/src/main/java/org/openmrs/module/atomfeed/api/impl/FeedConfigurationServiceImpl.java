@@ -1,56 +1,69 @@
 package org.openmrs.module.atomfeed.api.impl;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.AtomfeedmoduleConstants;
+import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-
 @Component("atomfeed.feedConfigurationService")
 public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements FeedConfigurationService {
 
-    private HashMap<String, FeedConfiguration> feedConfiguration;
-
+    private HashMap<String, FeedConfiguration> feedConfigurationByCategory;
+    
+    private HashMap<String, FeedConfiguration> feedConfigurationByOpenMrsClass;
+    
     public FeedConfigurationServiceImpl() {
-        if (AtomfeedUtils.resourceFileExists(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)) {
+        if (AtomfeedUtils.resourceFileExists(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)) {
             loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION)
+                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)
             );
         } else {
             loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedmoduleConstants.ATOMFEED_PATH_TO_DAFAULT_CONFIGURATION)
+                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_DEFAULT_CONFIGURATION)
             );
         }
     }
-
+    
+    @Override
     public void saveConfig(List<FeedConfiguration> value) {
         AtomfeedUtils.writeFeedConfigurationToJsonFile(value,
-            AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+            AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
         loadFeedConfigurations(value);
     }
-
+    
+    @Override
     public void saveConfig(String value) {
         if (AtomfeedUtils.isValidateJson(value)) {
             List<FeedConfiguration> localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
             AtomfeedUtils.writeFeedConfigurationToJsonFile(localConfiguration,
-                AtomfeedmoduleConstants.ATOMFEED_PATH_TO_LOCAL_CONFIGURATION);
+                AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
             loadFeedConfigurations(localConfiguration);
         }
     }
-
-    public FeedConfiguration getFeedConfigurationByTitle(String title) {
-        return feedConfiguration.get(title);
+    
+    @Override
+    public FeedConfiguration getFeedConfigurationByCategory(String category) {
+        return feedConfigurationByCategory.get(category);
     }
-
+    
+    @Override
+    public FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass) {
+        return feedConfigurationByOpenMrsClass.get(openMrsClass);
+    }
+    
     private void loadFeedConfigurations(List<FeedConfiguration> feedConfigurations) {
-        HashMap<String, FeedConfiguration> tmp = new HashMap<>();
+        HashMap<String, FeedConfiguration> byCategory = new HashMap<>();
+        HashMap<String, FeedConfiguration> byOpenMrsClass = new HashMap<>();
         for (FeedConfiguration configuration : feedConfigurations) {
-            tmp.put(configuration.getTitle(), configuration);
+            byCategory.put(configuration.getCategory(), configuration);
+            byOpenMrsClass.put(configuration.getOpenMrsClass(), configuration);
         }
-        feedConfiguration = tmp;
+        feedConfigurationByCategory = byCategory;
+        feedConfigurationByOpenMrsClass = byOpenMrsClass;
     }
 }
