@@ -1,7 +1,7 @@
 [
   {
     "openMrsClass": "org.openmrs.Location",
-    "enabled": "false",
+    "enabled": "true",
     "title": "Location",
     "category": "location",
     "linkTemplates": {
