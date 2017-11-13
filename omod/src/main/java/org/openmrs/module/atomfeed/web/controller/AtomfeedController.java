@@ -52,7 +52,7 @@ public class AtomfeedController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{category}/{n}")
 	@ResponseBody
 	public String getEventFeedWithCategory(HttpServletRequest httpServletRequest,
-										   @PathVariable String category, @PathVariable int n) {
+						@PathVariable String category, @PathVariable int n) {
 		return EventFeedServiceHelper.getEventFeed(eventFeedService, new UrlUtil().getRequestURL(httpServletRequest),
 				category, n, logger, atomTxManager);
 	}

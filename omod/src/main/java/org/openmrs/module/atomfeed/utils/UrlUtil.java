@@ -3,17 +3,16 @@ package org.openmrs.module.atomfeed.utils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 public class UrlUtil {
     private static Logger logger = Logger.getLogger(UrlUtil.class);
-
-    private static final int SSL_PORT = 443;
-    private static final int DEFAULT_PORT = 80;
-
 
     public String getRequestURL(HttpServletRequest request) {
         String requestUrl = getServiceUriFromRequest(request);
@@ -44,16 +43,17 @@ public class UrlUtil {
         return formUrl(scheme, request.getServerName(), request.getServerPort(), request.getRequestURI(), request.getQueryString());
     }
 
-    private String formUrl(String scheme, String hostname, int port, String path, String queryString) {
-        String url;
-        if (port != DEFAULT_PORT && port != SSL_PORT && port != -1) {
-            url = scheme + "://" + hostname + ":" + port + path;
-        } else {
-            url = scheme + "://" + hostname + path;
+    private String formUrl(String protocol, String hostname, int port, String path, String queryString) {
+        URL url;
+        try {
+            URI uri = new URI(protocol, null, hostname, port, path, queryString, null);
+            url = uri.toURL();
+        } catch (URISyntaxException e) {
+            throw new AtomfeedException("Bad URI: ", e);
+        } catch (MalformedURLException e) {
+            throw new AtomfeedException("An URL is Malformed", e);
         }
-        if (queryString != null) {
-            return url + "?" + queryString;
-        }
-        return url;
+
+        return url.toString();
     }
 }
