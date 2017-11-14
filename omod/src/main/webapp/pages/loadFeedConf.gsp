@@ -30,7 +30,7 @@
                 ${ui.message("atomfeed.configuration.json.label")} (${ ui.message("emr.formValidation.messages.requiredField.label") })
             </span>
         </label>
-        <textarea id="json-field" class="required" name="json" rows="15" cols="80"></textarea>
+        <textarea id="json-field" class="required" name="json" rows="15" cols="80">${configuration}</textarea>
     </p>
 
     <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="javascript:window.location='/${ contextPath }/atomfeed/atomfeed.page'" />

@@ -38,7 +38,10 @@ public class LoadFeedConfPageController {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(LoadFeedConfPageController.class);
 
-	public String get(PageModel model) {
+	public String get(PageModel model,
+					  @SpringBean("atomfeed.feedConfigurationService") FeedConfigurationService feedConfigurationService) {
+		String configuration = AtomfeedUtils.writeFeedConfigurationToJsonString(feedConfigurationService.getAllFeedConfigurations());
+		model.addAttribute("configuration", configuration);
 		return VIEW_PROVIDER;
 	}
 	
