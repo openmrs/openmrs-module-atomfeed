@@ -29,7 +29,7 @@
         </label>
         <input id="json-file" type="file" name="file"/>
     </p>
-    <input type="submit" id="import-button" class="confirm right" value="${ ui.message("atomfeed.configuration.import.label") }"/>
+    <input type="submit" id="import-button" class="confirm right" value="${ ui.message("atomfeed.configuration.import.label") }" disabled="disabled"/>
 </form>
 
 <form class="simple-form-ui" method="POST" action="loadFeedConf.page">
