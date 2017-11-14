@@ -11,10 +11,11 @@
  */
 package org.openmrs.module.atomfeed.page.controller;
 
-import javax.servlet.http.HttpSession;
-
+import org.apache.commons.io.IOUtils;
+import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
+import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
@@ -24,10 +25,20 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
 
 @Controller
 public class LoadFeedConfPageController {
@@ -38,10 +49,19 @@ public class LoadFeedConfPageController {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(LoadFeedConfPageController.class);
 
+	@Autowired
+	FeedConfigurationService feedConfigurationService;
+
+	@Autowired
+	@Qualifier("messageSourceService")
+	private MessageSourceService messageSourceService;
+
 	public String get(PageModel model,
+					  @RequestParam(value = "importStatus", required = false) String importStatus,
 					  @SpringBean("atomfeed.feedConfigurationService") FeedConfigurationService feedConfigurationService) {
 		String configuration = AtomfeedUtils.writeFeedConfigurationToJsonString(feedConfigurationService.getAllFeedConfigurations());
 		model.addAttribute("configuration", configuration);
+		model.addAttribute("importStatus", importStatus);
 		return VIEW_PROVIDER;
 	}
 	
@@ -76,5 +96,27 @@ public class LoadFeedConfPageController {
 		}
 		
 		return result;
+	}
+
+	@RequestMapping(value = "/atomfeed/importFeedConfiguration", method = RequestMethod.POST)
+	public String importSyncConfiguration(@RequestParam("file") MultipartFile file,
+										  ModelMap model) throws AtomfeedException, IOException {
+		StringWriter writer = null;
+		try {
+			writer = new StringWriter();
+			IOUtils.copy(file.getInputStream(), writer, "UTF-8");
+
+			List<FeedConfiguration> feedConfigurations = AtomfeedUtils.parseJsonStringToFeedConfiguration(writer.toString());
+			feedConfigurationService.saveConfig(feedConfigurations);
+			model.addAttribute("importStatus", "");
+			return "redirect:/atomfeed/atomfeed.page";
+		} catch (AtomfeedException e) {
+			LOGGER.warn("Error during import configuration:", e);
+			model.addAttribute("importStatus", messageSourceService.getMessage("atomfeed.configuration.errors.invalidFile"));
+		} finally {
+			IOUtils.closeQuietly(writer);
+		}
+
+		return "redirect:/atomfeed/LoadFeedConf.page";
 	}
 }

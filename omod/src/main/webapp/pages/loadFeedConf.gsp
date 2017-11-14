@@ -17,6 +17,21 @@
 
 <h2>${ ui.message("atomfeed.configuration.label")}</h2>
 
+<form action="importFeedConfiguration.form" method="POST" enctype="multipart/form-data">
+    <span >
+        ${importStatus}
+    </span>
+    <p>
+        <label for="json-file">
+            <span>
+                ${ui.message("atomfeed.configuration.import.file.label")}
+            </span>
+        </label>
+        <input id="json-file" type="file" name="file"/>
+    </p>
+    <input type="submit" id="import-button" class="confirm right" value="${ ui.message("atomfeed.configuration.import.label") }"/>
+</form>
+
 <form class="simple-form-ui" method="POST" action="loadFeedConf.page">
     <span id="errorMsg" class="field-error" style="display: none">
         ${ui.message("atomfeed.configuration.errors.invalidJson")}
