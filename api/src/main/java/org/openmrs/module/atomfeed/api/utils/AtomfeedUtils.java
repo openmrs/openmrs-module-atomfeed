@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -69,7 +70,18 @@ public final class AtomfeedUtils {
 		}
 		return true;
 	}
-	
+
+	public static String writeFeedConfigurationToJsonString(Collection<FeedConfiguration> feedConfigurations)
+			throws AtomfeedException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+		try {
+			return writer.writeValueAsString(feedConfigurations);
+		} catch (IOException e) {
+			throw new AtomfeedException(e);
+		}
+	}
+
 	public static void writeFeedConfigurationToJsonFile(List<FeedConfiguration> feedConfigurations, String file)
 			throws AtomfeedException {
 		ObjectMapper mapper = new ObjectMapper();

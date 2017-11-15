@@ -1,5 +1,6 @@
 package org.openmrs.module.atomfeed.api;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.openmrs.api.OpenmrsService;
@@ -14,4 +15,6 @@ public interface FeedConfigurationService extends OpenmrsService {
     FeedConfiguration getFeedConfigurationByCategory(String category);
     
     FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass);
+
+    Collection<FeedConfiguration> getAllFeedConfigurations();
 }

@@ -1,14 +1,15 @@
 package org.openmrs.module.atomfeed.api.impl;
 
-import java.util.HashMap;
-import java.util.List;
-
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 @Component("atomfeed.feedConfigurationService")
 public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements FeedConfigurationService {
@@ -55,6 +56,12 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
     public FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass) {
         return feedConfigurationByOpenMrsClass.get(openMrsClass);
     }
+
+    @Override
+    public Collection<FeedConfiguration> getAllFeedConfigurations() {
+        return feedConfigurationByCategory.values();
+    }
+
     
     private void loadFeedConfigurations(List<FeedConfiguration> feedConfigurations) {
         HashMap<String, FeedConfiguration> byCategory = new HashMap<>();
