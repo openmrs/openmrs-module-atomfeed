@@ -219,4 +219,17 @@
 		<atomfeedVersion>1.9.4</atomfeedVersion>
 		<openmrsAtomfeedVersion>2.5.5</openmrsAtomfeedVersion>
 	</properties>
+	
+	<distributionManagement>
+            <repository>
+                <id>openmrs-repo-modules</id>
+                <name>Modules</name>
+                <url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules/</url>
+            </repository>
+            <snapshotRepository>
+                <id>openmrs-repo-snapshots</id>
+                <name>OpenMRS Snapshots</name>
+                <url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
+            </snapshotRepository>
+        </distributionManagement>
 </project>
