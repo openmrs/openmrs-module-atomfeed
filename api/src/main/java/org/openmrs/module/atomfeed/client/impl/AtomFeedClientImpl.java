@@ -130,7 +130,7 @@ public class AtomFeedClientImpl implements AtomFeedClient {
     private org.ict4h.atomfeed.client.service.AtomFeedClient createAtomFeedClient() {
         HashMap<String, String> clientCookies = new HashMap<>();
         AtomFeedSpringTransactionManager atomFeedSpringTransactionManager = getAtomFeedSpringTransactionManager();
-        this.eventWorker = this.eventWorker != null ? this.eventWorker : new FeedWorker();
+        this.eventWorker = this.eventWorker != null ? this.eventWorker : new FeedEventWorkerImpl();
 
         return new org.ict4h.atomfeed.client.service.AtomFeedClient(
                 new AllFeeds(this.atomFeedProperties, clientCookies),
