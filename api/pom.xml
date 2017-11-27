@@ -15,6 +15,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.ict4h</groupId>
+			<artifactId>atomfeed-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ict4h</groupId>
 			<artifactId>atomfeed-server</artifactId>
 		</dependency>
 		<dependency>

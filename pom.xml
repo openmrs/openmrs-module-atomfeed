@@ -64,6 +64,11 @@
 				<artifactId>openmrs-atomfeed-common</artifactId>
 				<version>${openmrsAtomfeedVersion}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.ict4h</groupId>
+				<artifactId>atomfeed-client</artifactId>
+				<version>${atomfeedVersion}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
