@@ -22,11 +22,13 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.util.DefaultPrettyPrinter;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.springframework.transaction.PlatformTransactionManager;
 
 public final class AtomfeedUtils {
-	
+
 	public static String readResourceFile(String file) throws AtomfeedException {
 		try (InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(file)) {
 			if (in == null) {
@@ -37,7 +39,7 @@ public final class AtomfeedUtils {
 			throw new AtomfeedException(e);
 		}
 	}
-	
+
 	public static List<FeedConfiguration> parseJsonFileToFeedConfiguration(String resourcePath) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -47,7 +49,7 @@ public final class AtomfeedUtils {
 			throw new AtomfeedException(e);
 		}
 	}
-	
+
 	public static List<FeedConfiguration> parseJsonStringToFeedConfiguration(String value) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -57,7 +59,7 @@ public final class AtomfeedUtils {
 			throw new AtomfeedException(e);
 		}
 	}
-	
+
 	public static boolean isValidateJson(String json) throws AtomfeedException {
 		try {
 			final JsonParser parser = new ObjectMapper().getJsonFactory().createJsonParser(json);
@@ -93,9 +95,13 @@ public final class AtomfeedUtils {
 			throw new AtomfeedException(e);
 		}
 	}
-	
+
 	public static boolean resourceFileExists(String path) {
 		InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(path);
 		return in != null;
+	}
+
+	public static PlatformTransactionManager getSpringPlatformTransactionManager() {
+		return Context.getRegisteredComponents(PlatformTransactionManager.class).get(0);
 	}
 }
