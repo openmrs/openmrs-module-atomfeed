@@ -11,10 +11,6 @@ public class AtomFeedClientFactory {
 
     private AtomFeedClientFactory() { }
 
-    public static AtomFeedClient createClient() {
-        return createClient(null);
-    }
-
     public static AtomFeedClient createClient(EventWorker eventWorker) {
         AtomFeedClient atomFeedClient =  new AtomFeedClientImpl(eventWorker);
 
