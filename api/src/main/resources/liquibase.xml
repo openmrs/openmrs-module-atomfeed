@@ -94,4 +94,14 @@
             <column name="tags" type="varchar(255)"/>
         </createTable>
     </changeSet>
+
+    <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-12-14-17:28">
+        <addColumn tableName="failed_events">
+            <column name="title" type="varchar(255)"/>
+            <column name="retries" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_hash_code" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
