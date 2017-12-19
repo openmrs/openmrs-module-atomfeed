@@ -165,5 +165,14 @@
       "rest": "openmrs/ws/rest/v1/program/{uuid}?v=full",
       "fhir": "openmrs/ws/fhir/Program/{uuid}"
     }
+  },
+  {
+    "openMrsClass": "org.openmrs.Privilege",
+    "enabled": "false",
+    "title": "Privilege",
+    "category": "privilege",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/Privilege/{uuid}?v=full"
+    }
   }
 ]
