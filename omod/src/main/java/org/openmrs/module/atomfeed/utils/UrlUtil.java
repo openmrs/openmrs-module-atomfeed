@@ -16,10 +16,26 @@ public class UrlUtil {
 
     public String getRequestURL(HttpServletRequest request) {
         String requestUrl = getServiceUriFromRequest(request);
+        URI uri;
+
         if (requestUrl == null) {
             requestUrl = getBaseUrlFromOpenMrsGlobalProperties(request);
         }
-        return requestUrl != null ? requestUrl : formUrl(request.getScheme(), request.getServerName(), request.getServerPort(), request.getRequestURI(), request.getQueryString());
+
+        requestUrl = requestUrl != null ? requestUrl : formUrl(request.getScheme(), request.getServerName(),
+                request.getServerPort(), request.getRequestURI(), request.getQueryString());
+        try {
+            uri = new URI(requestUrl);
+
+            if (null != uri && uri.getScheme().equals("https") && uri.getPort() == 80) {
+                requestUrl = formUrl(request.getScheme(), request.getServerName(), 443,
+                        request.getRequestURI(), request.getQueryString());
+            }
+        } catch (URISyntaxException e) {
+            throw new AtomfeedException("Bad URI: ", e);
+        }
+
+        return requestUrl;
     }
 
     private String getBaseUrlFromOpenMrsGlobalProperties(HttpServletRequest request) {
