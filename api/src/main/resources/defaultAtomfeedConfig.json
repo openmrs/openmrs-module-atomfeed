@@ -172,7 +172,7 @@
     "title": "Privilege",
     "category": "privilege",
     "linkTemplates": {
-      "rest": "openmrs/ws/rest/v1/Privilege/{uuid}?v=full"
+      "rest": "openmrs/ws/rest/v1/privilege/{uuid}?v=full"
     }
   }
 ]
