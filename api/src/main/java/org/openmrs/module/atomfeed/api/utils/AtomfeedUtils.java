@@ -11,7 +11,6 @@ package org.openmrs.module.atomfeed.api.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,10 +22,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.util.DefaultPrettyPrinter;
-import org.ict4h.atomfeed.client.repository.AllFailedEvents;
-import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.client.AtomFeedClient;
@@ -35,16 +31,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public final class AtomfeedUtils {
     
-    public static void resetMaxFailedEventsToDefaultValueDuringNextProcessing(AtomFeedClient atomFeedClient,
-                                                                              URI specificFeedUri) {
-        int newMaxFailedEvents = AtomfeedUtils.getNumberOfFailedEvents(specificFeedUri)
-                + AtomfeedConstants.ATOMFEED_DEFAULT_MAX_FAILED_EVENTS;
-        atomFeedClient.setMaxFailedEvents(newMaxFailedEvents);
-    }
-    
-    public static int getNumberOfFailedEvents(URI feedUri) {
-        AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(getAtomFeedSpringTransactionManager());
-        return allFailedEvents.getNumberOfFailedEvents(feedUri.toString());
+    public static void disableMaxFailedEventCondition(AtomFeedClient atomFeedClient) {
+        atomFeedClient.setMaxFailedEvents(Integer.MAX_VALUE);
     }
     
     public static String readResourceFile(String file) throws AtomfeedException {
