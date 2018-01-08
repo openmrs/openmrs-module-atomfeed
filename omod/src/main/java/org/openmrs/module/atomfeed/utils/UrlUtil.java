@@ -28,7 +28,7 @@ public class UrlUtil {
             uri = new URI(requestUrl);
 
             if (null != uri && uri.getScheme().equals("https") && uri.getPort() == 80) {
-                requestUrl = formUrl(request.getScheme(), request.getServerName(), 443,
+                requestUrl = formUrl("https", request.getServerName(), 443,
                         request.getRequestURI(), request.getQueryString());
             }
         } catch (URISyntaxException e) {
