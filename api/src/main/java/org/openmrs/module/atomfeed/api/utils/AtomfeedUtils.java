@@ -26,12 +26,21 @@ import org.codehaus.jackson.util.DefaultPrettyPrinter;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.client.AtomFeedClient;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 public final class AtomfeedUtils {
+    
+    public static void resetMaxFailedEventsToDefaultValueDuringNextProcessing(AtomFeedClient atomFeedClient,
+                                                                              URI specificFeedUri) {
+        int newMaxFailedEvents = AtomfeedUtils.getNumberOfFailedEvents(specificFeedUri)
+                + AtomfeedConstants.ATOMFEED_DEFAULT_MAX_FAILED_EVENTS;
+        atomFeedClient.setMaxFailedEvents(newMaxFailedEvents);
+    }
     
     public static int getNumberOfFailedEvents(URI feedUri) {
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(getAtomFeedSpringTransactionManager());
