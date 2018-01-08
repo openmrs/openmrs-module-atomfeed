@@ -7,4 +7,6 @@ public final class AtomfeedConstants {
     public static final String ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION = "customAtomfeedConfig.json";
     
     public static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
+    
+    public static final int ATOMFEED_DEFAULT_MAX_FAILED_EVENTS = 5;
 }
