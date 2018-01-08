@@ -11,6 +11,7 @@ package org.openmrs.module.atomfeed.api.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -32,9 +33,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public final class AtomfeedUtils {
     
-    public static int getNumberOfFailedEvents(String feedUri) {
+    public static int getNumberOfFailedEvents(URI feedUri) {
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(getAtomFeedSpringTransactionManager());
-        return allFailedEvents.getNumberOfFailedEvents(feedUri);
+        return allFailedEvents.getNumberOfFailedEvents(feedUri.toString());
     }
     
     public static String readResourceFile(String file) throws AtomfeedException {
