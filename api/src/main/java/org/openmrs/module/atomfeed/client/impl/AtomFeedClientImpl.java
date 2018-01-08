@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashMap;
 
 import org.ict4h.atomfeed.client.AtomFeedProperties;
+import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
@@ -129,7 +130,8 @@ public class AtomFeedClientImpl implements AtomFeedClient {
 
     private org.ict4h.atomfeed.client.service.AtomFeedClient createAtomFeedClient() {
         HashMap<String, String> clientCookies = new HashMap<>();
-        AtomFeedSpringTransactionManager atomFeedSpringTransactionManager = getAtomFeedSpringTransactionManager();
+        AtomFeedSpringTransactionManager atomFeedSpringTransactionManager =
+                AtomfeedUtils.getAtomFeedSpringTransactionManager();
         this.eventWorker = this.eventWorker != null ? this.eventWorker : new FeedEventWorkerImpl();
 
         return new org.ict4h.atomfeed.client.service.AtomFeedClient(
@@ -147,9 +149,5 @@ public class AtomFeedClientImpl implements AtomFeedClient {
         if (uri == null) {
             throw new AtomfeedException("URI is not set");
         }
-    }
-
-    private AtomFeedSpringTransactionManager getAtomFeedSpringTransactionManager() {
-        return new AtomFeedSpringTransactionManager(AtomfeedUtils.getSpringPlatformTransactionManager());
     }
 }
