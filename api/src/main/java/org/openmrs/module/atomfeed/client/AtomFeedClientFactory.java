@@ -1,6 +1,7 @@
 package org.openmrs.module.atomfeed.client;
 
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.client.impl.AtomFeedClientImpl;
 
 public class AtomFeedClientFactory {
@@ -16,6 +17,7 @@ public class AtomFeedClientFactory {
 
         atomFeedClient.setConnectTimeout(CONNECT_TIMEOUT);
         atomFeedClient.setReadTimeout(READ_TIMEOUT);
+        atomFeedClient.setMaxFailedEvents(AtomfeedConstants.ATOMFEED_DEFAULT_MAX_FAILED_EVENTS);
 
         return atomFeedClient;
     }
