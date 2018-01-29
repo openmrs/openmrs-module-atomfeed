@@ -174,5 +174,14 @@
     "linkTemplates": {
       "rest": "/ws/rest/v1/privilege/{uuid}?v=full"
     }
+  },
+  {
+    "openMrsClass": "org.openmrs.module.sync2.api.model.audit.AuditMessage",
+    "enabled": true,
+    "title": "AuditMessage",
+    "category": "audit_message",
+    "linkTemplates": {
+      "rest": "/ws/rest/sync2/messages/{uuid}"
+    }
   }
 ]
