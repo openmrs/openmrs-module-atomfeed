@@ -38,7 +38,7 @@ import org.springframework.util.ReflectionUtils;
  * a Stack here to handle any nested transactions that may occur within a single thread
  */
 
-@Component
+@Component("atomfeed-hibernate-interceptor")
 public class HibernateEventInterceptor extends EmptyInterceptor {
 	
 	private static final long serialVersionUID = 1L;

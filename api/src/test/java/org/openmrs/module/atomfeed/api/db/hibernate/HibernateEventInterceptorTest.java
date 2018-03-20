@@ -84,7 +84,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onSave_shouldAddOpenmrsObjectToInsertSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onSave(openmrsObject, null, null, null, null);
 		Assert.assertTrue(inserts.get().peek().contains(openmrsObject));
 	}
@@ -92,7 +92,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onSave_shouldNotAddNotOpenmrsObjectToInsertSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onSave(notOpenmrsObject, null, null, null, null);
 		Assert.assertFalse(inserts.get().peek().contains(notOpenmrsObject));
 	}
@@ -100,7 +100,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onFlushDirty_shouldAddOpenmrsObjectToUpdateSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onFlushDirty(openmrsObject, null, null, null, null, null);
 		Assert.assertTrue(updates.get().peek().contains(openmrsObject));
 	}
@@ -108,7 +108,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onFlushDirty_shouldNotAddNotOpenmrsObjectToUpdateSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onFlushDirty(notOpenmrsObject, null, null, null, null, null);
 		Assert.assertFalse(updates.get().peek().contains(notOpenmrsObject));
 	}
@@ -121,7 +121,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "retired" };
 		Object[] previousState = { Boolean.FALSE };
 		Object[] currentState = { Boolean.TRUE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(retireable));
 		Assert.assertTrue(retiredObjects.get().peek().contains(retireable));
@@ -136,7 +136,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "retired" };
 		Object[] previousState = { Boolean.TRUE };
 		Object[] currentState = { Boolean.TRUE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(retireable));
 		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
@@ -151,7 +151,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "retired" };
 		Object[] previousState = { Boolean.TRUE };
 		Object[] currentState = { Boolean.FALSE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(retireable));
 		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
@@ -166,7 +166,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "retired" };
 		Object[] previousState = { Boolean.FALSE };
 		Object[] currentState = { Boolean.FALSE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(retireable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(retireable));
 		Assert.assertFalse(retiredObjects.get().peek().contains(retireable));
@@ -181,7 +181,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "voided" };
 		Object[] previousState = { Boolean.FALSE };
 		Object[] currentState = { Boolean.TRUE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(voidable));
 		Assert.assertTrue(voidedObjects.get().peek().contains(voidable));
@@ -196,7 +196,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "voided" };
 		Object[] previousState = { Boolean.TRUE };
 		Object[] currentState = { Boolean.TRUE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(voidable));
 		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
@@ -211,7 +211,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "voided" };
 		Object[] previousState = { Boolean.TRUE };
 		Object[] currentState = { Boolean.FALSE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(voidable));
 		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
@@ -226,7 +226,7 @@ public class HibernateEventInterceptorTest {
 		String[] propertyNames = { "voided" };
 		Object[] previousState = { Boolean.FALSE };
 		Object[] currentState = { Boolean.FALSE };
-		
+
 		hibernateEventInterceptor.onFlushDirty(voidable, null, currentState, previousState, propertyNames, null);
 		Assert.assertTrue(updates.get().peek().contains(voidable));
 		Assert.assertFalse(voidedObjects.get().peek().contains(voidable));
@@ -236,7 +236,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onDelete_shouldAddOpenmrsObjectToDeleteSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onDelete(openmrsObject, null, null, null, null);
 		Assert.assertTrue(deletes.get().peek().contains(openmrsObject));
 	}
@@ -244,7 +244,7 @@ public class HibernateEventInterceptorTest {
 	@Test
 	public void onDelete_shouldNotAddNotOpenmrsObjectToDeleteSet() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onSave(notOpenmrsObject, null, null, null, null);
 		Assert.assertFalse(deletes.get().peek().contains(notOpenmrsObject));
 	}
@@ -255,9 +255,9 @@ public class HibernateEventInterceptorTest {
 		
 		final PersistentCollection updatedCollection = mock(PersistentCollection.class);
 		when(updatedCollection.getOwner()).thenReturn(expectedCollectionOwner);
-		
+
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onCollectionUpdate(updatedCollection, null);
 		Assert.assertTrue(updates.get().peek().contains(expectedCollectionOwner));
 	}
@@ -268,9 +268,9 @@ public class HibernateEventInterceptorTest {
 		
 		final PersistentCollection updatedCollection = mock(PersistentCollection.class);
 		when(updatedCollection.getOwner()).thenReturn(collectionOwner);
-		
+
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
+
 		hibernateEventInterceptor.onCollectionUpdate(updatedCollection, null);
 		Assert.assertFalse(updates.get().peek().contains(collectionOwner));
 	}
@@ -283,7 +283,7 @@ public class HibernateEventInterceptorTest {
 		
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(true);
-		
+
 		hibernateEventInterceptor.afterTransactionCompletion(transaction);
 		
 		verify(eventManager, times(1)).serveEvent(eq(openmrsObject), eq(EventAction.CREATED));
@@ -303,7 +303,7 @@ public class HibernateEventInterceptorTest {
 		
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(false);
-		
+
 		hibernateEventInterceptor.afterTransactionCompletion(transaction);
 		
 		verify(eventManager, never()).serveEvent(any(), any());
@@ -317,7 +317,7 @@ public class HibernateEventInterceptorTest {
 		
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(false);
-		
+
 		hibernateEventInterceptor.afterTransactionCompletion(transaction);
 		
 		Assert.assertNull(inserts.get());
