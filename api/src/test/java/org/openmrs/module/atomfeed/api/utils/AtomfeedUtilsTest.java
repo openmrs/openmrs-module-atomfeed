@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
@@ -53,7 +54,7 @@ public class AtomfeedUtilsTest {
 	public void readResourceFile_shouldThrowIoExceptionIfFileDoesNotExist() throws AtomfeedException {
 		AtomfeedUtils.readResourceFile(notExistingFilePath);
 	}
-	
+
 	@Test
 	public void parseJsonFileToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
 		List<FeedConfiguration> result = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
@@ -89,7 +90,7 @@ public class AtomfeedUtilsTest {
 		String json = AtomfeedUtils.readResourceFile(incorrectFeedConfigurationPath);
 		Assert.assertFalse(AtomfeedUtils.isValidateJson(json));
 	}
-	
+
 	@Test
 	public void writeFeedConfigurationToJsonFile() throws AtomfeedException {
 		List<FeedConfiguration> list = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);

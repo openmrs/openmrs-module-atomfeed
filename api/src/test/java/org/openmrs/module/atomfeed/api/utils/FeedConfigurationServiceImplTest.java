@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
@@ -61,7 +62,7 @@ public class FeedConfigurationServiceImplTest {
         Assert.assertEquals(EXPECTED_FEED_CONFIGURATION2,
                 manager.getFeedConfigurationByOpenMrsClass(EXPECTED_FEED_CONFIGURATION2.getOpenMrsClass()));
     }
-    
+
     @Test
     public void loadLocalFeedConfiguration_shouldReturnNullIfFeedConfigurationDoesNotExist() throws AtomfeedException {
         FeedConfigurationServiceImpl manager = prepareServiceWithLoadedConfigFromArray();

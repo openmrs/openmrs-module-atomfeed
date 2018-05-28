@@ -110,6 +110,36 @@
     }
   },
   {
+    "openMrsClass": "org.openmrs.Visit",
+    "enabled": "true",
+    "title": "Visit",
+    "category": "visit",
+    "linkTemplates": {
+      "rest": "/ws/rest/v1/visit/{uuid}?v=full",
+      "fhir": "/ws/fhir/Encounter/{uuid}"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Encounter",
+    "enabled": "true",
+    "title": "Encounter",
+    "category": "encounter",
+    "linkTemplates": {
+      "rest": "/ws/rest/v1/encounter/{uuid}?v=full",
+      "fhir": "/ws/fhir/Encounter/{uuid}"
+    }
+  },
+  {
+    "openMrsClass": "org.openmrs.Obs",
+    "enabled": "true",
+    "title": "Obs",
+    "category": "ob",
+    "linkTemplates": {
+      "rest": "/ws/rest/v1/obs/{uuid}?v=full",
+      "fhir": "/ws/fhir/Observation/{uuid}"
+    }
+  },
+  {
     "openMrsClass": "org.openmrs.Relationship",
     "enabled": "false",
     "title": "Relationship",
