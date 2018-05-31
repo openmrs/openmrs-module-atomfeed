@@ -9,7 +9,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>atomfeed</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Atomfeed module</name>
 	<description>Atomfeed module for OpenMRS</description>
