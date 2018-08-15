@@ -6,6 +6,17 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <changeSet author="SolDevelo" id="org.openmrs.module.atomfeed-2017-11-08-10:22">
+    	<validCheckSum>3:ce20ea9f79b936f10010d668ef669ca7</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+			<not><tableExists tableName="event_records" /></not>
+			<not><tableExists tableName="event_records_queue" /></not>
+			<not><tableExists tableName="chunking_history" /></not>
+			<not><tableExists tableName="event_records_offset_marker" /></not>
+			<sqlCheck expectedResult="0">
+				SELECT COUNT(*) FROM scheduler_task_config
+				WHERE schedulable_class = 'org.openmrs.module.atomfeed.scheduler.tasks.EventPublisherTask'
+			</sqlCheck>
+		</preConditions>
         <createTable tableName="event_records">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" />
@@ -16,7 +27,7 @@
             <column name="uri" type="varchar(255)" />
             <column name="object" type="varchar(1000)" />
             <column name="category" type="varchar(255)" />
-            <column name="date_created" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP" />
+            <column name="date_created" type="timestamp" />
             <column name="tags" type="varchar(255)" />
         </createTable>
         <createTable tableName="event_records_queue">
