@@ -27,7 +27,7 @@
             <column name="uri" type="varchar(255)" />
             <column name="object" type="varchar(1000)" />
             <column name="category" type="varchar(255)" />
-            <column name="date_created" type="timestamp" />
+            <column name="date_created" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP"/>
             <column name="tags" type="varchar(255)" />
         </createTable>
         <createTable tableName="event_records_queue">
