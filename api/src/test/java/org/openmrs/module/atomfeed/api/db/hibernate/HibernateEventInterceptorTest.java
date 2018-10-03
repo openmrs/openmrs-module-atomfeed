@@ -296,20 +296,6 @@ public class HibernateEventInterceptorTest {
 	}
 	
 	@Test
-	public void beforeTransactionCompletion_shouldNotServeEventsWhenTransationWasNotCommited() {
-		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
-		
-		addOpenmrsObjectToAllSets();
-		
-		final Transaction transaction = mock(Transaction.class);
-		when(transaction.wasCommitted()).thenReturn(false);
-
-		hibernateEventInterceptor.beforeTransactionCompletion(transaction);
-		
-		verify(eventManager, never()).serveEvent(any(), any());
-	}
-	
-	@Test
 	public void beforeTransactionCompletion_shouldCleanupSetsAtTheEndOfMethod() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
