@@ -201,29 +201,27 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	@Override
 	public void beforeTransactionCompletion(Transaction tx) {
 		try {
-			if (tx.wasCommitted()) {
-				for (OpenmrsObject delete : deletes.get().peek()) {
-					eventManager.serveEvent(delete, EventAction.DELETED);
-				}
-				for (OpenmrsObject insert : inserts.get().peek()) {
-					eventManager.serveEvent(insert, EventAction.CREATED);
-				}
-				for (OpenmrsObject update : updates.get().peek()) {
-					eventManager.serveEvent(update, EventAction.UPDATED);
-				}
-				for (OpenmrsObject retired : retiredObjects.get().peek()) {
-					eventManager.serveEvent(retired, EventAction.RETIRED);
-				}
-				for (OpenmrsObject unretired : unretiredObjects.get().peek()) {
-					eventManager.serveEvent(unretired, EventAction.UNRETIRED);
-				}
-				for (OpenmrsObject voided : voidedObjects.get().peek()) {
-					eventManager.serveEvent(voided, EventAction.VOIDED);
-				}
-				for (OpenmrsObject unvoided : unvoidedObjects.get().peek()) {
-					eventManager.serveEvent(unvoided, EventAction.UNVOIDED);
-				}
-			}
+            for (OpenmrsObject delete : deletes.get().peek()) {
+                eventManager.serveEvent(delete, EventAction.DELETED);
+            }
+            for (OpenmrsObject insert : inserts.get().peek()) {
+                eventManager.serveEvent(insert, EventAction.CREATED);
+            }
+            for (OpenmrsObject update : updates.get().peek()) {
+                eventManager.serveEvent(update, EventAction.UPDATED);
+            }
+            for (OpenmrsObject retired : retiredObjects.get().peek()) {
+                eventManager.serveEvent(retired, EventAction.RETIRED);
+            }
+            for (OpenmrsObject unretired : unretiredObjects.get().peek()) {
+                eventManager.serveEvent(unretired, EventAction.UNRETIRED);
+            }
+            for (OpenmrsObject voided : voidedObjects.get().peek()) {
+                eventManager.serveEvent(voided, EventAction.VOIDED);
+            }
+            for (OpenmrsObject unvoided : unvoidedObjects.get().peek()) {
+                eventManager.serveEvent(unvoided, EventAction.UNVOIDED);
+            }
 		} finally {
 			//cleanup
 			inserts.get().pop();
