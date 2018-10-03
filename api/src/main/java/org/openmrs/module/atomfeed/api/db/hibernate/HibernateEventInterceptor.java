@@ -8,28 +8,25 @@
  */
 package org.openmrs.module.atomfeed.api.db.hibernate;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
-import java.util.HashSet;
-import java.util.Stack;
-
 import org.hibernate.CallbackException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
-
 import org.openmrs.OpenmrsObject;
 import org.openmrs.Retireable;
 import org.openmrs.Voidable;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.db.EventManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Stack;
 
 /**
  * A hibernate {@link Interceptor} implementation, intercepts any database inserts, updates and
@@ -197,11 +194,12 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 		
 		return ReflectionUtils.invokeMethod(method, collection);
 	}
-	/**
+
+    /**
 	 * @see EmptyInterceptor#afterTransactionCompletion(Transaction)
 	 */
 	@Override
-	public void afterTransactionCompletion(Transaction tx) {
+	public void beforeTransactionCompletion(Transaction tx) {
 		try {
 			if (tx.wasCommitted()) {
 				for (OpenmrsObject delete : deletes.get().peek()) {

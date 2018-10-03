@@ -276,7 +276,7 @@ public class HibernateEventInterceptorTest {
 	}
 	
 	@Test
-	public void afterTransactionCompletion_shouldCallServeEventMethodInEventManagerOnEveryObjectInStack() {
+	public void beforeTransactionCompletion_shouldCallServeEventMethodInEventManagerOnEveryObjectInStack() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
 		addOpenmrsObjectToAllSets();
@@ -284,7 +284,7 @@ public class HibernateEventInterceptorTest {
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(true);
 
-		hibernateEventInterceptor.afterTransactionCompletion(transaction);
+		hibernateEventInterceptor.beforeTransactionCompletion(transaction);
 		
 		verify(eventManager, times(1)).serveEvent(eq(openmrsObject), eq(EventAction.CREATED));
 		verify(eventManager, times(1)).serveEvent(eq(openmrsObject), eq(EventAction.DELETED));
@@ -296,7 +296,7 @@ public class HibernateEventInterceptorTest {
 	}
 	
 	@Test
-	public void afterTransactionCompletion_shouldNotServeEventsWhenTransationWasNotCommited() {
+	public void beforeTransactionCompletion_shouldNotServeEventsWhenTransationWasNotCommited() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
 		addOpenmrsObjectToAllSets();
@@ -304,13 +304,13 @@ public class HibernateEventInterceptorTest {
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(false);
 
-		hibernateEventInterceptor.afterTransactionCompletion(transaction);
+		hibernateEventInterceptor.beforeTransactionCompletion(transaction);
 		
 		verify(eventManager, never()).serveEvent(any(), any());
 	}
 	
 	@Test
-	public void afterTransactionCompletion_shouldCleanupSetsAtTheEndOfMethod() {
+	public void beforeTransactionCompletion_shouldCleanupSetsAtTheEndOfMethod() {
 		hibernateEventInterceptor.afterTransactionBegin(null); // init structure
 		
 		addOpenmrsObjectToAllSets();
@@ -318,7 +318,7 @@ public class HibernateEventInterceptorTest {
 		final Transaction transaction = mock(Transaction.class);
 		when(transaction.wasCommitted()).thenReturn(false);
 
-		hibernateEventInterceptor.afterTransactionCompletion(transaction);
+		hibernateEventInterceptor.beforeTransactionCompletion(transaction);
 		
 		Assert.assertNull(inserts.get());
 		Assert.assertNull(inserts.get());
