@@ -1,76 +1,94 @@
 package org.openmrs.module.atomfeed.api.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.openmrs.module.atomfeed.AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION;
+import static org.openmrs.module.atomfeed.AtomfeedConstants.ATOMFEED_PATH_TO_DEFAULT_CONFIGURATION;
+import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.parseJsonFileToFeedConfiguration;
+
 @Component("atomfeed.feedConfigurationService")
 public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements FeedConfigurationService {
 
-    private HashMap<String, FeedConfiguration> feedConfigurationByCategory;
-    
-    private HashMap<String, FeedConfiguration> feedConfigurationByOpenMrsClass;
-    
-    public FeedConfigurationServiceImpl() {
-        if (AtomfeedUtils.resourceFileExists(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)) {
-            loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)
-            );
-        } else {
-            loadFeedConfigurations(
-                    AtomfeedUtils.parseJsonFileToFeedConfiguration(AtomfeedConstants.ATOMFEED_PATH_TO_DEFAULT_CONFIGURATION)
-            );
-        }
-    }
-    
-    @Override
-    public void saveConfig(List<FeedConfiguration> value) {
-        AtomfeedUtils.writeFeedConfigurationToJsonFile(value,
-            AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
-        loadFeedConfigurations(value);
-    }
-    
-    @Override
-    public void saveConfig(String value) {
-        if (AtomfeedUtils.isValidateJson(value)) {
-            List<FeedConfiguration> localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
-            AtomfeedUtils.writeFeedConfigurationToJsonFile(localConfiguration,
-                AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
-            loadFeedConfigurations(localConfiguration);
-        }
-    }
-    
-    @Override
-    public FeedConfiguration getFeedConfigurationByCategory(String category) {
-        return feedConfigurationByCategory.get(category);
-    }
-    
-    @Override
-    public FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass) {
-        return feedConfigurationByOpenMrsClass.get(openMrsClass);
-    }
+	private List<String> feedFilters;
 
-    @Override
-    public Collection<FeedConfiguration> getAllFeedConfigurations() {
-        return feedConfigurationByCategory.values();
-    }
+	private HashMap<String, FeedConfiguration> feedConfigurationByCategory;
 
-    
-    private void loadFeedConfigurations(List<FeedConfiguration> feedConfigurations) {
-        HashMap<String, FeedConfiguration> byCategory = new HashMap<>();
-        HashMap<String, FeedConfiguration> byOpenMrsClass = new HashMap<>();
-        for (FeedConfiguration configuration : feedConfigurations) {
-            byCategory.put(configuration.getCategory(), configuration);
-            byOpenMrsClass.put(configuration.getOpenMrsClass(), configuration);
-        }
-        feedConfigurationByCategory = byCategory;
-        feedConfigurationByOpenMrsClass = byOpenMrsClass;
-    }
+	private HashMap<String, FeedConfiguration> feedConfigurationByOpenMrsClass;
+
+	public FeedConfigurationServiceImpl() {
+		GeneralConfiguration generalConfiguration;
+		if (AtomfeedUtils.resourceFileExists(ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)) {
+			generalConfiguration = parseJsonFileToFeedConfiguration(ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
+		} else {
+			generalConfiguration = parseJsonFileToFeedConfiguration(ATOMFEED_PATH_TO_DEFAULT_CONFIGURATION);
+		}
+
+		loadFeedConfigurations(generalConfiguration);
+	}
+
+	@Override
+	public void saveConfig(GeneralConfiguration generalConfiguration) {
+		AtomfeedUtils.writeFeedConfigurationToJsonFile(generalConfiguration,
+				ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
+		loadFeedConfigurations(generalConfiguration);
+	}
+
+	@Override
+	public void saveConfig(String value) {
+		if (AtomfeedUtils.isValidateJson(value)) {
+			GeneralConfiguration localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
+			saveConfig(localConfiguration);
+		}
+	}
+
+	@Override
+	public FeedConfiguration getFeedConfigurationByCategory(String category) {
+		return feedConfigurationByCategory.get(category);
+	}
+
+	@Override
+	public FeedConfiguration getFeedConfigurationByOpenMrsClass(String openMrsClass) {
+		return feedConfigurationByOpenMrsClass.get(openMrsClass);
+	}
+
+	@Override
+	public Collection<FeedConfiguration> getAllFeedConfigurations() {
+		return feedConfigurationByCategory.values();
+	}
+
+	@Override
+	public List<String> getFeedFilterBeans() {
+		return feedFilters;
+	}
+
+	@Override
+	public GeneralConfiguration getGeneralConfiguration() {
+		GeneralConfiguration generalConfiguration = new GeneralConfiguration();
+		generalConfiguration.setFeedFilterBeans(feedFilters);
+		generalConfiguration.setFeedConfigurations(new ArrayList(feedConfigurationByCategory.values()));
+		return generalConfiguration;
+	}
+
+	private void loadFeedConfigurations(GeneralConfiguration generalConfiguration) {
+		HashMap<String, FeedConfiguration> byCategory = new HashMap<>();
+		HashMap<String, FeedConfiguration> byOpenMrsClass = new HashMap<>();
+		for (FeedConfiguration configuration : generalConfiguration.getFeedConfigurations()) {
+			byCategory.put(configuration.getCategory(), configuration);
+			byOpenMrsClass.put(configuration.getOpenMrsClass(), configuration);
+		}
+		feedConfigurationByCategory = byCategory;
+		feedConfigurationByOpenMrsClass = byOpenMrsClass;
+
+		feedFilters = generalConfiguration.getFeedFilterBeans();
+	}
 }

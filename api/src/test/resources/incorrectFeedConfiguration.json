@@ -1,4 +1,6 @@
-[
+{
+  "feedFilterBeans": [],
+  "feedConfigurations": [
   {
     "openMrsClass": "org.openmrs.Patient",
     "enabled": "false",
@@ -21,3 +23,4 @@
     "feedWriter": "custom.VisitWriter"
   }
 ]
+}

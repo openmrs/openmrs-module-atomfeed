@@ -15,7 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.atomfeed.api.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
-import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
@@ -38,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 @Controller
 public class LoadFeedConfPageController {
@@ -59,7 +58,7 @@ public class LoadFeedConfPageController {
 	public String get(PageModel model,
 					  @RequestParam(value = "importStatus", required = false) String importStatus,
 					  @SpringBean("atomfeed.feedConfigurationService") FeedConfigurationService feedConfigurationService) {
-		String configuration = AtomfeedUtils.writeFeedConfigurationToJsonString(feedConfigurationService.getAllFeedConfigurations());
+		String configuration = AtomfeedUtils.writeFeedConfigurationToJsonString(feedConfigurationService.getGeneralConfiguration());
 		model.addAttribute("configuration", configuration);
 		model.addAttribute("importStatus", importStatus);
 		return VIEW_PROVIDER;
@@ -106,8 +105,8 @@ public class LoadFeedConfPageController {
 			writer = new StringWriter();
 			IOUtils.copy(file.getInputStream(), writer, "UTF-8");
 
-			List<FeedConfiguration> feedConfigurations = AtomfeedUtils.parseJsonStringToFeedConfiguration(writer.toString());
-			feedConfigurationService.saveConfig(feedConfigurations);
+			GeneralConfiguration generalConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(writer.toString());
+			feedConfigurationService.saveConfig(generalConfiguration);
 			model.addAttribute("importStatus", "");
 			return "redirect:/atomfeed/atomfeed.page";
 		} catch (AtomfeedException e) {
