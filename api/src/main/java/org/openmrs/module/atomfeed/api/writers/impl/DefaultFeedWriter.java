@@ -14,15 +14,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
+import org.openmrs.module.atomfeed.api.filter.GenericFeedFilter;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("atomfeed.DefaultFeedWriter")
@@ -31,7 +36,10 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
 	
 	private static final String UUID_PATTERN = "{uuid}";
-	
+
+	@Autowired
+	private FeedConfigurationService feedConfigurationService;
+
 	@Override
 	public void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration) {
 		if (!feedConfiguration.isEnabled()) {
@@ -40,15 +48,25 @@ public class DefaultFeedWriter extends FeedWriterBase {
 				openmrsObject.getClass().getName());
 			return;
 		}
-		
+
+		StringBuilder tags = new StringBuilder(eventAction.name());
+
+		for (String beanName : feedConfigurationService.getFeedFilterBeans()) {
+			GenericFeedFilter feedFilter = Context.getRegisteredComponent(beanName, GenericFeedFilter.class);
+			String tag = StringUtils.normalizeSpace(feedFilter.createFilterTag(openmrsObject));
+			if (tag != null && !tag.isEmpty()) {
+				tags.append(",").append(tag);
+			}
+		}
+
 		final Event event = new Event(
 				UUID.randomUUID().toString(),
 				feedConfiguration.getTitle(),
 				DateTime.now(),
-				(URI) null,
+				null,
 				getEventContent(openmrsObject, feedConfiguration),
 				feedConfiguration.getCategory(),
-				eventAction.name()
+				tags.toString()
 		);
 		debugEvent(event);
 		saveEvent(event);
