@@ -13,7 +13,7 @@ package org.openmrs.module.atomfeed.page.controller;
 
 import org.apache.commons.io.IOUtils;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.atomfeed.api.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;

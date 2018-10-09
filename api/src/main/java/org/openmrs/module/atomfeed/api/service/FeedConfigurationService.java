@@ -1,4 +1,4 @@
-package org.openmrs.module.atomfeed.api;
+package org.openmrs.module.atomfeed.api.service;
 
 import java.util.Collection;
 import java.util.List;

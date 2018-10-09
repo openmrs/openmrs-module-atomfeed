@@ -1,7 +1,7 @@
-package org.openmrs.module.atomfeed.api.impl;
+package org.openmrs.module.atomfeed.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.atomfeed.api.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.api.utils.AtomfeedUtils;

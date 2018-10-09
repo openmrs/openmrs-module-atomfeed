@@ -13,7 +13,7 @@ import static org.openmrs.module.atomfeed.AtomfeedConstants.DEFAULT_FEED_WRITER;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.atomfeed.api.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;

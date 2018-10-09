@@ -4,7 +4,7 @@ import org.openmrs.OpenmrsObject;
 
 public interface GenericFeedFilter {
 
-	public String createFilterTag(OpenmrsObject object);
+	String createFilterTag(OpenmrsObject object);
 
-	public boolean isFilterTagValid(String tag);
+	boolean isFilterTagValid(String tag);
 }
