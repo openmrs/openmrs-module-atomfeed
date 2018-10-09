@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
-import org.openmrs.module.atomfeed.api.impl.FeedConfigurationServiceImpl;
+import org.openmrs.module.atomfeed.api.service.impl.FeedConfigurationServiceImpl;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 
