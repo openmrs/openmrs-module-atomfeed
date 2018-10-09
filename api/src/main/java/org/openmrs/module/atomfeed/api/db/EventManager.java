@@ -28,7 +28,7 @@ public class EventManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
 	
 	@Autowired
-	FeedConfigurationService feedConfigurationService;
+	private FeedConfigurationService feedConfigurationService;
 	
 	public void serveEvent(OpenmrsObject openmrsObject, EventAction eventAction) {
 		LOGGER.info("Called serveEvent method. Parameters: openmrsObject={}, eventAction={}",

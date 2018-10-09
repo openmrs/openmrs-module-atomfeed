@@ -1,16 +1,17 @@
 package org.openmrs.module.atomfeed.api.utils;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.impl.FeedConfigurationServiceImpl;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
+
+import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.parseJsonFileToFeedConfiguration;
 
 public class FeedConfigurationServiceImplTest {
     
@@ -73,9 +74,9 @@ public class FeedConfigurationServiceImplTest {
     }
     
     private FeedConfigurationServiceImpl prepareServiceWithLoadedConfigFromArray() {
-        List<FeedConfiguration> array = AtomfeedUtils.parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_PATH);
+        GeneralConfiguration generalConfiguration = parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_PATH);
         FeedConfigurationServiceImpl service = new FeedConfigurationServiceImpl();
-        service.saveConfig(array);
+        service.saveConfig(generalConfiguration);
         return service;
     }
     

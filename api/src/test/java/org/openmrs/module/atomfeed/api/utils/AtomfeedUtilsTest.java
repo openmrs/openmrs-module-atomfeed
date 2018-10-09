@@ -10,26 +10,28 @@ package org.openmrs.module.atomfeed.api.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 
 public class AtomfeedUtilsTest {
 
-	private static final String sampleFeedConfigurationPath = "sampleFeedConfiguration.json";
-	private static final String incorrectFeedConfigurationPath = "incorrectFeedConfiguration.json";
-	private static final String notExistingFilePath = "pathToNotExistingFile";
-	private static final FeedConfiguration expectedFeedConfiguration = new FeedConfiguration();
+	private static final String SAMPLE_FEED_CONFIGURATION_JSON = "sampleFeedConfiguration.json";
+	private static final String INCORRECT_FEED_CONFIGURATION_JSON = "incorrectFeedConfiguration.json";
+	private static final String PATH_TO_NOT_EXISTING_FILE = "pathToNotExistingFile";
+	private static final GeneralConfiguration EXPECTED_FEED_CONFIGURATION = new GeneralConfiguration();
 
 	@Before
 	public void setUp() {
+		FeedConfiguration expectedFeedConfiguration = new FeedConfiguration();
 		expectedFeedConfiguration.setOpenMrsClass("org.openmrs.Patient");
 		expectedFeedConfiguration.setEnabled(false);
 		expectedFeedConfiguration.setTitle("Title");
@@ -39,6 +41,11 @@ public class AtomfeedUtilsTest {
 		expectedLinkTemplates.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
 		expectedLinkTemplates.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
 		expectedFeedConfiguration.setLinkTemplates(expectedLinkTemplates);
+
+		List<String> expectedFeedFilter = Collections.singletonList("testBeanName");
+
+		EXPECTED_FEED_CONFIGURATION.setFeedFilterBeans(expectedFeedFilter);
+		EXPECTED_FEED_CONFIGURATION.setFeedConfigurations(Collections.singletonList(expectedFeedConfiguration));
 	}
 	
 	@Test
@@ -52,65 +59,70 @@ public class AtomfeedUtilsTest {
 	
 	@Test(expected = AtomfeedException.class)
 	public void readResourceFile_shouldThrowIoExceptionIfFileDoesNotExist() throws AtomfeedException {
-		AtomfeedUtils.readResourceFile(notExistingFilePath);
+		AtomfeedUtils.readResourceFile(PATH_TO_NOT_EXISTING_FILE);
 	}
 
 	@Test
 	public void parseJsonFileToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
-		List<FeedConfiguration> result = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
-		Assert.assertEquals(expectedFeedConfiguration, result.get(0));
+		GeneralConfiguration result = AtomfeedUtils.parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_JSON);
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedConfigurations().get(0),
+				result.getFeedConfigurations().get(0));
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedFilterBeans(), result.getFeedFilterBeans());
 	}
 
 	@Test(expected = AtomfeedException.class)
 	public void parseJsonFileToFeedConfiguration_shouldThrowJsonParseException() throws AtomfeedException {
-		AtomfeedUtils.parseJsonFileToFeedConfiguration(incorrectFeedConfigurationPath);
+		AtomfeedUtils.parseJsonFileToFeedConfiguration(INCORRECT_FEED_CONFIGURATION_JSON);
 	}
 
 	@Test
 	public void parseJsonStringToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
-		String json = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath);
-		List<FeedConfiguration> result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
-		Assert.assertEquals(expectedFeedConfiguration, result.get(0));
+		String json = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
+		GeneralConfiguration result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedConfigurations().get(0),
+				result.getFeedConfigurations().get(0));
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedFilterBeans(), result.getFeedFilterBeans());
 	}
 
 	@Test(expected = AtomfeedException.class)
 	public void parseJsonStringToFeedConfiguration_shouldThrowJsonParseException() throws AtomfeedException {
-		String json = AtomfeedUtils.readResourceFile(incorrectFeedConfigurationPath);
+		String json = AtomfeedUtils.readResourceFile(INCORRECT_FEED_CONFIGURATION_JSON);
 		AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
 	}
 
 	@Test
 	public void isValidateJson_correct() throws AtomfeedException {
-		String json = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath);
+		String json = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
 		Assert.assertTrue(AtomfeedUtils.isValidateJson(json));
 	}
 
 	@Test
 	public void isValidateJson_incorrect() throws AtomfeedException {
-		String json = AtomfeedUtils.readResourceFile(incorrectFeedConfigurationPath);
+		String json = AtomfeedUtils.readResourceFile(INCORRECT_FEED_CONFIGURATION_JSON);
 		Assert.assertFalse(AtomfeedUtils.isValidateJson(json));
 	}
 
 	@Test
 	public void writeFeedConfigurationToJsonFile() throws AtomfeedException {
-		List<FeedConfiguration> list = AtomfeedUtils.parseJsonFileToFeedConfiguration(sampleFeedConfigurationPath);
+		GeneralConfiguration generalConfiguration = AtomfeedUtils.parseJsonFileToFeedConfiguration(
+				SAMPLE_FEED_CONFIGURATION_JSON);
 		
 		final String path = "newFile.txt";
-		AtomfeedUtils.writeFeedConfigurationToJsonFile(list, path);
+		AtomfeedUtils.writeFeedConfigurationToJsonFile(generalConfiguration, path);
 		
-		String expected = AtomfeedUtils.readResourceFile(sampleFeedConfigurationPath);
-		String result = AtomfeedUtils.readResourceFile(path);
+		String expected = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
+		String result = AtomfeedUtils.readResourceFile(path) + "\n";
 		
 		Assert.assertEquals(expected, result);
 	}
 	
 	@Test
 	public void resourceFileExists_exist() throws AtomfeedException {
-		Assert.assertTrue(AtomfeedUtils.resourceFileExists(sampleFeedConfigurationPath));
+		Assert.assertTrue(AtomfeedUtils.resourceFileExists(SAMPLE_FEED_CONFIGURATION_JSON));
 	}
 	
 	@Test
 	public void resourceFileExists_notExist() throws AtomfeedException {
-		Assert.assertFalse(AtomfeedUtils.resourceFileExists(notExistingFilePath));
+		Assert.assertFalse(AtomfeedUtils.resourceFileExists(PATH_TO_NOT_EXISTING_FILE));
 	}
 }
