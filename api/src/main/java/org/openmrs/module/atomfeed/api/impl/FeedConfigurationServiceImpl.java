@@ -26,7 +26,7 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
 	private HashMap<String, FeedConfiguration> feedConfigurationByOpenMrsClass;
 
 	public FeedConfigurationServiceImpl() {
-		GeneralConfiguration generalConfiguration = null;
+		GeneralConfiguration generalConfiguration;
 		if (AtomfeedUtils.resourceFileExists(ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION)) {
 			generalConfiguration = parseJsonFileToFeedConfiguration(ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
 		} else {
@@ -47,9 +47,7 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
 	public void saveConfig(String value) {
 		if (AtomfeedUtils.isValidateJson(value)) {
 			GeneralConfiguration localConfiguration = AtomfeedUtils.parseJsonStringToFeedConfiguration(value);
-			AtomfeedUtils.writeFeedConfigurationToJsonFile(localConfiguration,
-					ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION);
-			loadFeedConfigurations(localConfiguration);
+			saveConfig(localConfiguration);
 		}
 	}
 

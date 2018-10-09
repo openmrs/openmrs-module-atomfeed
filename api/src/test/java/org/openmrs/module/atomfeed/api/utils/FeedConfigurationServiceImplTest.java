@@ -26,7 +26,7 @@ public class FeedConfigurationServiceImplTest {
             "custom.PatientWriter"
     );
     
-    private static final String SAMPLE_FEED_CONFIGURATION_PATH2 = "sampleFeedConfiguration2.json";
+    private static final String SAMPLE_FEED_CONFIGURATION_PATH2 = "defaultBeanConfiguration.json";
     private static final FeedConfiguration EXPECTED_FEED_CONFIGURATION2 = new FeedConfiguration(
             "org.openmrs.TEST2",
             "Title2",
