@@ -1,16 +1,13 @@
-{
-  "feedFilterBeans": [],
-  "feedConfigurations": [
-    {
-      "openMrsClass": "org.openmrs.TEST2",
-      "enabled": false,
-      "title": "Title2",
-      "category": "patient",
-      "linkTemplates": {
-        "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
-        "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
-      },
-      "feedWriter": "custom"
-    }
-  ]
-}
+[
+  {
+    "openMrsClass": "org.openmrs.TEST2",
+    "enabled": false,
+    "title": "Title2",
+    "category": "patient",
+    "linkTemplates": {
+      "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
+      "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
+    },
+    "feedWriter": "custom"
+  }
+]

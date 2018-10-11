@@ -10,7 +10,6 @@ package org.openmrs.module.atomfeed.api.utils;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,32 +19,25 @@ import org.junit.Test;
 
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 
 public class AtomfeedUtilsTest {
 
 	private static final String SAMPLE_FEED_CONFIGURATION_JSON = "sampleFeedConfiguration.json";
 	private static final String INCORRECT_FEED_CONFIGURATION_JSON = "incorrectFeedConfiguration.json";
 	private static final String PATH_TO_NOT_EXISTING_FILE = "pathToNotExistingFile";
-	private static final GeneralConfiguration EXPECTED_FEED_CONFIGURATION = new GeneralConfiguration();
+	private static final FeedConfiguration EXPECTED_FEED_CONFIGURATION = new FeedConfiguration();
 
 	@Before
 	public void setUp() {
-		FeedConfiguration expectedFeedConfiguration = new FeedConfiguration();
-		expectedFeedConfiguration.setOpenMrsClass("org.openmrs.Patient");
-		expectedFeedConfiguration.setEnabled(false);
-		expectedFeedConfiguration.setTitle("Title");
-		expectedFeedConfiguration.setCategory("patient");
-		expectedFeedConfiguration.setFeedWriter("custom.PatientWriter");
+		EXPECTED_FEED_CONFIGURATION.setOpenMrsClass("org.openmrs.Patient");
+		EXPECTED_FEED_CONFIGURATION.setEnabled(false);
+		EXPECTED_FEED_CONFIGURATION.setTitle("Title");
+		EXPECTED_FEED_CONFIGURATION.setCategory("patient");
+		EXPECTED_FEED_CONFIGURATION.setFeedWriter("custom.PatientWriter");
 		final HashMap<String, String> expectedLinkTemplates = new HashMap<>();
 		expectedLinkTemplates.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
 		expectedLinkTemplates.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
-		expectedFeedConfiguration.setLinkTemplates(expectedLinkTemplates);
-
-		List<String> expectedFeedFilter = Collections.singletonList("testBeanName");
-
-		EXPECTED_FEED_CONFIGURATION.setFeedFilterBeans(expectedFeedFilter);
-		EXPECTED_FEED_CONFIGURATION.setFeedConfigurations(Collections.singletonList(expectedFeedConfiguration));
+		EXPECTED_FEED_CONFIGURATION.setLinkTemplates(expectedLinkTemplates);
 	}
 	
 	@Test
@@ -64,10 +56,8 @@ public class AtomfeedUtilsTest {
 
 	@Test
 	public void parseJsonFileToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
-		GeneralConfiguration result = AtomfeedUtils.parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_JSON);
-		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedConfigurations().get(0),
-				result.getFeedConfigurations().get(0));
-		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedFilterBeans(), result.getFeedFilterBeans());
+		List<FeedConfiguration> result = AtomfeedUtils.parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_JSON);
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION, result.get(0));
 	}
 
 	@Test(expected = AtomfeedException.class)
@@ -78,10 +68,8 @@ public class AtomfeedUtilsTest {
 	@Test
 	public void parseJsonStringToFeedConfiguration_shouldParseSampleFeedConfigurationResource() throws AtomfeedException {
 		String json = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
-		GeneralConfiguration result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
-		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedConfigurations().get(0),
-				result.getFeedConfigurations().get(0));
-		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION.getFeedFilterBeans(), result.getFeedFilterBeans());
+		List<FeedConfiguration> result = AtomfeedUtils.parseJsonStringToFeedConfiguration(json);
+		Assert.assertEquals(EXPECTED_FEED_CONFIGURATION, result.get(0));
 	}
 
 	@Test(expected = AtomfeedException.class)
@@ -104,11 +92,11 @@ public class AtomfeedUtilsTest {
 
 	@Test
 	public void writeFeedConfigurationToJsonFile() throws AtomfeedException {
-		GeneralConfiguration generalConfiguration = AtomfeedUtils.parseJsonFileToFeedConfiguration(
+		List<FeedConfiguration> feedConfigurations = AtomfeedUtils.parseJsonFileToFeedConfiguration(
 				SAMPLE_FEED_CONFIGURATION_JSON);
 		
 		final String path = "newFile.txt";
-		AtomfeedUtils.writeFeedConfigurationToJsonFile(generalConfiguration, path);
+		AtomfeedUtils.writeFeedConfigurationToJsonFile(feedConfigurations, path);
 		
 		String expected = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
 		String result = AtomfeedUtils.readResourceFile(path) + "\n";

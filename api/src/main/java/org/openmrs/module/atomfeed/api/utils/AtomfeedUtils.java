@@ -11,6 +11,10 @@ package org.openmrs.module.atomfeed.api.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 
 import org.codehaus.jackson.JsonParseException;
@@ -20,7 +24,7 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.util.DefaultPrettyPrinter;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
-import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
+import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.client.AtomFeedClient;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.slf4j.Logger;
@@ -47,22 +51,22 @@ public final class AtomfeedUtils {
         }
     }
     
-    public static GeneralConfiguration parseJsonFileToFeedConfiguration(String resourcePath) {
+    public static List<FeedConfiguration> parseJsonFileToFeedConfiguration(String resourcePath) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            GeneralConfiguration generalConfiguration = mapper.readValue(readResourceFile(resourcePath), GeneralConfiguration.class);
-            return generalConfiguration;
+            FeedConfiguration[] array = mapper.readValue(readResourceFile(resourcePath), FeedConfiguration[].class);
+            return Arrays.asList(array);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw new AtomfeedException(e);
         }
     }
     
-    public static GeneralConfiguration parseJsonStringToFeedConfiguration(String value) {
+    public static List<FeedConfiguration> parseJsonStringToFeedConfiguration(String value) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            GeneralConfiguration generalConfiguration = mapper.readValue(value, GeneralConfiguration.class);
-            return generalConfiguration;
+            FeedConfiguration[] array = mapper.readValue(value, FeedConfiguration[].class);
+            return Arrays.asList(array);
         } catch (IOException e) {
             throw new AtomfeedException(e);
         }
@@ -82,25 +86,25 @@ public final class AtomfeedUtils {
         return true;
     }
     
-    public static String writeFeedConfigurationToJsonString(GeneralConfiguration generalConfiguration)
+    public static String writeFeedConfigurationToJsonString(Collection<FeedConfiguration> feedConfigurations)
             throws AtomfeedException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         try {
-            return writer.writeValueAsString(generalConfiguration);
+            return writer.writeValueAsString(feedConfigurations);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw new AtomfeedException(e);
         }
     }
     
-    public static void writeFeedConfigurationToJsonFile(GeneralConfiguration generalConfiguration, String file)
+    public static void writeFeedConfigurationToJsonFile(List<FeedConfiguration> feedConfigurations, String file)
             throws AtomfeedException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         try {
             File resultFile = new File(AtomfeedUtils.class.getClassLoader().getResource("").getPath() + file);
-            writer.writeValue(resultFile, generalConfiguration);
+            writer.writeValue(resultFile, feedConfigurations);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw new AtomfeedException(e);
