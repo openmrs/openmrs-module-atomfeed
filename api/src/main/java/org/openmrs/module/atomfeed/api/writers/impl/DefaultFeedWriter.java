@@ -8,56 +8,39 @@
  */
 package org.openmrs.module.atomfeed.api.writers.impl;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
-import org.openmrs.module.atomfeed.api.filter.GenericFeedFilter;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
-import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Component("atomfeed.DefaultFeedWriter")
 public class DefaultFeedWriter extends FeedWriterBase {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
-	
-	private static final String UUID_PATTERN = "{uuid}";
 
-	@Autowired
-	private FeedConfigurationService feedConfigurationService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
+
+	private static final String UUID_PATTERN = "{uuid}";
 
 	@Override
 	public void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration) {
 		if (!feedConfiguration.isEnabled()) {
 			LOGGER.debug("Skipped writing '{}' to AtomFeed because "
-					+ "the synchronization for this object is disabled in the configuration",
-				openmrsObject.getClass().getName());
+							+ "the synchronization for this object is disabled in the configuration",
+					openmrsObject.getClass().getName());
 			return;
 		}
 
-		StringBuilder tags = new StringBuilder(eventAction.name());
-
-		for (String beanName : feedConfigurationService.getFeedFilterBeans()) {
-			GenericFeedFilter feedFilter = Context.getRegisteredComponent(beanName, GenericFeedFilter.class);
-			String tag = StringUtils.normalizeSpace(feedFilter.createFilterTag(openmrsObject));
-			if (tag != null && !tag.isEmpty()) {
-				tags.append(",").append(tag);
-			}
-		}
+		String tags = eventAction.name();
 
 		final Event event = new Event(
 				UUID.randomUUID().toString(),
@@ -66,13 +49,13 @@ public class DefaultFeedWriter extends FeedWriterBase {
 				null,
 				getEventContent(openmrsObject, feedConfiguration),
 				feedConfiguration.getCategory(),
-				tags.toString()
+				tags
 		);
 		debugEvent(event);
 		saveEvent(event);
 		LOGGER.info("A feed for {} has been saved in AtomFeed", openmrsObject.getClass().getName());
 	}
-	
+
 	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
 		Map<String, String> links = getLinks(openmrsObject, feedConfiguration);
 		ObjectMapper objectMapper = new ObjectMapper();

@@ -1,26 +1,20 @@
-{
-  "feedFilterBeans": [],
-  "feedConfigurations": [
-  {
-    "openMrsClass": "org.openmrs.Patient",
-    "enabled": "false",
-    "title": "Title",
-    "linkTemplates": {
-      "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
-      "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
-    },
-    "feedWriter": "custom.PatientWriter"
+[ {
+  "openMrsClass": "org.openmrs.Patient",
+  "enabled": "false",
+  "title": "Title",
+  "linkTemplates": {
+    "rest": "openmrs/ws/rest/v1/patient{uuid}?v=full",
+    "fhir": "openmrs/ws/fhir/v1/patient{uuid}?v=full"
   },
-  {
-    "openMrsClass": "org.openmrs.Visit",
-    "enabled": "false",
-    "title": "Visit",
-    "category": "visit",
-    "linkTemplates": {
-      "rest": "/ws/rest/v1/visit/{uuid}?v=full"
-      "fhir": "/ws/fhir/Visit/{uuid}"
-    },
-    "feedWriter": "custom.VisitWriter"
-  }
-]
-}
+  "feedWriter": "custom.PatientWriter"
+}, {
+  "openMrsClass": "org.openmrs.Visit",
+  "enabled": "false",
+  "title": "Visit",
+  "category": "visit",
+  "linkTemplates": {
+    "rest": "/ws/rest/v1/visit/{uuid}?v=full"
+    "fhir": "/ws/fhir/Visit/{uuid}"
+  },
+  "feedWriter": "custom.VisitWriter"
+} ]
