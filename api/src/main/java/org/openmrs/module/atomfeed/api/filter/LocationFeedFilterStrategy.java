@@ -31,11 +31,9 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 		FeedFilter feedFilter;
 		try {
 			feedFilter = getXmlParseService().createFeedFilterFromXMLString(tagXML);
-		}
-		catch (JAXBException e) {
+		} catch (JAXBException e) {
 			return false;
 		}
-
 
 		return feedFilter.getBeanName().equals(getBeanName())
 				&& FeedFilterUtil.isFilterValid(feedFilter.getFilter(), getLocationFilterProperty());
@@ -69,8 +67,7 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 		String xml;
 		try {
 			xml = getXmlParseService().createXMLFromFeedFilter(feedFilter);
-		}
-		catch (JAXBException e) {
+		} catch (JAXBException e) {
 			throw new AtomfeedException(e);
 		}
 		return xml;

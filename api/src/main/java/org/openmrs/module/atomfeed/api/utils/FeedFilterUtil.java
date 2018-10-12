@@ -18,10 +18,8 @@ public final class FeedFilterUtil {
 		}
 
 		for (int i = 0; i < filterValues.length; i++) {
-			if (!SKIP_VALUE.equals(filterPropertyValues[i])) {
-				if (!filterPropertyValues[i].equals(filterValues[i])) {
-					return false;
-				}
+			if (filterValueDoesNotMatch(filterPropertyValues[i], filterValues[i])) {
+				return false;
 			}
 		}
 
@@ -30,13 +28,18 @@ public final class FeedFilterUtil {
 
 	public static String createLocationFilter(PersonAddress personAddress) {
 		return personAddress.getCountry()
-				+ FILTER_DELIMITER
-				+ personAddress.getStateProvince()
-				+ FILTER_DELIMITER
-				+ personAddress.getCountyDistrict()
-				+ FILTER_DELIMITER
-				+ personAddress.getCityVillage()
-				+ FILTER_DELIMITER
-				+ personAddress.getPostalCode();
+			+ FILTER_DELIMITER
+			+ personAddress.getStateProvince()
+			+ FILTER_DELIMITER
+			+ personAddress.getCountyDistrict()
+			+ FILTER_DELIMITER
+			+ personAddress.getCityVillage()
+			+ FILTER_DELIMITER
+			+ personAddress.getPostalCode();
+	}
+
+	private static boolean filterValueDoesNotMatch(String filterPropertyValue, String filterValue) {
+		return !SKIP_VALUE.equals(filterPropertyValue)
+				&& !filterPropertyValue.equals(filterValue);
 	}
 }

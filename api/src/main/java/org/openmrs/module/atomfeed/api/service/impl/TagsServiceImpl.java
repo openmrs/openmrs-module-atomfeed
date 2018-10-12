@@ -29,8 +29,7 @@ public class TagsServiceImpl implements TagService {
 					if (feedFilter.getBeanName() != null && feedFilter.getFilter() != null) {
 						feedFilters.add(feedFilter);
 					}
-				}
-				catch (JAXBException e) {
+				} catch (JAXBException e) {
 					LOGGER.warn(String.format("Cannot parse tag to XML: %s", (String) tag));
 				}
 			}

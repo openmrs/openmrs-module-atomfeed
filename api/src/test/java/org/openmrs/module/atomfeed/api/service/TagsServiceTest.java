@@ -62,18 +62,9 @@ public class TagsServiceTest {
 			tags.add(feedFilterXML);
 		}
 		// Add 3 bad formatted FeedFilters
-		String feedFilter1 = String.format(BAD_FEED_FILTER_XML_1, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i++);
-		when(xmlParseService.createFeedFilterFromXMLString(feedFilter1))
-				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
-		tags.add(feedFilter1);
-		String feedFilter2 = String.format(BAD_FEED_FILTER_XML_2, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i++);
-		when(xmlParseService.createFeedFilterFromXMLString(feedFilter2))
-				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
-		tags.add(feedFilter2);
-		String feedFilter3 = String.format(BAD_FEED_FILTER_XML_3, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i);
-		when(xmlParseService.createFeedFilterFromXMLString(feedFilter3))
-				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
-		tags.add(feedFilter3);
+		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_1, i++));
+		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_2, i++));
+		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_3, i));
 		// Add 1 Tag which cannot be parsed to FeedFilter
 		String tag = "patient,CREATED";
 		when(xmlParseService.createFeedFilterFromXMLString(tag))
@@ -86,22 +77,32 @@ public class TagsServiceTest {
 
 	}
 
+	private String createFeedFilter(String xml, int i) throws JAXBException {
+		String feedFilter = String.format(xml, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i);
+		when(xmlParseService.createFeedFilterFromXMLString(feedFilter))
+				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
+		return feedFilter;
+	}
+
 	static {
 		FEED_FILTER_XML_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ "<feedFilter>"
 				+ "<beanName>%s</beanName>"
 				+ "<filter>%s</filter>"
 				+ "</feedFilter>";
+		// Root markup is incorrect
 		BAD_FEED_FILTER_XML_1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ "<feedFilterWRONG>"
 				+ "<beanName>%s</beanName>"
 				+ "<filter>%s</filter>"
 				+ "</feedFilterWRONG>";
+		// BeanName markup is incorrect
 		BAD_FEED_FILTER_XML_2 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ "<feedFilter>"
 				+ "<beanNameWRONG>%s</beanNameWRONG>"
 				+ "<filter>%s</filter>"
 				+ "</feedFilter>";
+		// Filter markup is incorrect
 		BAD_FEED_FILTER_XML_3 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ "<feedFilter>"
 				+ "<beanName>%s</beanName>"
