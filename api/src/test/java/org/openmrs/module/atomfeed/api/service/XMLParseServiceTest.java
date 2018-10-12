@@ -1,4 +1,4 @@
-package org.openmrs.module.atomfeed.api;
+package org.openmrs.module.atomfeed.api.service;
 
 import org.junit.Assert;
 import org.junit.Test;

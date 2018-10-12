@@ -9,7 +9,6 @@
 package org.openmrs.module.atomfeed.api.writers.impl;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +21,7 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
-import org.openmrs.module.atomfeed.api.filter.GenericFeedFilter;
+import org.openmrs.module.atomfeed.api.filter.GenericFeedFilterStrategy;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.slf4j.Logger;
@@ -52,8 +51,8 @@ public class DefaultFeedWriter extends FeedWriterBase {
 		StringBuilder tags = new StringBuilder(eventAction.name());
 
 		for (String beanName : feedConfigurationService.getFeedFilterBeans()) {
-			GenericFeedFilter feedFilter = Context.getRegisteredComponent(beanName, GenericFeedFilter.class);
-			String tag = StringUtils.normalizeSpace(feedFilter.createFilterTag(openmrsObject));
+			GenericFeedFilterStrategy feedFilter = Context.getRegisteredComponent(beanName, GenericFeedFilterStrategy.class);
+			String tag = StringUtils.normalizeSpace(feedFilter.createFilterFeed(openmrsObject));
 			if (tag != null && !tag.isEmpty()) {
 				tags.append(",").append(tag);
 			}
