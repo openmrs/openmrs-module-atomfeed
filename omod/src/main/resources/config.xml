@@ -54,5 +54,12 @@
 		<description>Ability to load Atomfeed configuration from file.</description>
 	</privilege>
 
+	<!--Global Properties for Feed Filters-->
+	<globalProperty>
+		<property>${project.parent.artifactId}.filter.location</property>
+		<defaultValue>*%*%*%*%*</defaultValue>
+		<description>Value of this property is used to filter objects pulled from parent.</description>
+	</globalProperty>
+
 </module>
 
