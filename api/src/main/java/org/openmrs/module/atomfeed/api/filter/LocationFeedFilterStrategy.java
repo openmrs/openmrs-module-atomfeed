@@ -38,13 +38,13 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 
 	private String extractFilter(OpenmrsObject object) {
 		if (object instanceof Patient) {
-			return extractCityVillageFromPatient((Patient) object);
+			return extractLocationFilterFromPatient((Patient) object);
 		} else if (object instanceof Encounter) {
-			return extractCityVillageFromEncounter((Encounter) object);
+			return extractLocationFilterFromEncounter((Encounter) object);
 		} else if (object instanceof Visit) {
-			return extractCityVillageFromVisit((Visit) object);
+			return extractLocationFilterFromVisit((Visit) object);
 		} else if (object instanceof Obs) {
-			return extractCityVillageFromObs((Obs) object);
+			return extractLocationFilterFromObs((Obs) object);
 		} else {
 			return null;
 		}
@@ -69,7 +69,7 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 		return Context.getAdministrationService().getGlobalProperty(AtomfeedConstants.FilterProperties.PREFERRED_LOCATION_FILTER);
 	}
 
-	private String extractCityVillageFromPatient(Patient patient) {
+	private String extractLocationFilterFromPatient(Patient patient) {
 		PersonAddress personAddress = patient.getPersonAddress();
 		if (personAddress == null) {
 			return null;
@@ -77,27 +77,27 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 		return FeedFilterUtil.createLocationFilter(personAddress);
 	}
 
-	private String extractCityVillageFromEncounter(Encounter encounter) {
+	private String extractLocationFilterFromEncounter(Encounter encounter) {
 		Patient patient = encounter.getPatient();
 		if (patient == null) {
 			return null;
 		}
-		return extractCityVillageFromPatient(patient);
+		return extractLocationFilterFromPatient(patient);
 	}
 
-	private String extractCityVillageFromVisit(Visit visit) {
+	private String extractLocationFilterFromVisit(Visit visit) {
 		Patient patient = visit.getPatient();
 		if (patient == null) {
 			return null;
 		}
-		return extractCityVillageFromPatient(patient);
+		return extractLocationFilterFromPatient(patient);
 	}
 
-	private String extractCityVillageFromObs(Obs obs) {
+	private String extractLocationFilterFromObs(Obs obs) {
 		Encounter encounter = obs.getEncounter();
 		if (encounter == null) {
 			return null;
 		}
-		return extractCityVillageFromEncounter(encounter);
+		return extractLocationFilterFromEncounter(encounter);
 	}
 }
