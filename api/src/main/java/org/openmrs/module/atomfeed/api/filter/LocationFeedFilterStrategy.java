@@ -27,16 +27,8 @@ public class LocationFeedFilterStrategy extends FeedFilterStrategy implements Ge
 	}
 
 	@Override
-	public boolean isFilterTagValid(String tagXML) {
-		FeedFilter feedFilter;
-		try {
-			feedFilter = getXmlParseService().createFeedFilterFromXMLString(tagXML);
-		} catch (JAXBException e) {
-			return false;
-		}
-
-		return feedFilter.getBeanName().equals(getBeanName())
-				&& FeedFilterUtil.isFilterValid(feedFilter.getFilter(), getLocationFilterProperty());
+	public boolean isFilterTagValid(String filter) {
+		return FeedFilterUtil.isFilterValid(filter, getLocationFilterProperty());
 	}
 
 	@Override
