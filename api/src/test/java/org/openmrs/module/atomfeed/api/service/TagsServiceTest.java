@@ -1,5 +1,6 @@
 package org.openmrs.module.atomfeed.api.service;
 
+import com.sun.syndication.feed.atom.Category;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,20 +57,15 @@ public class TagsServiceTest {
 		int i = 0;
 		// Add 3 correct Feed Filters
 		for (; i < CORRECT_TAGS_NUMBER; i++) {
-			String feedFilterXML = String.format(FEED_FILTER_XML_PATTERN, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i);
-			when(xmlParseService.createFeedFilterFromXMLString(feedFilterXML))
-					.thenReturn(new FeedFilter(BEAN_NAME_PREFIX + i, FILTER_PREFIX + i));
-			tags.add(feedFilterXML);
+			tags.add(createFeedFilter(i));
 		}
 		// Add 3 bad formatted FeedFilters
-		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_1, i++));
-		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_2, i++));
-		tags.add(createFeedFilter(BAD_FEED_FILTER_XML_3, i));
+		tags.add(createBadFeedFilter(BAD_FEED_FILTER_XML_1, i++));
+		tags.add(createBadFeedFilter(BAD_FEED_FILTER_XML_2, i++));
+		tags.add(createBadFeedFilter(BAD_FEED_FILTER_XML_3, i));
 		// Add 1 Tag which cannot be parsed to FeedFilter
-		String tag = "patient,CREATED";
-		when(xmlParseService.createFeedFilterFromXMLString(tag))
-				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
-		tags.add(tag);
+		tags.add(createCategory("patient"));
+		tags.add(createCategory("CREATED"));
 		// Add 1 object that is not a String
 		tags.add(new Object());
 
@@ -77,11 +73,30 @@ public class TagsServiceTest {
 
 	}
 
-	private String createFeedFilter(String xml, int i) throws JAXBException {
+	private Category createFeedFilter(int i) throws JAXBException {
+		String feedFilter = String.format(FEED_FILTER_XML_PATTERN, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i);
+		when(xmlParseService.createFeedFilterFromXMLString(feedFilter))
+				.thenReturn(new FeedFilter(BEAN_NAME_PREFIX + i, FILTER_PREFIX + i));
+		Category category = new Category();
+		category.setTerm(feedFilter);
+		return category;
+	}
+
+	private Category createBadFeedFilter(String xml, int i) throws JAXBException {
 		String feedFilter = String.format(xml, BEAN_NAME_PREFIX + i, FILTER_PREFIX + i);
 		when(xmlParseService.createFeedFilterFromXMLString(feedFilter))
 				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
-		return feedFilter;
+		Category category = new Category();
+		category.setTerm(feedFilter);
+		return category;
+	}
+
+	private Category createCategory(String term) throws JAXBException {
+		Category category = new Category();
+		category.setTerm(term);
+		when(xmlParseService.createFeedFilterFromXMLString(term))
+				.thenThrow(new JAXBException(CANNOT_PARSE_ERROR));
+		return category;
 	}
 
 	static {

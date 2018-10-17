@@ -1,16 +1,20 @@
 package org.openmrs.module.atomfeed.api.service.impl;
 
+import com.sun.syndication.feed.atom.Category;
 import org.openmrs.module.atomfeed.api.filter.FeedFilter;
 import org.openmrs.module.atomfeed.api.service.TagService;
 import org.openmrs.module.atomfeed.api.service.XMLParseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Component("atomfeed.tagsService")
 public class TagsServiceImpl implements TagService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TagService.class);
@@ -23,14 +27,15 @@ public class TagsServiceImpl implements TagService {
 		List<FeedFilter> feedFilters = new ArrayList<>();
 
 		for (Object tag : tags) {
-			if (tag instanceof String) {
+			if (tag instanceof Category) {
 				try {
-					FeedFilter feedFilter = xmlParseService.createFeedFilterFromXMLString((String) tag);
+					FeedFilter feedFilter = xmlParseService.createFeedFilterFromXMLString(((Category) tag).getTerm());
 					if (feedFilter.getBeanName() != null && feedFilter.getFilter() != null) {
 						feedFilters.add(feedFilter);
 					}
-				} catch (JAXBException e) {
-					LOGGER.warn(String.format("Cannot parse tag to XML: %s", (String) tag));
+				}
+				catch (JAXBException e) {
+					LOGGER.warn(String.format("Cannot parse tag to XML: %s", ((Category) tag).getTerm()));
 				}
 			}
 		}
