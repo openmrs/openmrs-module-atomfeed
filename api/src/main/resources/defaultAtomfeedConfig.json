@@ -112,6 +112,16 @@
       }
     },
     {
+      "openMrsClass": "org.openmrs.Allergy",
+      "enabled": "true",
+      "title": "Allergy",
+      "category": "allergy",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/allergy/{uuid}?v=full",
+        "fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
+      }
+    },
+    {
       "openMrsClass": "org.openmrs.Visit",
       "enabled": "true",
       "title": "Visit",
