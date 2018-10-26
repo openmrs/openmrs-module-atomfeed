@@ -18,7 +18,7 @@
       "category": "observation",
       "linkTemplates": {
         "rest": "/ws/rest/v1/obs/{uuid}?v=full",
-        "fhir": "/ws/fhir/Obs/{uuid}"
+        "fhir": "/ws/fhir/Observation/{uuid}"
       }
     },
     {
@@ -38,7 +38,7 @@
       "category": "visit",
       "linkTemplates": {
         "rest": "/ws/rest/v1/visit/{uuid}?v=full",
-        "fhir": "/ws/fhir/Visit/{uuid}"
+        "fhir": "/ws/fhir/Encounter/{uuid}"
       }
     },
     {
@@ -111,46 +111,16 @@
         "fhir": "/ws/fhir/Patient/{uuid}"
       }
     },
-    {
-      "openMrsClass": "org.openmrs.Allergy",
-      "enabled": "true",
-      "title": "Allergy",
-      "category": "allergy",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/allergy/{uuid}?v=full",
-        "fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Visit",
-      "enabled": "true",
-      "title": "Visit",
-      "category": "visit",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/visit/{uuid}?v=full",
-        "fhir": "/ws/fhir/Encounter/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Encounter",
-      "enabled": "true",
-      "title": "Encounter",
-      "category": "encounter",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/encounter/{uuid}?v=full",
-        "fhir": "/ws/fhir/Encounter/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Obs",
-      "enabled": "true",
-      "title": "Obs",
-      "category": "ob",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/obs/{uuid}?v=full",
-        "fhir": "/ws/fhir/Observation/{uuid}"
-      }
-    },
+	{
+	  "openMrsClass": "org.openmrs.Allergy",
+	  "enabled": "true",
+	  "title": "Allergy",
+	  "category": "allergy",
+	  "linkTemplates": {
+		"rest": "/ws/rest/v1/allergy/{uuid}?v=full",
+		"fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
+	  }
+	},
     {
       "openMrsClass": "org.openmrs.Relationship",
       "enabled": "false",
