@@ -21,6 +21,7 @@ import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Person;
 import org.openmrs.Retireable;
 import org.openmrs.Voidable;
 import org.openmrs.api.context.Context;
@@ -114,6 +115,9 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 			}
 			if (entity instanceof Voidable) {
 				State state = hasPropertyChanged("voided", currentState, previousState, propertyNames);
+				if (entity instanceof Person) {
+					state = hasPropertyChanged("personVoided", currentState, previousState, propertyNames);
+				}
 				if (state == State.UNDO) {
 					unvoidedObjects.get().peek().add(object);
 				} else if (state == State.CHANGED) {
