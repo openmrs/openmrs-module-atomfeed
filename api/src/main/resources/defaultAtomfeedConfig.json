@@ -63,7 +63,7 @@
     },
     {
       "openMrsClass": "org.openmrs.Form",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Form",
       "category": "form",
       "linkTemplates": {
