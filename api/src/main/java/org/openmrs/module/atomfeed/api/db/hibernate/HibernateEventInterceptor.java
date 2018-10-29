@@ -114,10 +114,7 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 				}
 			}
 			if (entity instanceof Voidable) {
-				State state = hasPropertyChanged("voided", currentState, previousState, propertyNames);
-				if (entity instanceof Person) {
-					state = hasPropertyChanged("personVoided", currentState, previousState, propertyNames);
-				}
+				State state = isEntityVoided(entity, currentState, previousState, propertyNames);
 				if (state == State.UNDO) {
 					unvoidedObjects.get().peek().add(object);
 				} else if (state == State.CHANGED) {
@@ -126,6 +123,15 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 			}
 		}
 		return false; // tells hibernate that there are no changes made here that
+	}
+
+	private State isEntityVoided(Object entity, Object[] currentState, Object[] previousState, String[] propertyNames) {
+		if (entity instanceof Person) {
+			return hasPropertyChanged("personVoided", currentState, previousState, propertyNames);
+		}
+		else {
+			return hasPropertyChanged("voided", currentState, previousState, propertyNames);
+		}
 	}
 	
 	private State hasPropertyChanged(String propertyNameToCheck, Object[] currentState, Object[] previousState,
