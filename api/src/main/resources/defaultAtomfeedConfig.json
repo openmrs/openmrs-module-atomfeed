@@ -133,12 +133,12 @@
     },
     {
       "openMrsClass": "org.openmrs.Cohort",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Cohort",
       "category": "cohort",
       "linkTemplates": {
         "rest": "/ws/rest/v1/cohort/{uuid}?v=full",
-        "fhir": "/ws/fhir/Cohort/{uuid}"
+        "fhir": "/ws/fhir/Group/{uuid}"
       }
     },
     {
