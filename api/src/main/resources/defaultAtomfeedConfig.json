@@ -82,6 +82,26 @@
       }
     },
     {
+      "openMrsClass": "org.openmrs.DrugOrder",
+      "enabled": "true",
+      "title": "DrugOrder",
+      "category": "drug_order",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/drug_order/{uuid}?v=full",
+        "fhir": "/ws/fhir/MedicationRequest/{uuid}"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.TestOrder",
+      "enabled": "true",
+      "title": "TestOrder",
+      "category": "test_order",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/test_order/{uuid}?v=full",
+        "fhir": "/ws/fhir/ProcedureRequest/{uuid}"
+      }
+    },
+    {
       "openMrsClass": "org.openmrs.PatientProgram",
       "enabled": "false",
       "title": "Program Enrollment",
@@ -111,16 +131,16 @@
         "fhir": "/ws/fhir/Patient/{uuid}"
       }
     },
-	{
-	  "openMrsClass": "org.openmrs.Allergy",
-	  "enabled": "true",
-	  "title": "Allergy",
-	  "category": "allergy",
-	  "linkTemplates": {
-		"rest": "/ws/rest/v1/allergy/{uuid}?v=full",
-		"fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
-	  }
-	},
+    {
+      "openMrsClass": "org.openmrs.Allergy",
+      "enabled": "true",
+      "title": "Allergy",
+      "category": "allergy",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/allergy/{uuid}?v=full",
+        "fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
+      }
+    },
     {
       "openMrsClass": "org.openmrs.Relationship",
       "enabled": "false",
