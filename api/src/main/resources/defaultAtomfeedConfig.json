@@ -113,7 +113,7 @@
     },
     {
       "openMrsClass": "org.openmrs.Person",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Person",
       "category": "person",
       "linkTemplates": {
@@ -209,7 +209,7 @@
     },
     {
       "openMrsClass": "org.openmrs.module.sync2.api.model.audit.AuditMessage",
-      "enabled": true,
+      "enabled": "true",
       "title": "AuditMessage",
       "category": "audit_message",
       "linkTemplates": {
