@@ -67,8 +67,7 @@
       "title": "Form",
       "category": "form",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/form/{uuid}?v=full",
-        "fhir": "/ws/fhir/Form/{uuid}"
+        "rest": "/ws/rest/v1/form/{uuid}?v=full"
       }
     },
     {
