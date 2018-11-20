@@ -23,6 +23,7 @@ import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.client.AtomFeedClient;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -36,7 +37,7 @@ public final class AtomfeedUtils {
     }
     
     public static String readResourceFile(String file) throws AtomfeedException {
-        try (InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(file)) {
+        try (InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream(file)) {
             if (in == null) {
                 throw new AtomfeedException("Resource '" + file + "' doesn't exist");
             }
@@ -108,7 +109,7 @@ public final class AtomfeedUtils {
     }
     
     public static boolean resourceFileExists(String path) {
-        InputStream in = AtomfeedUtils.class.getClassLoader().getResourceAsStream(path);
+        InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream(path);
         return in != null;
     }
     
