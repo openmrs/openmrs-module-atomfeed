@@ -8,7 +8,7 @@
  */
 package org.openmrs.module.atomfeed.api.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 public class FeedConfiguration {
@@ -21,7 +21,7 @@ public class FeedConfiguration {
 	
 	private String category;
 	
-	private HashMap<String, String> linkTemplates;
+	private LinkedHashMap<String, String> linkTemplates;
 	
 	private String feedWriter;
 	
@@ -29,7 +29,7 @@ public class FeedConfiguration {
 	}
 	
 	public FeedConfiguration(String openMrsClass, String title, String category,
-			HashMap<String, String> linkTemplates, String feedWriter) {
+			LinkedHashMap<String, String> linkTemplates, String feedWriter) {
 		this.openMrsClass = openMrsClass;
 		this.enabled = false;
 		this.title = title;
@@ -70,11 +70,11 @@ public class FeedConfiguration {
 		this.category = category;
 	}
 	
-	public HashMap<String, String> getLinkTemplates() {
+	public LinkedHashMap<String, String> getLinkTemplates() {
 		return linkTemplates;
 	}
 	
-	public void setLinkTemplates(HashMap<String, String> linkTemplates) {
+	public void setLinkTemplates(LinkedHashMap<String, String> linkTemplates) {
 		this.linkTemplates = linkTemplates;
 	}
 	
