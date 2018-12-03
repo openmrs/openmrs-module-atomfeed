@@ -1,6 +1,6 @@
 package org.openmrs.module.atomfeed.api.utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +15,7 @@ import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.parseJsonFileT
 
 public class FeedConfigurationServiceImplTest {
     
-    private static final HashMap<String, String> links = new HashMap<>();
+    private static final LinkedHashMap<String, String> links = new LinkedHashMap<>();
     
     private static final String SAMPLE_FEED_CONFIGURATION_PATH = "sampleFeedConfiguration.json";
     private static final FeedConfiguration EXPECTED_FEED_CONFIGURATION = new FeedConfiguration(
