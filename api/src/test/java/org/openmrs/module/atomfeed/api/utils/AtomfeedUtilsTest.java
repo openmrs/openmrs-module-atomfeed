@@ -11,7 +11,7 @@ package org.openmrs.module.atomfeed.api.utils;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.junit.Assert;
@@ -37,7 +37,7 @@ public class AtomfeedUtilsTest {
 		expectedFeedConfiguration.setTitle("Title");
 		expectedFeedConfiguration.setCategory("patient");
 		expectedFeedConfiguration.setFeedWriter("custom.PatientWriter");
-		final HashMap<String, String> expectedLinkTemplates = new HashMap<>();
+		final LinkedHashMap<String, String> expectedLinkTemplates = new LinkedHashMap<>();
 		expectedLinkTemplates.put("rest", "openmrs/ws/rest/v1/patient{uuid}?v=full");
 		expectedLinkTemplates.put("fhir", "openmrs/ws/fhir/v1/patient{uuid}?v=full");
 		expectedFeedConfiguration.setLinkTemplates(expectedLinkTemplates);
