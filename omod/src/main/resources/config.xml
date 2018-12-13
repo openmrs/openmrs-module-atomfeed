@@ -14,7 +14,7 @@
 
 	<activator>org.openmrs.module.atomfeed.AtomfeedActivator</activator>
 
-	<require_version>2.0.5</require_version>
+	<require_version>${openmrsPlatformVersion}</require_version>
 
 	<require_modules>
 		<require_module version="${uiframeworkVersion}">

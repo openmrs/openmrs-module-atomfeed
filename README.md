@@ -11,3 +11,12 @@ Installation
 ------------
 1. Build the module to produce the .omod file.
 2. Use the OpenMRS Administration > Manage Modules screen to upload and install the .omod file.
+
+Note!
+
+By default module is build with dependencies required by the OpenMRS 2.0.5. 
+In order to build this module with dependencies required by the OpenMRS 1.9.10 or 1.9.11 please use the maven profile.
+Example:
+```bash
+mvn clean install -P openmrs-1.9
+```
