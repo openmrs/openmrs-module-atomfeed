@@ -32,12 +32,11 @@ function requireValues() {
 function toggleFields(isJsonValid) {
     if(isJsonValid && requireValues()) {
         jq('#save-button').removeAttr('disabled');
+        jq('#json-field').css("color", "black");
         jq('#errorMsg').hide();
-    } else if (isJsonValid) {
+    } else {
         jq('#save-button').attr('disabled','disabled');
-        jq('#errorMsg').hide();
-    } else if (!isJsonValid) {
-        jq('#save-button').attr('disabled','disabled');
+        jq('#json-field').css("color", "red");
         jq('#errorMsg').show();
     }
 }
