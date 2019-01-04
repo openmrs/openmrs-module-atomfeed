@@ -8,7 +8,7 @@
  */
 package org.openmrs.module.atomfeed.extension.html;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openmrs.module.Extension;
@@ -40,10 +40,11 @@ public class AdminList extends AdministrationSectionExt {
 	 */
 	public Map<String, String> getLinks() {
 		
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new LinkedHashMap<String, String>();
 		
 		map.put("module/atomfeed/atomfeed.form", "atomfeed.title");
-		
+		map.put("module/atomfeed/configuration.form", "atomfeed.configuration.label");
+
 		return map;
 	}
 	
