@@ -1,0 +1,37 @@
+#apps {
+    display: inline-flex;
+}
+
+.button {
+    width: 150px;
+    height: 90px;
+    padding-top: 60px;
+    text-align: center;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 10px;
+    background: #009384;
+    text-decoration: none !important;
+}
+
+.button:hover {
+    background: #5B57A6;
+    text-align: center;
+}
+
+.field-error {
+    color: #ff6666;
+    font-size: 1.1em;
+    font-weight:bold;
+}
+
+.title {
+    color: #363463;
+    font-size: 16px;
+}
+
+.button.disabled {
+    background: #EEE;
+    border: #cccccc 1px solid;
+    color: #CCC !important;
+}
