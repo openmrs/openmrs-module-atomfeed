@@ -74,7 +74,7 @@ public class AtomfeedConfigurationController {
 			feedConfigurationService.saveConfig(json);
 			AtomfeedMessageUtils.successMessage(model, SAVE_CONFIG_SUCCESS);
 			return "redirect:/module/atomfeed/atomfeed.form";
-		} catch (Exception e) {
+		} catch (AtomfeedException e) {
 			LOGGER.warn("Error during save:", e);
 			AtomfeedMessageUtils.errorMessage(model, SAVE_CONFIG_ERROR);
 		}
