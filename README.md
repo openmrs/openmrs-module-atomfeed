@@ -14,7 +14,7 @@ Installation
 
 Note!
 
-By default module is build with dependencies required by the OpenMRS 2.0.5. 
+By default module is built with dependencies required by the OpenMRS 2.0.5. 
 In order to build this module with dependencies required by the OpenMRS 1.9.10 or 1.9.11 please use the maven profile.
 Example:
 ```bash
