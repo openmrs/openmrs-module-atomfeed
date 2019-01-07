@@ -12,6 +12,7 @@
 package org.openmrs.module.atomfeed.page.controller;
 
 import org.apache.commons.io.IOUtils;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 @Controller
+@OpenmrsProfile(modules = { "uicommons:*.*" })
 public class LoadFeedConfPageController {
 
 	private static final String SAVE_CONFIG_ERROR = "atomfeed.configuration.json.save.fail";

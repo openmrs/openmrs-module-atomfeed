@@ -85,7 +85,9 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	private Map<String, String> getLinks(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
 		String uuid = openmrsObject.getUuid();
 		Map<String, String> urls = new HashMap<>();
-		feedConfiguration.getLinkTemplates().forEach((key, value) -> urls.put(key, value.replace(UUID_PATTERN, uuid)));
+		for (Map.Entry<String, String> entry : feedConfiguration.getLinkTemplates().entrySet()) {
+			urls.put(entry.getKey(), entry.getValue().replace(UUID_PATTERN, uuid));
+		}
 		return urls;
 	}
 }

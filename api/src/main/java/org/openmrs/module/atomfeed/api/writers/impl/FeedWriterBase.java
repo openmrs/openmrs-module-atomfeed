@@ -47,7 +47,7 @@ public abstract class FeedWriterBase implements FeedWriter, ApplicationListener<
 		this.eventService = new EventServiceImpl(allEventRecordsQueue);
 	}
 	
-	protected void saveEvent(Event event) {
+	protected void saveEvent(final Event event) {
 		atomFeedSpringTransactionManager.executeWithTransaction(
 			new AFTransactionWorkWithoutResult() {
 				@Override

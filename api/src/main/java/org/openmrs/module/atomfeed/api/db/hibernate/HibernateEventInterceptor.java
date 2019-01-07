@@ -66,13 +66,13 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 		
 		initializeStackIfNecessary();
 		
-		inserts.get().push(new HashSet<>());
-		updates.get().push(new HashSet<>());
-		deletes.get().push(new HashSet<>());
-		retiredObjects.get().push(new HashSet<>());
-		unretiredObjects.get().push(new HashSet<>());
-		voidedObjects.get().push(new HashSet<>());
-		unvoidedObjects.get().push(new HashSet<>());
+		inserts.get().push(new HashSet<OpenmrsObject>());
+		updates.get().push(new HashSet<OpenmrsObject>());
+		deletes.get().push(new HashSet<OpenmrsObject>());
+		retiredObjects.get().push(new HashSet<OpenmrsObject>());
+		unretiredObjects.get().push(new HashSet<OpenmrsObject>());
+		voidedObjects.get().push(new HashSet<OpenmrsObject>());
+		unvoidedObjects.get().push(new HashSet<OpenmrsObject>());
 	}
 	
 	/**
@@ -248,25 +248,25 @@ public class HibernateEventInterceptor extends EmptyInterceptor {
 	
 	private void initializeStackIfNecessary() {
 		if (inserts.get() == null) {
-			inserts.set(new Stack<>());
+			inserts.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (updates.get()  == null) {
-			updates.set(new Stack<>());
+			updates.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (deletes.get()  == null) {
-			deletes.set(new Stack<>());
+			deletes.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (retiredObjects.get()  == null) {
-			retiredObjects.set(new Stack<>());
+			retiredObjects.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (unretiredObjects.get()  == null) {
-			unretiredObjects.set(new Stack<>());
+			unretiredObjects.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (voidedObjects.get()  == null) {
-			voidedObjects.set(new Stack<>());
+			voidedObjects.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 		if (unvoidedObjects.get()  == null) {
-			unvoidedObjects.set(new Stack<>());
+			unvoidedObjects.set(new Stack<HashSet<OpenmrsObject>>());
 		}
 	}
 	
