@@ -25,6 +25,27 @@
 		<aware_of_module version="${uicommonsVersion}">org.openmrs.module.uicommons</aware_of_module>
 	</aware_of_modules>
 
+	<conditionalResources>
+		<conditionalResource>
+			<path>/lib/jackson-mapper-asl*</path>
+			<modules>
+				<module>
+					<moduleId>uiframework</moduleId>
+					<version>!</version>
+				</module>
+			</modules>
+		</conditionalResource>
+		<conditionalResource>
+			<path>/lib/jackson-core-asl*</path>
+			<modules>
+				<module>
+					<moduleId>uiframework</moduleId>
+					<version>!</version>
+				</module>
+			</modules>
+		</conditionalResource>
+	</conditionalResources>
+
 	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
