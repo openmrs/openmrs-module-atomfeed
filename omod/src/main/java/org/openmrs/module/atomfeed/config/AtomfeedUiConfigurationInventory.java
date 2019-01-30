@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenmrsProfile(modules = { "uicommons:*.*" })
-public class UiConfigurationInventory {
+public class AtomfeedUiConfigurationInventory {
 
 	@Bean
-	public StandardModuleUiConfiguration createUiConfigurationBean() {
+	public StandardModuleUiConfiguration createAtomfeedUiConfigurationBean() {
 		StandardModuleUiConfiguration standardModuleUiConfiguration = new StandardModuleUiConfiguration();
 		standardModuleUiConfiguration.setModuleId("atomfeed");
 		return standardModuleUiConfiguration;
