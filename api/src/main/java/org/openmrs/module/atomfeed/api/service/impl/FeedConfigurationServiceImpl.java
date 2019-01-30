@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.openmrs.module.atomfeed.AtomfeedConstants.ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION;
@@ -75,13 +76,13 @@ public class FeedConfigurationServiceImpl extends BaseOpenmrsService implements 
 	public GeneralConfiguration getGeneralConfiguration() {
 		GeneralConfiguration generalConfiguration = new GeneralConfiguration();
 		generalConfiguration.setFeedFilterBeans(feedFilters);
-		generalConfiguration.setFeedConfigurations(new ArrayList(feedConfigurationByCategory.values()));
+		generalConfiguration.setFeedConfigurations(new ArrayList<>(feedConfigurationByCategory.values()));
 		return generalConfiguration;
 	}
 
 	private void loadFeedConfigurations(GeneralConfiguration generalConfiguration) {
-		HashMap<String, FeedConfiguration> byCategory = new HashMap<>();
-		HashMap<String, FeedConfiguration> byOpenMrsClass = new HashMap<>();
+		HashMap<String, FeedConfiguration> byCategory = new LinkedHashMap<>();
+		HashMap<String, FeedConfiguration> byOpenMrsClass = new LinkedHashMap<>();
 		for (FeedConfiguration configuration : generalConfiguration.getFeedConfigurations()) {
 			byCategory.put(configuration.getCategory(), configuration);
 			byOpenMrsClass.put(configuration.getOpenMrsClass(), configuration);
