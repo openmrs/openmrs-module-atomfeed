@@ -22,7 +22,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import org.openmrs.module.atomfeed.client.AtomFeedClient;
-import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,9 +114,5 @@ public final class AtomfeedUtils {
     
     public static PlatformTransactionManager getSpringPlatformTransactionManager() {
         return Context.getRegisteredComponents(PlatformTransactionManager.class).get(0);
-    }
-    
-    public static AtomFeedSpringTransactionManager getAtomFeedSpringTransactionManager() {
-        return new AtomFeedSpringTransactionManager(AtomfeedUtils.getSpringPlatformTransactionManager());
     }
 }

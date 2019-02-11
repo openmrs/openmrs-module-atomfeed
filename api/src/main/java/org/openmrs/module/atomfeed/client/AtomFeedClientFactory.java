@@ -1,8 +1,7 @@
 package org.openmrs.module.atomfeed.client;
 
 import org.ict4h.atomfeed.client.service.EventWorker;
-import org.openmrs.module.atomfeed.AtomfeedConstants;
-import org.openmrs.module.atomfeed.client.impl.AtomFeedClientImpl;
+import org.openmrs.module.atomfeed.api.utils.ContextUtils;
 
 public class AtomFeedClientFactory {
 
@@ -13,11 +12,8 @@ public class AtomFeedClientFactory {
     private AtomFeedClientFactory() { }
 
     public static AtomFeedClient createClient(EventWorker eventWorker) {
-        AtomFeedClient atomFeedClient =  new AtomFeedClientImpl(eventWorker);
-
-        atomFeedClient.setConnectTimeout(CONNECT_TIMEOUT);
-        atomFeedClient.setReadTimeout(READ_TIMEOUT);
-
+        AtomFeedClientHelper atomFeedClientHelper = ContextUtils.getAtomFeedClientHelper();
+        AtomFeedClient atomFeedClient = atomFeedClientHelper.getAtomFeedClient(eventWorker, CONNECT_TIMEOUT, READ_TIMEOUT);
         return atomFeedClient;
     }
 

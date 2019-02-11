@@ -8,6 +8,8 @@ public final class AtomfeedConstants {
     
     public static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
 
+    public static final int ZERO = 0;
+
     public static final class FilterProperties {
         public static final String PREFERRED_LOCATION_FILTER = "atomfeed.filter.location";
     }

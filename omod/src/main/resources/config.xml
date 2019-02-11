@@ -44,6 +44,14 @@
 				</module>
 			</modules>
 		</conditionalResource>
+		<conditionalResource>
+			<path>/lib/atomfeed-api-1.9-${project.parent.version}.jar</path>
+			<openmrsVersion>1.9.* - 2.0.0</openmrsVersion>
+		</conditionalResource>
+		<conditionalResource>
+			<path>/lib/atomfeed-api-2.0-${project.parent.version}.jar</path>
+			<openmrsVersion>2.0.0 - 2.*</openmrsVersion>
+		</conditionalResource>
 	</conditionalResources>
 
 	<!-- Extensions -->

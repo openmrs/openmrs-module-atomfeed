@@ -6,9 +6,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.writers.impl;
-
-import java.io.IOException;
+package org.openmrs.module.atomfeed.api20.writers.impl;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsQueue;
@@ -17,17 +15,17 @@ import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventService;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
-
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.io.IOException;
 
 public abstract class FeedWriterBase implements FeedWriter, ApplicationListener<ContextRefreshedEvent> {
 	

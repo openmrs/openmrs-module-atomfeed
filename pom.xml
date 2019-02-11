@@ -37,6 +37,8 @@
 	<modules>
 		<module>api</module>
 		<module>omod</module>
+		<module>api-1.9</module>
+		<module>api-2.0</module>
 	</modules>
 
 	<dependencyManagement>
@@ -58,11 +60,6 @@
 				<groupId>org.ict4h</groupId>
 				<artifactId>atomfeed-server</artifactId>
 				<version>${atomfeedVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.ict4h.openmrs</groupId>
-				<artifactId>openmrs-atomfeed-common</artifactId>
-				<version>${openmrsAtomfeedVersion}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ict4h</groupId>
@@ -243,7 +240,6 @@
 		<uicommonsVersion>2.3.0</uicommonsVersion>
 		<uiframeworkVersion>3.11.0</uiframeworkVersion>
 		<atomfeedVersion>1.9.4</atomfeedVersion>
-		<openmrsAtomfeedVersion>2.5.5</openmrsAtomfeedVersion>
 	</properties>
 
 	<distributionManagement>
@@ -259,18 +255,4 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<profiles>
-		<profile>
-			<id>openmrs-1.9</id>
-			<properties>
-				<openmrsAtomfeedVersion>2.5.4</openmrsAtomfeedVersion>
-			</properties>
-		</profile>
-		<profile>
-			<id>openmrs-2.0</id>
-			<properties>
-				<openmrsAtomfeedVersion>2.5.5</openmrsAtomfeedVersion>
-			</properties>
-		</profile>
-	</profiles>
 </project>
