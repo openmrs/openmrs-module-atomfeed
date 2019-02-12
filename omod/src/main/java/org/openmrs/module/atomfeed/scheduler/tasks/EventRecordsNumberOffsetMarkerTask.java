@@ -1,5 +1,6 @@
 package org.openmrs.module.atomfeed.scheduler.tasks;
 
+import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.server.repository.AllEventRecords;
 import org.ict4h.atomfeed.server.repository.AllEventRecordsOffsetMarkers;
 import org.ict4h.atomfeed.server.repository.ChunkingEntries;
@@ -8,9 +9,9 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdb
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
 import org.ict4h.atomfeed.server.service.NumberOffsetMarkerServiceImpl;
 import org.ict4h.atomfeed.server.service.OffsetMarkerService;
+import org.ict4h.atomfeed.transaction.AFTransactionManager;
 import org.ict4h.atomfeed.transaction.AFTransactionWork;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
-import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
 public class EventRecordsNumberOffsetMarkerTask extends AbstractTask {
@@ -19,13 +20,13 @@ public class EventRecordsNumberOffsetMarkerTask extends AbstractTask {
 	
 	@Override
 	public void execute() {
-		AtomFeedSpringTransactionManager atomFeedSpringTransactionManager =
+		AFTransactionManager atomFeedSpringTransactionManager =
 				EventUtil.getAtomFeedSpringTransactionManager();
 		
 		atomFeedSpringTransactionManager.executeWithTransaction(new NumberOffsetMarkerTaskTransaction(
-			new AllEventRecordsJdbcImpl(atomFeedSpringTransactionManager),
-			new AllEventRecordsOffsetMarkersJdbcImpl(atomFeedSpringTransactionManager),
-			new ChunkingEntriesJdbcImpl(atomFeedSpringTransactionManager)
+			new AllEventRecordsJdbcImpl((JdbcConnectionProvider) atomFeedSpringTransactionManager),
+			new AllEventRecordsOffsetMarkersJdbcImpl((JdbcConnectionProvider) atomFeedSpringTransactionManager),
+			new ChunkingEntriesJdbcImpl((JdbcConnectionProvider) atomFeedSpringTransactionManager)
 		));
 	}
 	

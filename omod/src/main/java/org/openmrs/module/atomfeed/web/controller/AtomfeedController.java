@@ -1,6 +1,7 @@
 package org.openmrs.module.atomfeed.web.controller;
 
 import org.apache.log4j.Logger;
+import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl;
 import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
@@ -9,7 +10,8 @@ import org.ict4h.atomfeed.server.service.EventFeedServiceImpl;
 import org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory;
 import org.ict4h.atomfeed.server.service.helper.EventFeedServiceHelper;
 import org.ict4h.atomfeed.server.service.helper.ResourceHelper;
-import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+import org.ict4h.atomfeed.transaction.AFTransactionManager;
+import org.openmrs.module.atomfeed.api.utils.ContextUtils;
 import org.openmrs.module.atomfeed.utils.UrlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,16 +27,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/atomfeed")
 public class AtomfeedController {
 	private static Logger logger = Logger.getLogger(AtomfeedController.class);
-	private AtomFeedSpringTransactionManager atomTxManager;
+	private AFTransactionManager atomTxManager;
 	private EventFeedService eventFeedService;
 
 	@Autowired
 	public AtomfeedController(PlatformTransactionManager transactionManager) {
-		atomTxManager = new AtomFeedSpringTransactionManager(transactionManager);
+		atomTxManager = ContextUtils.getAtomFeedClientHelper().createAtomFeedSpringTransactionManager(transactionManager);
 		this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
-				new AllEventRecordsJdbcImpl(atomTxManager),
-				new AllEventRecordsOffsetMarkersJdbcImpl(atomTxManager),
-				new ChunkingEntriesJdbcImpl(atomTxManager),
+				new AllEventRecordsJdbcImpl((JdbcConnectionProvider) atomTxManager),
+				new AllEventRecordsOffsetMarkersJdbcImpl((JdbcConnectionProvider) atomTxManager),
+				new ChunkingEntriesJdbcImpl((JdbcConnectionProvider) atomTxManager),
 				new ResourceHelper()));
 	}
 

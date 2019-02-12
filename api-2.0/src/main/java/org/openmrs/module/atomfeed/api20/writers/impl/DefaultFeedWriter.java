@@ -6,18 +6,14 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.writers.impl;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+package org.openmrs.module.atomfeed.api20.writers.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
@@ -29,10 +25,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @Component("atomfeed.DefaultFeedWriter")
+@OpenmrsProfile(openmrsPlatformVersion = "2.0.0 - 2.*")
 public class DefaultFeedWriter extends FeedWriterBase {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(
+			DefaultFeedWriter.class);
 	
 	private static final String UUID_PATTERN = "{uuid}";
 

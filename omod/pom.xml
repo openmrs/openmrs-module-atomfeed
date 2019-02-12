@@ -12,11 +12,33 @@
 	<description>Omod submodule for Atomfeed module</description>
 
 	<dependencies>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>atomfeed-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>atomfeed-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>atomfeed-api-1.9</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.ict4h.openmrs</groupId>
+					<artifactId>openmrs-atomfeed-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>atomfeed-api-2.0</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.ict4h.openmrs</groupId>
+					<artifactId>openmrs-atomfeed-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
