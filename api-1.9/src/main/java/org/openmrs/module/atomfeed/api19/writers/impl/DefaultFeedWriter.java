@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.filter.GenericFeedFilterStrategy;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Component("atomfeed.DefaultFeedWriter")
+@Component(AtomfeedConstants.DEFAULT_FEED_WRITER_1_9)
 @OpenmrsProfile(openmrsPlatformVersion = "1.9.* - 2.0.0")
 public class DefaultFeedWriter extends FeedWriterBase {
 	
