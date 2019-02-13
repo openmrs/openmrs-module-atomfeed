@@ -6,7 +6,11 @@ public final class AtomfeedConstants {
 
     public static final String ATOMFEED_PATH_TO_CUSTOM_CONFIGURATION = "customAtomfeedConfig.json";
     
-    public static final String DEFAULT_FEED_WRITER = "atomfeed.DefaultFeedWriter";
+    public static final String DEFAULT_FEED_WRITER_1_9 = "atomfeed.DefaultFeedWriter1_9";
+
+    public static final String DEFAULT_FEED_WRITER_2_0 = "atomfeed.DefaultFeedWriter2_0";
+
+    public static final int ZERO = 0;
 
     public static final String DEFAULT_FEED_BUILDER = "atomfeed.DefaultFeedBuilder";
 

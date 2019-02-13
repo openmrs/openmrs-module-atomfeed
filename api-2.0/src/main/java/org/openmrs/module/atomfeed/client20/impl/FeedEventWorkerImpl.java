@@ -1,4 +1,4 @@
-package org.openmrs.module.atomfeed.client.impl;
+package org.openmrs.module.atomfeed.client20.impl;
 
 import org.ict4h.atomfeed.client.domain.Event;
 import org.openmrs.module.atomfeed.client.FeedEventWorker;

@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>atomfeed</artifactId>
-		<version>1.0.9-SNAPSHOT</version>
+		<version>1.0.12-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>atomfeed-api</artifactId>
@@ -29,10 +29,6 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ict4h.openmrs</groupId>
-			<artifactId>openmrs-atomfeed-common</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -8,14 +8,13 @@
  */
 package org.openmrs.module.atomfeed.api.db;
 
-import static org.openmrs.module.atomfeed.AtomfeedConstants.DEFAULT_FEED_WRITER;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
+import org.openmrs.module.atomfeed.api.utils.ContextUtils;
 import org.openmrs.module.atomfeed.api.writers.FeedWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,17 +46,22 @@ public class EventManager {
 	}
 	
 	private FeedWriter getFeedWriter(FeedConfiguration feedConfiguration) {
-		String feedWriterBeanId;
+		FeedWriter feedWriter = null;
 		if (StringUtils.isBlank(feedConfiguration.getFeedWriter())) {
-			feedWriterBeanId = DEFAULT_FEED_WRITER;
+			feedWriter = ContextUtils.getDefaultFeedWriter();
 		} else {
-			feedWriterBeanId = feedConfiguration.getFeedWriter();
+			feedWriter = getBeen(feedConfiguration.getFeedWriter());
 		}
-		
+		return feedWriter;
+	}
+
+	private FeedWriter getBeen(String feedWriterBeanId) {
+		FeedWriter feedWriter = null;
 		try {
-			return Context.getRegisteredComponent(feedWriterBeanId, FeedWriter.class);
+			feedWriter = Context.getRegisteredComponent(feedWriterBeanId, FeedWriter.class);
 		} catch (Exception e) {
 			throw new AtomfeedException("`" + feedWriterBeanId + "` bean for FeedWriter has not been found", e);
 		}
+		return feedWriter;
 	}
 }

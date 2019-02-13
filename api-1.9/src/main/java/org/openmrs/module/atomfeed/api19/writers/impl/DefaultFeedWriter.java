@@ -6,19 +6,14 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.atomfeed.api.writers.impl;
+package org.openmrs.module.atomfeed.api19.writers.impl;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import com.sun.syndication.feed.atom.Feed;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.server.service.Event;
 import org.joda.time.DateTime;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.AtomfeedConstants;
 import org.openmrs.module.atomfeed.api.converter.FeedBuilder;
@@ -33,7 +28,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("atomfeed.DefaultFeedWriter")
+import java.io.IOException;
+import java.util.Map;
+import java.util.UUID;
+
+@Component(AtomfeedConstants.DEFAULT_FEED_WRITER_1_9)
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.* - 2.0.0")
 public class DefaultFeedWriter extends FeedWriterBase {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
@@ -45,8 +45,8 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	public void writeFeed(OpenmrsObject openmrsObject, EventAction eventAction, FeedConfiguration feedConfiguration) {
 		if (!feedConfiguration.isEnabled()) {
 			LOGGER.debug("Skipped writing '{}' to AtomFeed because "
-					+ "the synchronization for this object is disabled in the configuration",
-				openmrsObject.getClass().getName());
+							+ "the synchronization for this object is disabled in the configuration",
+					openmrsObject.getClass().getName());
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class DefaultFeedWriter extends FeedWriterBase {
 		saveEvent(event);
 		LOGGER.info("A feed for {} has been saved in AtomFeed", openmrsObject.getClass().getName());
 	}
-	
+
 	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
 		FeedBuilder builder = ContextUtils.getFeedBuilder(openmrsObject);
 		Map<String, String> links = builder.getLinks(openmrsObject, feedConfiguration);
