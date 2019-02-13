@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.util.HashMap;
 
-@Component("atomfeed.AtomFeedClient")
+@Component("atomfeed.AtomFeedClient1_9")
 @OpenmrsProfile(openmrsPlatformVersion = "1.9.* - 2.0.0")
 @Scope("request")
 public class AtomFeedClientImpl implements AtomFeedClient {
