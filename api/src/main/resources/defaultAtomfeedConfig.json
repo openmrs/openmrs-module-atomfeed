@@ -49,6 +49,24 @@
       }
     },
     {
+      "openMrsClass": "org.openmrs.PersonName",
+      "enabled": "true",
+      "title": "PersonName",
+      "category": "person_name",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/person/{parent-uuid}/name/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.PatientIdentifier",
+      "enabled": "true",
+      "title": "PatientIdentifier",
+      "category": "patient_identifier",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/patient/{parent-uuid}/identifier/{uuid}?v=full"
+      }
+    },
+    {
       "openMrsClass": "org.openmrs.Person",
       "enabled": "true",
       "title": "Person",
