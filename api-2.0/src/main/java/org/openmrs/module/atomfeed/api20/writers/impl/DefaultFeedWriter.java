@@ -16,29 +16,27 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.AtomfeedConstants;
+import org.openmrs.module.atomfeed.api.converter.FeedBuilder;
 import org.openmrs.module.atomfeed.api.db.EventAction;
 import org.openmrs.module.atomfeed.api.exceptions.AtomfeedException;
 import org.openmrs.module.atomfeed.api.filter.GenericFeedFilterStrategy;
 import org.openmrs.module.atomfeed.api.model.FeedConfiguration;
 import org.openmrs.module.atomfeed.api.service.FeedConfigurationService;
+import org.openmrs.module.atomfeed.api.utils.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @Component(AtomfeedConstants.DEFAULT_FEED_WRITER_2_0)
 @OpenmrsProfile(openmrsPlatformVersion = "2.0.0 - 2.*")
 public class DefaultFeedWriter extends FeedWriterBase {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			DefaultFeedWriter.class);
-	
-	private static final String UUID_PATTERN = "{uuid}";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFeedWriter.class);
 
 	@Autowired
 	private FeedConfigurationService feedConfigurationService;
@@ -77,21 +75,13 @@ public class DefaultFeedWriter extends FeedWriterBase {
 	}
 	
 	private String getEventContent(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
-		Map<String, String> links = getLinks(openmrsObject, feedConfiguration);
+		FeedBuilder builder = ContextUtils.getFeedBuilder(openmrsObject);
+		Map<String, String> links = builder.getLinks(openmrsObject, feedConfiguration);
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			return objectMapper.writeValueAsString(links);
 		} catch (IOException e) {
 			throw new AtomfeedException("There is a problem with serialize resource links to AtomFeed content");
 		}
-	}
-
-	private Map<String, String> getLinks(OpenmrsObject openmrsObject, FeedConfiguration feedConfiguration) {
-		String uuid = openmrsObject.getUuid();
-		Map<String, String> urls = new HashMap<>();
-		for (Map.Entry<String, String> entry : feedConfiguration.getLinkTemplates().entrySet()) {
-			urls.put(entry.getKey(), entry.getValue().replace(UUID_PATTERN, uuid));
-		}
-		return urls;
 	}
 }

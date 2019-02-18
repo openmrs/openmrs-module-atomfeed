@@ -12,6 +12,12 @@ public final class AtomfeedConstants {
 
     public static final int ZERO = 0;
 
+    public static final String DEFAULT_FEED_BUILDER = "atomfeed.DefaultFeedBuilder";
+
+    public static final String FEED_BUILDER_BEAN_ID_PREFIX = "atomfeed.";
+
+    public static final String FEED_BUILDER_BEAN_ID_SUFIX = "FeedBuilder";
+
     public static final class FilterProperties {
         public static final String PREFERRED_LOCATION_FILTER = "atomfeed.filter.location";
     }

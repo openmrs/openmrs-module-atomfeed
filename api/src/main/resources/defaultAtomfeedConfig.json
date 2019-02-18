@@ -12,33 +12,68 @@
       }
     },
     {
-      "openMrsClass": "org.openmrs.Obs",
+      "openMrsClass": "org.openmrs.Concept",
       "enabled": "false",
-      "title": "Observation",
-      "category": "observation",
+      "title": "Concept",
+      "category": "concept",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/obs/{uuid}?v=full",
-        "fhir": "/ws/fhir/Observation/{uuid}"
+        "rest": "/ws/rest/v1/concept/{uuid}?v=full"
       }
     },
     {
-      "openMrsClass": "org.openmrs.Encounter",
-      "enabled": "false",
-      "title": "Encounter",
-      "category": "encounter",
+      "openMrsClass": "org.openmrs.Cohort",
+      "enabled": "true",
+      "title": "Cohort",
+      "category": "cohort",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/encounter/{uuid}?v=full",
-        "fhir": "/ws/fhir/Encounter/{uuid}"
+        "rest": "/ws/rest/v1/cohort/{uuid}?v=full",
+        "fhir": "/ws/fhir/Group/{uuid}"
       }
     },
     {
-      "openMrsClass": "org.openmrs.Visit",
+      "openMrsClass": "org.openmrs.VisitType",
       "enabled": "false",
-      "title": "Visit",
-      "category": "visit",
+      "title": "Visit Type",
+      "category": "visittype",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/visit/{uuid}?v=full",
-        "fhir": "/ws/fhir/Encounter/{uuid}"
+        "rest": "/ws/rest/v1/visittype/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.PersonAddress",
+      "enabled": "true",
+      "title": "PersonAddress",
+      "category": "person_address",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/person/{parent-uuid}/address/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.PersonName",
+      "enabled": "true",
+      "title": "PersonName",
+      "category": "person_name",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/person/{parent-uuid}/name/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.PatientIdentifier",
+      "enabled": "true",
+      "title": "PatientIdentifier",
+      "category": "patient_identifier",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/patient/{parent-uuid}/identifier/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.Person",
+      "enabled": "true",
+      "title": "Person",
+      "category": "person",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/person/{uuid}?v=full",
+        "fhir": "/ws/fhir/Person/{uuid}"
       }
     },
     {
@@ -52,6 +87,35 @@
       }
     },
     {
+      "openMrsClass": "org.openmrs.User",
+      "enabled": "false",
+      "title": "User",
+      "category": "user",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/user/{uuid}?v=full"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.Patient",
+      "enabled": "true",
+      "title": "Patient",
+      "category": "patient",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/patient/{uuid}?v=full",
+        "fhir": "/ws/fhir/Patient/{uuid}"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.Relationship",
+      "enabled": "false",
+      "title": "Relationship",
+      "category": "relationship",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/relationship/{uuid}?v=full",
+        "fhir": "/ws/fhir/Relationship/{uuid}"
+      }
+    },
+    {
       "openMrsClass": "org.openmrs.Drug",
       "enabled": "false",
       "title": "Drug",
@@ -59,6 +123,16 @@
       "linkTemplates": {
         "rest": "/ws/rest/v1/drug/{uuid}?v=full",
         "fhir": "/ws/fhir/Drug/{uuid}"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.Allergy",
+      "enabled": "true",
+      "title": "Allergy",
+      "category": "allergy",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/allergy/{uuid}?v=full",
+        "fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
       }
     },
     {
@@ -101,90 +175,33 @@
       }
     },
     {
-      "openMrsClass": "org.openmrs.PatientProgram",
-      "enabled": "false",
-      "title": "Program Enrollment",
-      "category": "programenrollment",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/programenrollment/{uuid}?v=full",
-        "fhir": "/ws/fhir/Programenrollment/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Person",
+      "openMrsClass": "org.openmrs.Obs",
       "enabled": "true",
-      "title": "Person",
-      "category": "person",
+      "title": "Observation",
+      "category": "observation",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/person/{uuid}?v=full",
-        "fhir": "/ws/fhir/Person/{uuid}"
+        "rest": "/ws/rest/v1/obs/{uuid}?v=full",
+        "fhir": "/ws/fhir/Observation/{uuid}"
       }
     },
     {
-      "openMrsClass": "org.openmrs.Patient",
+      "openMrsClass": "org.openmrs.Encounter",
       "enabled": "true",
-      "title": "Patient",
-      "category": "patient",
+      "title": "Encounter",
+      "category": "encounter",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/patient/{uuid}?v=full",
-        "fhir": "/ws/fhir/Patient/{uuid}"
+        "rest": "/ws/rest/v1/encounter/{uuid}?v=full",
+        "fhir": "/ws/fhir/Encounter/{uuid}"
       }
     },
     {
-      "openMrsClass": "org.openmrs.Allergy",
+      "openMrsClass": "org.openmrs.Visit",
       "enabled": "true",
-      "title": "Allergy",
-      "category": "allergy",
+      "title": "Visit",
+      "category": "visit",
       "linkTemplates": {
-        "rest": "/ws/rest/v1/allergy/{uuid}?v=full",
-        "fhir": "/ws/fhir/AllergyIntolerance/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Relationship",
-      "enabled": "false",
-      "title": "Relationship",
-      "category": "relationship",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/relationship/{uuid}?v=full",
-        "fhir": "/ws/fhir/Relationship/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Cohort",
-      "enabled": "true",
-      "title": "Cohort",
-      "category": "cohort",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/cohort/{uuid}?v=full",
-        "fhir": "/ws/fhir/Group/{uuid}"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.VisitType",
-      "enabled": "false",
-      "title": "Visit Type",
-      "category": "visittype",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/visittype/{uuid}?v=full"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.Concept",
-      "enabled": "false",
-      "title": "Concept",
-      "category": "concept",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/concept/{uuid}?v=full"
-      }
-    },
-    {
-      "openMrsClass": "org.openmrs.User",
-      "enabled": "false",
-      "title": "User",
-      "category": "user",
-      "linkTemplates": {
-        "rest": "/ws/rest/v1/user/{uuid}?v=full"
+        "rest": "/ws/rest/v1/visit/{uuid}?v=full",
+        "fhir": "/ws/fhir/Encounter/{uuid}"
       }
     },
     {
@@ -195,6 +212,16 @@
       "linkTemplates": {
         "rest": "/ws/rest/v1/program/{uuid}?v=full",
         "fhir": "/ws/fhir/Program/{uuid}"
+      }
+    },
+    {
+      "openMrsClass": "org.openmrs.PatientProgram",
+      "enabled": "false",
+      "title": "Program Enrollment",
+      "category": "programenrollment",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/programenrollment/{uuid}?v=full",
+        "fhir": "/ws/fhir/Programenrollment/{uuid}"
       }
     },
     {

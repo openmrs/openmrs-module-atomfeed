@@ -14,10 +14,11 @@ import org.openmrs.module.atomfeed.api.model.GeneralConfiguration;
 import static org.openmrs.module.atomfeed.api.utils.AtomfeedUtils.parseJsonFileToFeedConfiguration;
 
 public class FeedConfigurationServiceImplTest {
-    
+
     private static final LinkedHashMap<String, String> links = new LinkedHashMap<>();
     
     private static final String SAMPLE_FEED_CONFIGURATION_PATH = "sampleFeedConfiguration.json";
+
     private static final FeedConfiguration EXPECTED_FEED_CONFIGURATION = new FeedConfiguration(
             "org.openmrs.Patient",
             "Title",
@@ -34,6 +35,10 @@ public class FeedConfigurationServiceImplTest {
             links,
             "custom"
     );
+
+    private static final String PATIENT_CATEGORY = "patient";
+
+    private static final String VISIT_CATEGORY = "visit";
 
     @Mock
     private FeedConfigurationServiceImpl feedConfigurationService;
@@ -72,7 +77,17 @@ public class FeedConfigurationServiceImplTest {
         Assert.assertNull(manager.getFeedConfigurationByCategory(notExistingKey));
         Assert.assertNull(manager.getFeedConfigurationByOpenMrsClass(notExistingKey));
     }
-    
+
+    @Test
+    public void getAllFeedConfigurations_shouldReturnConfigurationsInCorrectOrder() {
+        FeedConfigurationServiceImpl manager = prepareServiceWithLoadedConfigFromArray();
+
+        Assert.assertEquals(PATIENT_CATEGORY,
+                ((FeedConfiguration) manager.getAllFeedConfigurations().toArray()[0]).getCategory());
+        Assert.assertEquals(VISIT_CATEGORY,
+                ((FeedConfiguration) manager.getAllFeedConfigurations().toArray()[1]).getCategory());
+    }
+
     private FeedConfigurationServiceImpl prepareServiceWithLoadedConfigFromArray() {
         GeneralConfiguration generalConfiguration = parseJsonFileToFeedConfiguration(SAMPLE_FEED_CONFIGURATION_PATH);
         FeedConfigurationServiceImpl service = new FeedConfigurationServiceImpl();
