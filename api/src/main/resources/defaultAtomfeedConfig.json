@@ -176,7 +176,7 @@
     },
     {
       "openMrsClass": "org.openmrs.Obs",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Observation",
       "category": "observation",
       "linkTemplates": {
@@ -186,7 +186,7 @@
     },
     {
       "openMrsClass": "org.openmrs.Encounter",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Encounter",
       "category": "encounter",
       "linkTemplates": {
@@ -196,7 +196,7 @@
     },
     {
       "openMrsClass": "org.openmrs.Visit",
-      "enabled": "false",
+      "enabled": "true",
       "title": "Visit",
       "category": "visit",
       "linkTemplates": {
