@@ -81,7 +81,7 @@ public class LoadFeedConfPageController {
 			session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, ui.message(SAVE_CONFIG_ERROR));
 		}
 
-		return null;
+		return "redirect:/atomfeed/LoadFeedConf.page";
 	}
 	
 	@ResponseBody
