@@ -1,5 +1,5 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("atomfeed.configuration.label") ])
+    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("atomfeed.title") ])
     if (context.hasPrivilege("Load Atomfeed config")) {
 %>
 
