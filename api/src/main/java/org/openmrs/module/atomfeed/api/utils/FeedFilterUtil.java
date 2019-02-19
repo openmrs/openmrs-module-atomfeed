@@ -40,6 +40,6 @@ public final class FeedFilterUtil {
 
 	private static boolean filterValueDoesNotMatch(String filterPropertyValue, String filterValue) {
 		return !SKIP_VALUE.equals(filterPropertyValue)
-				&& !filterPropertyValue.equals(filterValue);
+				&& !filterPropertyValue.equalsIgnoreCase(filterValue);
 	}
 }
