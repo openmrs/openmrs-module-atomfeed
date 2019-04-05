@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -31,17 +32,24 @@ public class AtomfeedController {
 	private EventFeedService eventFeedService;
 
 	@Autowired
-	public AtomfeedController(PlatformTransactionManager transactionManager) {
+	private PlatformTransactionManager transactionManager;
+
+	public AtomfeedController() {
+
+	}
+
+	public AtomfeedController(EventFeedService eventFeedService) {
+		this.eventFeedService = eventFeedService;
+	}
+
+	@PostConstruct
+	public void setupTransactionManager() {
 		atomTxManager = ContextUtils.getAtomFeedClientHelper().createAtomFeedSpringTransactionManager(transactionManager);
 		this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
 				new AllEventRecordsJdbcImpl((JdbcConnectionProvider) atomTxManager),
 				new AllEventRecordsOffsetMarkersJdbcImpl((JdbcConnectionProvider) atomTxManager),
 				new ChunkingEntriesJdbcImpl((JdbcConnectionProvider) atomTxManager),
 				new ResourceHelper()));
-	}
-
-	public AtomfeedController(EventFeedService eventFeedService) {
-		this.eventFeedService = eventFeedService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{category}/recent")
