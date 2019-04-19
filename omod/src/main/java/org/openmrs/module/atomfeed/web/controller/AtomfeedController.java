@@ -61,7 +61,7 @@ public class AtomfeedController {
 				category, n, logger, atomTxManager);
 	}
 
-	private void setupTransactionManagerIfNecessary() {
+	private synchronized void setupTransactionManagerIfNecessary() {
 		if (atomTxManager == null || eventFeedService == null) {
 			atomTxManager = ContextUtils.getAtomFeedClientHelper().createAtomFeedSpringTransactionManager(transactionManager);
 			eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
