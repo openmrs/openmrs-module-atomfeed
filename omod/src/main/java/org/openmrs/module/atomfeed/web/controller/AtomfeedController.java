@@ -26,18 +26,18 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = "/atomfeed")
 public class AtomfeedController {
+
 	private static Logger logger = Logger.getLogger(AtomfeedController.class);
+
 	private AFTransactionManager atomTxManager;
+
 	private EventFeedService eventFeedService;
 
 	@Autowired
-	public AtomfeedController(PlatformTransactionManager transactionManager) {
-		atomTxManager = ContextUtils.getAtomFeedClientHelper().createAtomFeedSpringTransactionManager(transactionManager);
-		this.eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
-				new AllEventRecordsJdbcImpl((JdbcConnectionProvider) atomTxManager),
-				new AllEventRecordsOffsetMarkersJdbcImpl((JdbcConnectionProvider) atomTxManager),
-				new ChunkingEntriesJdbcImpl((JdbcConnectionProvider) atomTxManager),
-				new ResourceHelper()));
+	private PlatformTransactionManager transactionManager;
+
+	public AtomfeedController() {
+
 	}
 
 	public AtomfeedController(EventFeedService eventFeedService) {
@@ -47,6 +47,7 @@ public class AtomfeedController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{category}/recent")
 	@ResponseBody
 	public String getRecentEventFeedForCategory(HttpServletRequest httpServletRequest, @PathVariable String category) {
+		setupTransactionManagerIfNecessary();
 		return EventFeedServiceHelper.getRecentFeed(eventFeedService, new UrlUtil().getRequestURL(httpServletRequest),
 				category, logger, atomTxManager);
 	}
@@ -55,7 +56,19 @@ public class AtomfeedController {
 	@ResponseBody
 	public String getEventFeedWithCategory(HttpServletRequest httpServletRequest,
 						@PathVariable String category, @PathVariable int n) {
+		setupTransactionManagerIfNecessary();
 		return EventFeedServiceHelper.getEventFeed(eventFeedService, new UrlUtil().getRequestURL(httpServletRequest),
 				category, n, logger, atomTxManager);
+	}
+
+	private synchronized void setupTransactionManagerIfNecessary() {
+		if (atomTxManager == null || eventFeedService == null) {
+			atomTxManager = ContextUtils.getAtomFeedClientHelper().createAtomFeedSpringTransactionManager(transactionManager);
+			eventFeedService = new EventFeedServiceImpl(new FeedGeneratorFactory().getFeedGenerator(
+					new AllEventRecordsJdbcImpl((JdbcConnectionProvider) atomTxManager),
+					new AllEventRecordsOffsetMarkersJdbcImpl((JdbcConnectionProvider) atomTxManager),
+					new ChunkingEntriesJdbcImpl((JdbcConnectionProvider) atomTxManager),
+					new ResourceHelper()));
+		}
 	}
 }
