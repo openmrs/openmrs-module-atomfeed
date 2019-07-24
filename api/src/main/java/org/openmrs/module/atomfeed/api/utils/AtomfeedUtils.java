@@ -40,7 +40,7 @@ public final class AtomfeedUtils {
             if (in == null) {
                 throw new AtomfeedException("Resource '" + file + "' doesn't exist");
             }
-            return IOUtils.toString(in);
+            return IOUtils.toString(in, "UTF-8");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw new AtomfeedException(e);
