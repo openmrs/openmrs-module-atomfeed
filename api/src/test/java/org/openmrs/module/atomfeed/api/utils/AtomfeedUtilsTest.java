@@ -111,7 +111,7 @@ public class AtomfeedUtilsTest {
 		AtomfeedUtils.writeFeedConfigurationToJsonFile(generalConfiguration, path);
 		
 		String expected = AtomfeedUtils.readResourceFile(SAMPLE_FEED_CONFIGURATION_JSON);
-		String result = AtomfeedUtils.readResourceFile(path) + "\n";
+		String result = AtomfeedUtils.readResourceFile(path) + System.getProperty("line.separator");
 		
 		Assert.assertEquals(expected, result);
 	}
