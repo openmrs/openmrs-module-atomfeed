@@ -67,6 +67,15 @@
       }
     },
     {
+      "openMrsClass": "org.openmrs.PersonAttribute",
+      "enabled": "true",
+      "title": "PersonAttribute",
+      "category": "person_attribute",
+      "linkTemplates": {
+        "rest": "/ws/rest/v1/person/{parent-uuid}/attribute/{uuid}?v=full"
+      }
+    },
+    {
       "openMrsClass": "org.openmrs.Person",
       "enabled": "true",
       "title": "Person",
