@@ -55,7 +55,7 @@ public abstract class FeedWriterBase implements FeedWriter, ApplicationListener<
 				
 				@Override
 				public PropagationDefinition getTxPropagationDefinition() {
-					return PropagationDefinition.PROPAGATION_REQUIRES_NEW;
+					return PropagationDefinition.PROPAGATION_REQUIRED;
 				}
 			}
 		);
